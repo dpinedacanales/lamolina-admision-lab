@@ -1,0 +1,115 @@
+<html layout:decorator="admision/_layout/layoutAgraria1">
+    <head>
+        <title>Guía del Postulante</title>
+    </head>
+
+    <body>
+
+        <div layout:fragment="banner" >
+
+            <h3>ELIGE TU OPCIÓN DE PREFERENCIA</h3>
+            <h1> <span  th:text="${interesado.nombreCompleto}" /> 
+                <div class="line"></div>
+            </h1>
+
+            <p class="text-center bold h4 m-t-n m-b-xs"
+               th:unless="${esFinalInscripciones}" th:text="|Si deseas rendir el Concurso de Admisión ${ciclo.cicloAcademico.descripcion}|"> Si deseas rendir el Concurso de Admisión 2022-I</p>
+            <p class="text-center bold h4 m-b-lg"
+               th:inline="text"
+               th:unless="${esFinalInscripciones}">Dale clic a POSTULAR AL CONCURSO DE ADMISIÓN <!--Postula hasta el [[${ultimaFecha}]]--></p>
+
+        </div>
+
+        <div layout:fragment="main" >
+
+            <div th:each="deuda : ${deudas}"
+                 class="alert alert-warning" style=" background-color: #D6EDDE; border-color: #D6EDDE;color: #000000">
+                <h2 class="text-center" th:inline="text">
+                    Boleta de pago Nº [[${deuda.conceptoPrecio.numero}]] - [[${deuda.id}]]
+                </h2>
+                <div >
+                    <table class="table table-condensed">
+                        <tbody class="">
+                            <tr th:if="${deuda.conceptoPrecio.conceptoPago.codigo=='999'}">
+                                <td class="text-center" colspan="2"><b>Segundo Pago</b></td>
+                            </tr>
+                            <tr>
+                                <td style="width:40%">Entidad Bancaria</td>
+                                <td style="width:60%" 
+                                    th:text="${deuda.conceptoPrecio.conceptoPago.cuentaBancaria.banco}">BANCO DE CRÉDITO DEL PERÚ</td>
+                            </tr>
+                            <tr>
+                                <td>Nombre Comercial</td>
+                                <td th:text="${deuda.conceptoPrecio.conceptoPago.cuentaBancaria.empresa}">UNIVERSIDADES AGRARIA LA MOLINA</td>
+                            </tr>
+                            <tr th:unless="${deuda.conceptoPrecio.conceptoPago.codigo=='999'}">
+                                <td>Nombre del servicio a pagar ww</td>
+                                <td th:inline="text">
+                                    [[${deuda.cuentaBancaria.nombre}]]<br/>
+                                    <strong class="h4">[[${deuda.cuentaBancaria.numero}]]</strong>
+                                </td>
+                            </tr>
+                            <tr th:if="${deuda.conceptoPrecio.conceptoPago.codigo=='999'}">
+                                <td>Número de la Cuenta</td>
+                                <td th:text="${deuda.conceptoPrecio.conceptoPago.cuentaBancaria.numero}"></td>
+                            </tr>
+                            <tr th:unless="${deuda.conceptoPrecio.conceptoPago.codigo=='999'}">
+                                <td>Concepto de Pago</td>
+                                <td th:text="${deuda.conceptoPrecio.conceptoPago.descripcion}"></td>
+                            </tr>
+                            <tr>
+                                <td>Código de Identificación (DNI)</td>
+                                <td th:text="${postulante.persona.codigoPago}"></td>
+                            </tr>
+                            <tr>
+                                <td><b class="mark block">Monto a Pagar</b></td>
+                                <td th:inline="text"><b class="mark block">S/. [[${helper.precio(deuda.conceptoPrecio.monto)}]]</b></td>
+                            </tr>
+
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <div class="col-md-6 col-md-offset-3 m-t-lg">
+
+                <a  class="btn btn-lg btn-primary  m-b btn-block"
+                    th:href="@{/inscripcion/postulante/1/paso}" 
+                    th:unless="${esFinalInscripciones}"
+                    th:if="${ciclo.esVirtual}"> POSTULAR AL CONCURSO DE ADMISIÓN VIRTUAL</a>
+                    
+                <a  class="btn btn-lg btn-primary  m-b btn-block"
+                    th:href="@{/inscripcion/postulante/1/paso}" 
+                    th:unless="${esFinalInscripciones}"
+                    th:if="${!ciclo.esVirtual}">POSTULAR AL CONCURSO DE ADMISIÓN</a>
+
+                <a  class="btn btn-lg btn-primary  m-b btn-block" 
+                    th:href="@{/inscripcion/evaluacion}"  
+                    th:if="${validandoBtnExamenVirtual AND !esVirtual}">Examen Virtual </a>
+
+                <a  class="btn btn-lg btn-primary  m-b btn-block" target="guiapostulante"
+                    th:href="@{/inscripcion/postpago/verGuiaPostulante}" 
+                    th:if="${validandoBtnDescargarGuiaPostulante}">Guía del Postulante</a>
+
+                <a  class="btn btn-lg btn-primary  m-b btn-block" 
+                    th:href="@{/inscripcion/guiapostulante/saveAdquirirExamen}" 
+                    th:if="${validandoBtnAdquirirExamen}">Adquirir Examen Virtual</a>
+
+                <a  class="btn btn-lg btn-primary  m-b btn-block"  
+                    th:href="@{/inscripcion/guiapostulante/generateBoletaPago}"
+                    th:if="${validandoBtnDescargarBoleta}">Descarga tu Boleta</a>
+
+            </div>
+
+
+        </div>    
+        <div layout:fragment="js">
+            <script th:inline="javascript">
+                /*<![CDATA[*/
+                var esSimulacro = /*[[${esSimulacro}]]*/ '';
+                var esVirtual = /*[[${esVirtual}]]*/ '';
+                /*]]>*/
+            </script>
+        </div>
+    </body>
+</html>

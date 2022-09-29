@@ -1,0 +1,84 @@
+<html layout:decorator="admision/_layout/layoutAgraria1">
+    <head>
+        <title>Inscripción de Postulantes</title>
+    </head>
+
+    <body>
+
+        <div layout:fragment="banner">
+
+            <h1> 
+                <span  th:inline="text">Gracias [[${interesado.nombreCompleto}]] por registrarte </span> 
+                <div class="line"></div>
+            </h1>
+        </div>
+
+        <div layout:fragment="main">
+
+            <p class="h3 m-b-md text-center" th:unless="${esFinalInscripciones}">
+                Elige tu opción de preferencia
+            </p>
+            <p class="h3 m-b-md text-center" th:if="${esFinalInscripciones}">
+                Para realizar la compra de la Guía del Postulante
+                <span th:text="${ciclo.cicloAcademico.descripcion}">2017-I</span> debe contar con DNI.
+            </p>
+
+            <div class="col-md-6 col-md-offset-3 m-t-lg">
+
+                <a class="btn btn-lg btn-primary  m-b btn-block"
+                   style="white-space: normal;"
+                   th:href="@{/inscripcion/postulante}" 
+                   th:if="${esPrelamolinaActiva AND esIngresantePre}">
+                    Inscripción Ingresantes CEPRE-La Molina
+                </a>
+
+                <a class="btn btn-lg btn-primary  m-b btn-block" 
+                   style="white-space: normal;"
+                   th:href="@{/inscripcion/postulante}" 
+                   th:if="${esInscripcionActiva AND !esExtemporaneaActiva AND !esIngresantePre}">
+                    <span th:if="${!ciclo.esSimulacro}">Inscríbete y Compra tu Guía del Postulante </span>  
+                    <span th:if="${ciclo.esSimulacro}" >Inscríbete al simulacro virtual del examen de admisión</span>  
+                </a>
+
+                <a class="btn btn-lg btn-primary  m-b btn-block" 
+                   style="white-space: normal;"
+                   th:href="@{/inscripcion/postulante}" 
+                   th:if="${esExtemporaneaActiva AND !esIngresantePre}">
+                    Inscríbete y Compra tu Guía del Postulante (extemporáneo)
+                </a>
+
+                <a class="btn btn-lg btn-primary  m-b btn-block" 
+                   style="white-space: normal;"
+                   th:href="@{/inscripcion/guiapostulante/conexamen/tipo}" 
+                   th:if="${esFinalInscripciones}">
+                    Guía del Postulante con Examen Virtual
+                </a>
+                <a class="btn btn-lg btn-primary  m-b btn-block"
+                   style="white-space: normal;"
+                   th:href="@{/inscripcion/guiapostulante/sinexamen/tipo}"
+                   th:if="${esFinalInscripciones}">
+                    Guía del Postulante sin Examen Virtual
+                </a>
+
+                <span th:unless='${esFinalInscripciones}'></span>
+                <a class="btn btn-lg btn-primary  m-b btn-block" 
+                   style="white-space: normal;"
+                   th:href="@{/inscripcion/guiapostulante/regular/tipo}" 
+                   th:unless="${esFinalInscripciones}"
+                   th:if="${!ciclo.esSimulacro AND !esIngresantePre}" >
+                    Solo Compra tu Guía del Postulante 
+                </a>
+
+                <a class="btn btn-lg btn-primary  m-b btn-block" style="white-space: normal;" th:href="@{/}" >Regresar al Inicio </a>
+
+            </div>
+
+        </div>
+
+        <div layout:fragment="js" th:remove="tag">
+            <div th:substituteby="admision/_layout/includes :: jquery-cookie" th:remove="tag"></div>
+            <script th:src="@{/app/postulante/interesado/finInteresado.js}" charset="utf-8"></script>
+        </div>
+
+    </body>
+</html>

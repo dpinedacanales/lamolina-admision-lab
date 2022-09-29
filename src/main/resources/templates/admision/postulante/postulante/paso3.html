@@ -1,0 +1,158 @@
+<html layout:decorator="admision/_layout/layoutAgraria1">
+    <head>
+        <title>Inscripción de Postulantes</title>
+        <style>
+            @media only screen and (max-width : 320px) {
+                .font-cell {
+                    font-size: 15px;
+                    line-height: 17px;
+                }
+                .sweet-alert .sa-icon {
+                    width: 0;
+                    height: 0;
+                    border: 0 solid gray;
+                }
+                .sweet-alert .sa-icon.sa-warning .sa-body {
+                    width: 0;
+                    height: 0;
+                    left: 0;
+                    top: 0;
+                }
+                .sweet-alert h2 {
+                    line-height: 17px;
+                }
+            }
+
+            /* Extra Small Devices, Phones */
+            @media only screen and (max-width : 480px) {
+                .font-cell {
+                    font-size: 15px;
+                    line-height: 17px;
+                }
+                .sweet-alert .sa-icon {
+                    width: 0;
+                    height: 0;
+                    border: 0 solid gray;
+                }
+                .sweet-alert .sa-icon.sa-warning .sa-body {
+                    width: 0;
+                    height: 0;
+                    left: 0;
+                    top: 0;
+                }
+                .sweet-alert h2 {
+                    line-height: 17px;
+                }
+            }
+
+            .sweet-alert p {
+                color: #000;
+                font-size: 16px;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div layout:fragment="banner">
+
+            <h3>Información Académica</h3>
+            <h1> <span  th:text="${postulante.persona.nombreCompleto}" /> 
+                <div class="line"></div>
+            </h1>
+
+        </div>
+
+        <div layout:fragment="main" class="scrollable" id="scrolled">
+
+            <form id="formPostulante" data-parsley-validate="true"  method="POST" th:action="@{/inscripcion/postulante/savePaso/3/paso}">
+                <div class="panel-body">
+
+                    <div class="row text-center"  th:if="${error}" >
+                        <div class="col-md-offset-3 col-sm-6 alert alert-danger">
+                            <span th:text="${mensaje}" style="font-size: 16px;">Advertencia</span>
+                        </div>
+                    </div>
+
+                    <h4 class="m-b-md" th:if="${!esSimulacro}">Modalidad de Ingreso </h4>
+                    <h4 class="m-b-md" th:if="${esSimulacro}">Simulación Modalidad de Ingreso </h4>
+
+                    <div class="row">
+                        <div th:if="${modalidad}">
+                            <div class="col-sm-12" 
+                                 th:unless="${modalidad.isPreLaMolina()}">
+                                <div class="form-group">
+                                    <select class="form-control" required="true" name="modalidadIngreso.id">
+                                        <option></option>
+                                        <option th:each="item : ${modalidades}"
+                                                th:value="${item.id}"
+                                                th:unless="${item.isPreLaMolina()}"
+                                                th:selected="${modalidad}? ${item.id==modalidad.id}"
+                                                th:text="${item.nombreInscripcion}">nombre</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-sm-12" 
+                                 th:if="${modalidad.isPreLaMolina()}">
+                                <div class="form-group">
+                                    <select class="form-control" required="true" name="modalidadIngreso.id">
+                                        <option th:each="item : ${modalidades}"
+                                                th:if="${item.id==modalidad.id}"
+                                                th:value="${item.id}"
+                                                th:selected="${modalidad}? ${item.id==modalidad.id}"
+                                                th:text="${item.nombreInscripcion}">nombre</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                        <div th:unless="${modalidad}">
+                            <div class="col-sm-12">
+                                <div class="form-group">
+                                    <select class="form-control" required="true" name="modalidadIngreso.id">
+                                        <option></option>
+                                        <option th:each="item : ${modalidades}"
+                                                th:value="${item.id}"
+                                                th:unless="${item.isPreLaMolina()}"
+                                                th:selected="${modalidad}? ${item.id==modalidad.id}"
+                                                th:text="${item.nombreInscripcion}">nombre</option>
+                                    </select>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div id='detModalidad'>
+
+                    </div>
+
+                </div>
+
+                <hr/>
+
+                <div class="col-md-12 text-center">
+                    <a class="btn btn-link text-success" id="cancelar" style="color:green" th:href="@{/inscripcion/postulante/1/paso}">Atras</a>
+                    <button  
+                        type="button" 
+                        id="submitForm"
+                        th:disabled="${modalidad==null}"
+                        class="btn btn-success send-form"><i class="fa fa-spinner fa-spin hide" id="spin"/> Siguiente</button>
+                </div>
+
+            </form>
+
+        </div>
+        <div layout:fragment="js">
+            <script th:inline="javascript">
+                /*<![CDATA[*/
+                var carreras = [];
+                var colegiosCOAR = [];
+                var modalidadez = /*[[${modalidadez}]]*/ modalidadez;
+                /*]]>*/
+            </script>
+            <script th:src="@{/app/postulante/postulante/paso3.js}" charset="utf-8"></script>
+        </div>
+
+
+
+    </body>
+</html>

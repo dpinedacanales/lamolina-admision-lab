@@ -1,0 +1,90 @@
+<html layout:decorator="admision/_layout/layoutAgraria1">
+    <head>
+        <title> Evaluación </title>
+    </head>
+
+    <body>
+
+        <div layout:fragment="banner">
+
+            <h3>Bienvenido al simulacro de exámen de admisión</h3>
+            <h1> 
+                <span th:if="${persona==null}" th:text="${interesado !=null? interesado.nombreCompleto:''}" /> 
+                <span th:unless="${persona==null}" th:text="${persona.nombreCompleto}" /> 
+                <div class="line"></div>
+            </h1>
+
+            <div class="col-md-10 col-md-offset-1">
+                <p class="alert alert-warning col-md-12" style="font-size: 18px; display: inline-block;">
+                    Estimado(a) postulante, en esta opción pondrás a prueba tus conocimientos como si se tratara del mismo examen de admisión. 
+                    Esta es una evaluación virtual que consta de 100 preguntas con una duración de 3 horas. En el caso de las modalidades de 
+                    Traslado Externo, Graduados o Titulados Universitarios y Convenio Andres Bello, consta de 42 preguntas con una duración 
+                    de 1 hora y 15 minutos. Prepara un cuadernillo 
+                    y un lápiz, cuando ya te sientas listo haz clic en el botón <strong>Iniciar Nueva Evaluación</strong>. ¡Suerte! Ah,
+                    no vale usar calculadora ni Google.
+                </p>
+            </div>
+            <div class="col-md-10 col-md-offset-1">
+                <div class="panel-body">
+
+                    <a class="btn btn-primary btn-rounded  pull-left" th:href="@{/inscripcion/evaluacion/eva}"  >Iniciar Nueva Evaluación</a>
+
+                    <a class="btn btn-link pull-right btn-rounded btn-primary"
+                       th:href="@{/inscripcion/postpago/recurso}" >Regresar</a>
+
+
+
+                </div>
+            </div>
+
+        </div>
+
+        <div layout:fragment="main">
+
+            <h5 th:if="${cantidad>0}">Evaluaciones anteriores.</h5>
+
+            <div class="table-responsive"
+                 th:if="${cantidad>0}">
+
+                <table class="table table-condensed" id="dynaTable">
+
+                    <thead>
+                        <tr>
+
+                            <th class="text-center"></th>
+                            <th class="text-center"></th>
+                            <th class="text-center" colspan="3">Preguntas</th>
+                            <th class="text-center"></th>
+                            <th class="text-center"></th>
+                        </tr>
+                        <tr>
+                            <th class="text-center">Fecha</th>
+                            <th class="text-center">Hora</th>
+                            <th class="text-center">Correctas</th>
+                            <th class="text-center">Incorrectas</th>
+                            <th class="text-center">Vacías</th>
+                            <th class="text-center">Puntos</th>
+                            <th class="text-center">Nota</th>
+                        </tr>
+                    </thead>
+
+                    <tbody>
+                    </tbody>
+
+                </table>
+
+            </div>
+
+
+            <script id="templateResultado" type="text/x-jsrender" class="hide"><div th:substituteby="admision/inscripcion/evaluacion/templateResultado"/></script>
+
+
+        </div>
+
+        <div layout:fragment="js">
+            <div th:substituteby="admision/_layout/includes :: javascript-dynatable"/>
+            <script th:src="@{/app/evaluacion/resultado.js}" charset="utf-8"></script>
+        </div>
+
+    </body>
+</html>

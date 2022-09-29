@@ -1,0 +1,72 @@
+<html layout:decorator="admision/_layout/layoutAgraria1">
+    <head>
+        <title>Inscripción de Postulantes</title>
+        <link rel="stylesheet" type="text/css" th:href="@{/vendor/bootzard-wizard/style.css}" />
+    </head>
+
+    <body>
+        <!--        <div layout:fragment="banner">
+                    <h3 > 
+                        <span th:if="esVirtual">DECLARCIÓN JURADA</span>
+                        <span th:if="!esVirtual">CARTA DE COMPROMISO </span>
+                        <span th:text='${postulante.cicloPostula.cicloAcademico.descripcion}'></span> </h3>
+                    <h1> <span  th:text="${postulante.persona.nombreCompleto}" /> 
+                        <div class="line"></div>
+                    </h1>
+        
+                </div>-->
+
+        <div layout:fragment="main">
+            <input type="hidden" id="verTerminos" th:value="${verTerminos}"/>
+            <!--            <div th:utext="${contenido}" style="padding: 20px; line-height: 1.7;">
+            
+                        </div>-->
+            <div class="f1-steps">
+                <div class="f1-progress">
+                    <div class="f1-progress-line" data-now-value="0" data-number-of-steps="0" style=""></div>
+                </div>
+
+                <div th:each="carta, conteo : ${cartas}"
+                     th:class="|f1-step ${conteo.index==0? 'active':''} |"
+                     th:rel="${carta.id}"
+                     th:attr="ref=${carta.id}">
+                    <div class="f1-step-icon"
+                         th:inline="text">[[${conteo.count}]]</div><p></p>
+                </div>
+            </div>
+            <form role="form" action="" method="post" class="f1" id="wizardform">
+                <fieldset th:each="carta, conteo : ${cartas}"
+                          th:attr="ref=${carta.id}"
+                          th:rel="${carta.id}">
+
+                    <div class="form-group m-t-xl m-l-lg m-r-lg"  style="min-height: 250px;" >
+                        <div th:utext="${carta.contenido}" style="padding: 20px; line-height: 1.7;">bla bla bla</div>
+
+                    </div>
+
+                    <div class="f1-buttons text-center" style="text-align: center !important">
+                        <button type="button" class="btn btn-next " th:attr="ref=${carta.id}, value=${carta.nombre}, name=${conteo.count}">Siguiente</button>
+                    </div>
+
+                </fieldset>
+            </form>
+            <div class="col-md-12 text-center">
+                <a class="btn btn-link" th:href="@{/inscripcion/postpago/recurso}" >Regresar</a>
+            </div>
+
+        </div>
+        <div layout:fragment="js">
+            <script th:inline="javascript">
+                /*<![CDATA[*/
+                var esPre = /*[[${postulante.modalidadIngreso.isPreLaMolina()}]]*/ postulante;
+                var esSimulacro = /*[[${esSimulacro}]]*/ '';
+                var esVirtual = /*[[${esVirtual}]]*/ '';
+                /*]]>*/
+            </script>
+            <script type="text/javascript" th:src="@{/vendor/jquery.countdown/dist/jquery.countdown.min.js}" />
+            <script type="text/javascript" th:src="@{/vendor/bootzard-wizard/scripts.js}" />
+
+            <script th:src="@{/app/postulante/postpago/compromiso.js}" charset="utf-8"></script>
+        </div>
+    </body>
+</html>

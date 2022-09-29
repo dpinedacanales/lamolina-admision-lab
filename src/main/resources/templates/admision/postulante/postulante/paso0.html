@@ -1,0 +1,58 @@
+<html layout:decorator="admision/_layout/layoutAgraria1">
+    <head>
+        <title>Inscripción de Postulantes</title>
+        <style>
+            .parrafo {
+                text-align: justify;
+                margin-bottom: 20px;
+            }
+            .resaltar {
+                text-transform: uppercase;
+                font-weight: bold;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div layout:fragment="banner">
+
+            <h3>TÉRMINOS Y CONDICIONES GENERALES DEL CONCURSO DE ADMISIÓN </h3>
+            <h1> 
+                <span  th:text="${interesado !=null? interesado.nombreCompleto:''}"></span> 
+                <div class="line"></div>
+            </h1>
+
+        </div>
+
+        <div layout:fragment="main">
+
+            <form  data-parsley-validate="true"  method="POST"  id="formPostulante" th:action="@{/inscripcion/postulante/savePaso/0/paso}">
+
+                <div th:utext="${contenido.contenido}" style="padding: 20px; line-height: 1.7;">
+
+                </div>
+
+                <hr/>
+
+                <div class="col-md-12 text-center">
+                    <a class="btn btn-link boton" th:href="@{/}">Inicio</a>
+                    <button type="button" class="btn btn-success send-form boton" id="btnAccept" ><i class="fa fa-spinner fa-spin hide" id="spin"/> Aceptar</button>
+                </div>
+
+            </form>
+
+        </div>
+
+        <div layout:fragment="js">
+            <script  th:inline="javascript" >
+                /*<![CDATA[*/
+
+                var esSimulacro = /*[[${esSimulacro}]]*/ '';
+                /*]]>*/
+            </script>
+            <script th:src="@{/app/postulante/postulante/paso0.js}" charset="utf-8"></script>
+        </div>
+
+    </body>
+</html>

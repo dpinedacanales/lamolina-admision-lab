@@ -1,0 +1,116 @@
+<div class="modal fade bs-example-modal-lg" tabindex="-1" id="viewModal" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-body row">
+                <div class="col-md-12">
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+                </div>
+                <div class="col-md-5">
+                    <img class="img-responsive img-thumbnail" style="max-height: 250px; object-fit: contain;" th:src="|/archivo/download/${taller.banner}|"/>
+                </div>
+                <div class="col-md-7">
+                    <h4 class="modal-title talleres-modal-title" id="modalTitle" th:text="${taller.getTituloEnum().value}">Un Día en la Agraria</h4>
+                    <h4 class="modal-b-title" style="font-weight: bold; margin-bottom: 2px;" th:if="${taller.carrera}" th:text="${taller.carrera.nombre}">Biología</h4>
+
+                    <p th:text="${taller.descripcion}" class="text-modales">
+                        Ven y conoce mas de esta hermosa carrera, sus ámbitos de trabajo y demás. Ven y conoce mas de esta hermosa carrera, sus ámbitos de trabajo y demás
+                    </p>
+                    <p class="icon-show" th:inline="text">
+                        <span class="fa fa-calendar text-info"></span> [[${#dates.format( taller.fecha,'dd')}]] de [[${dt.format( taller.fecha,'MMMM', 'es')}]]
+                    </p>
+                    <p class="icon-show">
+                        <span class="fa fa-clock-o text-info"></span> <span th:text="${taller.hora}" th:remove="tag">6:00 PM</span>
+                    </p>
+                    <p class="icon-show">
+                        <span class="fa fa-university text-info"></span> <span th:text="${taller.ubicacion}" th:remove="tag">A-5</span>
+                    </p>
+                </div>
+                <div class="warnings col-md-12 mt-2" th:if='${taller.visita == 1 AND taller.visitaCosto != NULL}'>
+                    <div class="alert alert-orange text-center">
+                        En caso desees una visita guiada por la UNALM este tendrá un costo de <span th:text="${taller.visitaCosto}" th:remove="tag">5.00</span> soles
+                    </div>
+                </div>
+            </div>
+            <form id="confInteresado" th:if="${!lleno}">
+                <input type="hidden" value="" name="idTaller"/>
+                <div th:if="${interesado != null and (interesado.carreraInteres == null or interesado.carreraNueva == null)}" class="modal-footer" >
+                    <div class="form text-left">
+                        <!--div th:unless="${interesado.tipoDocumento}" class="col-md-6 mt-3">
+                            <label>Tipo de documento</label>
+                            <select class="form-control select2" th:rel="${documentos.size()}" name="tipoDocumento.id" required="true">
+                                <option></option>
+                                <option th:each="item : ${documentos}"
+                                        th:value="${item.id}"
+                                        th:text="${item.nombre}">
+                                </option>
+                            </select>
+                        </div>
+                        <div th:unless="${interesado.tipoDocumento}" class="col-md-6 mt-3">
+                            <label>Número de documento</label>
+                            <input type="text" class="form-control" name="numeroDocIdentidad" required="true"/>
+                        </div-->
+                        <div th:unless="${interesado.email}" class="col-md-12 mt-3">
+                            <label>Email</label>
+                            <input type="email" class="form-control" name="email" required="true"/>
+                        </div>
+                        <div th:unless="${interesado.celular}" class="col-md-6 mt-3">
+                            <label>Celular</label>
+                            <input type="text" class="form-control" name="celular" required="true"/>
+                        </div>
+                        <div th:unless="${interesado.telefono}" class="col-md-6 mt-3">
+                            <label>Telefono</label>
+                            <input type="text" class="form-control" name="telefono"/>
+                        </div>
+                        <div th:unless="${interesado.carreraInteres}" class="col-md-12 mt-3">
+                            <label>¿Qué carrera te gustaría estudiar en la Agraria?</label>
+                            <select class="form-control select2" name="carreraInteres.id" required="true">
+                                <option></option>
+                                <option th:each="item : ${carreras}"
+                                        th:value="${item.id}"
+                                        th:text="${item.nombre}">
+                                </option>
+                            </select>
+                        </div>
+                        <div th:unless="${interesado.carreraNueva}" class="col-md-12 mt-3">
+ <label>¿Cuál de las siguientes carreras te gustaría que se implemente en la Agraria</label>
+                            <select class="form-control select2" name="carreraNueva.id" required="true">
+                                <option></option>
+                                <option th:each="item : ${carrerasNuevas}"
+                                        th:value="${item.id}"
+                                        th:text="${item.nombre}"
+                                        >
+                                </option>
+                            </select>
+                        </div>
+                        <div id="especificarCarrera"
+                             class="col-md-12 mt-3">
+                        </div>
+                    </div>
+                </div>
+            </form>
+            <div th:unless="${inscrito}" class="modal-footer" style="text-align: center;">
+                <form class="text-center" th:if='${session["SESSION_USUARIO"]} == null AND ${!lleno}' action="/contingencia/facebook/logincontingencia" method="POST">
+                 <!--form action="https://bit.ly/3indEeY"-->
+                    <button type="submit" class='btn btn-success qwbtn_face' >
+                        <i class="fa fa-facebook-official fa-lg"></i> 
+                        &nbsp; Inscríbete aquí
+                    </button>
+                </form>
+                <div th:if='${session["SESSION_USUARIO"]} != null AND ${!lleno}'>
+                    <button type="button" th:rel="${taller.id}" class="btn btn-success inscribirse" 
+                            th:if='${session["SESSION_USUARIO"].interesado.id} != null AND ${!lleno}'>Inscríbete</button>
+                    <form class="text-center" th:if='${session["SESSION_USUARIO"].interesado.id} == null AND ${!lleno}' action="/contingencia/facebook/logincontingencia" method="POST">
+                        <button type="submit" class='btn btn-success qwbtn_face' >
+                            <i class="fa fa-facebook-official fa-lg"></i>  &nbsp; Inscríbete aquí
+                        </button>
+                    </form>
+                </div>
+                <button type="button" class="btn btn-success inscribirse" disabled="" th:if="${lleno}">El taller se encuentra lleno</button>
+            </div>
+            <div th:if="${inscrito}" class="modal-footer text-center">
+                <button type="button" class="btn btn-success inscribirse" th:if='${session["SESSION_USUARIO"].interesado.id} != null' disabled="">Ya estás Inscrito</button>
+                <button type="button" class="btn btn-success inscribirse" disabled="" th:if="${lleno}">El taller se encuentra lleno</button>
+            </div>
+        </div>
+    </div>
+</div>

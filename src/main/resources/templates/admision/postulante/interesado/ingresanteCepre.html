@@ -1,0 +1,76 @@
+<html layout:decorator="admision/_layout/layoutAgraria1">
+    <head>
+        <title>Inscripción Ingresante CEPRE</title>
+    </head>
+
+    <body>
+
+        <div layout:fragment="banner">
+
+            <h1> 
+                <span th:inline="text" >Bienvenida a la familia Molinera <br/><p>[[${interesado.nombreCompleto}]]</p> <!--¿Eres de la CEPRE?--></span> 
+                <div class="line"></div>
+            </h1>
+        </div>
+
+        <div layout:fragment="main">
+
+
+
+            <div class="col-md-6 col-md-offset-3 m-t-lg">
+
+                <p class="h4 m-b-md text-center"
+                   th:inline="text">
+                    Ingrese la información solicitada.
+                    <!--[[${interesado.nombres}]], hemos detectado que te has preparado en la
+                    última temporada del Centro Pre Universitario La Molina. Ingresa tu código y DNI para confirmar esta información
+                    y presiona el botón <strong>Soy de la CEPRE</strong>-->
+                </p>
+
+                <form id="formCepre">
+                    <div class="row">
+
+                        <div class="form-group">
+                            <label>Documento de identidad</label>
+                            <select name="tipoDocumento.id" class="form-control select2" required="true">
+                                <option></option>
+                                <option th:each="tipo : ${tiposDocIdentidad}"
+                                        th:value="${tipo.id}"
+                                        th:text="${tipo.nombre}"></option>
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Nro de documento de identidad</label>
+                            <input type="text" name="numeroDocIdentidad" class="form-control sin-espacios" required="true"/>
+                        </div>
+
+                        <!--div class="form-group">
+                            <label>Código CEPRE</label>
+                            <input type="text" class="form-control sin-espacios numerico" name="codigo"/>
+                        </div-->
+
+                    </div>
+                </form>
+
+                <a class="btn btn-lg btn-primary  m-b-lg btn-block enviar-cepre" >Soy de la CEPRE </a>
+            </div>
+
+            <!--div class="col-md-6 col-md-offset-3 m-t-lg">
+                <p class="h4 m-b-md text-center"
+                   th:inline="text">
+                    Caso contrario, presiona el botón <strong>No soy de la CEPRE</strong>:
+                </p>
+
+                <a class="btn btn-lg btn-danger  m-b-lg btn-block no-es-cepre" >No soy de la CEPRE </a>
+
+            </div-->
+
+        </div>
+
+        <div layout:fragment="js">
+            <script th:src="@{/app/postulante/interesado/ingresanteCepre.js}" charset="utf-8"></script>
+        </div>
+
+    </body>
+</html>

@@ -1,0 +1,471 @@
+<html layout:decorator="admision/_layout/layoutAgraria1">
+    <head>
+        <title>Resumen de Inscripción</title>
+    </head>
+
+    <body>
+
+        <div layout:fragment="banner">
+
+            <h3>Resumen de Inscripción</h3>
+            <h1> <span  th:text="${postulante.persona.nombreCompleto}" /> 
+                <div class="line"></div>
+            </h1>
+        </div>
+
+        <div layout:fragment="main">
+
+            <h4 class="text-primary">Datos personales</h4>
+
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-4 bold">Paterno</div>
+                    <div class="col-md-8">
+                        <span th:text="${postulante.persona.paterno}"></span>
+                        <br/>
+                        <span th:if="${datPerso != null &amp;&amp; postulante.persona.paterno != datPerso.paterno}" 
+                              data-toggle="tooltip" title="Cambios Pendientes" class="text-danger bold" th:text="${datPerso.paterno}">s</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 bold">Materno</div>
+                    <div class="col-md-8">
+                        <span th:text="${postulante.persona.materno}"></span>
+                        <br/>
+                        <span th:if="${datPerso != null &amp;&amp; postulante.persona.materno != datPerso.materno}" 
+                              data-toggle="tooltip" title="Cambios Pendientes" class="text-danger bold" th:text="${datPerso.materno}">s</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 bold">Nombres</div>
+                    <div class="col-md-8">
+                        <span th:text="${postulante.persona.nombres}"></span>
+                        <br/>
+                        <span th:if="${datPerso != null &amp;&amp; postulante.persona.nombres != datPerso.nombres}" 
+                              data-toggle="tooltip" title="Cambios Pendientes" class="text-danger bold" th:text="${datPerso.nombres}">s</span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 bold">Sexo</div>
+                    <div class="col-md-8">
+                        <span th:text="${postulante.persona.sexoEnum!=null?postulante.persona.sexoEnum.value:''}"></span>
+                        <br/>
+                        <span th:if="${datPerso != null &amp;&amp; postulante.persona.sexo != datPerso.sexo}" 
+                              data-toggle="tooltip" title="Cambios Pendientes" class="text-danger bold" th:text="${datPerso.sexoEnum.value}"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 bold">Documento de identidad</div>
+                    <div class="col-md-8">
+                        <p th:class="|inline ${postulante.cambioDni == 1 ? 'text-info bold' : ''}|"
+                           data-toggle="tooltip" th:title="${postulante.cambioDni == 1 ? 'Se realizó un cambio' : ''}"
+                           th:text="|${postulante.persona.tipoDocumento!=null?postulante.persona.tipoDocumento.simbolo:''} - ${postulante.persona.numeroDocIdentidad!=null?postulante.persona.numeroDocIdentidad:''} |"></p>
+                    </div>
+                </div>
+
+            </div>
+
+            <h4 class="text-primary">Fecha y lugar de nacimiento</h4>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-4 bold">Fecha de nacimiento</div>
+                    <div class="col-md-4">
+                        <span th:text="${postulante.persona.fechaNacer!=null? #dates.format( postulante.persona.fechaNacer,'dd/MM/yyyy'):''}"></span>
+                        <br/>
+                        <span th:if="${datPerso != null &amp;&amp; postulante.persona.fechaNacer != datPerso.fechaNacer}" 
+                              data-toggle="tooltip" title="Cambio Pendiente" class="text-danger bold" th:text="${#dates.format( datPerso.fechaNacer,'dd/MM/yyyy')}"></span>
+                    </div>
+                </div>
+                <div class="row" th:if="${postulante.persona.paisNacer}">
+                    <div class="col-md-4 bold">País</div>
+                    <div class="col-md-8">
+                        <span th:text="${postulante.persona.paisNacer.nombre}"></span>
+                        <br/>
+                        <span th:if="${datPerso != null &amp;&amp; postulante.persona.paisNacer.id != datPerso.paisNacer.id}" class="text-danger bold" th:text="${datPerso.paisNacer.nombre}"></span>
+                    </div>
+                </div>
+                <div class="row" th:if="${postulante.persona.ubicacionNacer}">
+                    <div class="col-md-4 bold">Lugar</div>
+                    <div class="col-md-4">
+                        <span th:text="${postulante.persona.ubicacionNacer!=null?postulante.persona.ubicacionNacer.distrito:''}"></span>
+                        <br/>
+                        <span class="text-danger bold" th:if="${datPerso != null &amp;&amp; postulante.persona.ubicacionNacer!=null
+                              &amp;&amp; postulante.persona.ubicacionNacer.id != datPerso.ubicacionNacer.id}" th:text="${datPerso.ubicacionNacer.distrito}"
+                              data-toggle="tooltip" title="Cambio Pendiente"></span>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="text-primary">Domicilio</h4>
+            <div class="panel-body">
+                <div class="row" th:if="${postulante.persona.paisDomicilio}">
+                    <div class="col-md-4 bold">País</div>
+                    <div class="col-md-8">
+                        <span th:text="${postulante.persona.paisDomicilio.nombre}"></span>
+                        <br/>
+                        <span th:if="${datPerso != null &amp;&amp; postulante.persona.paisDomicilio.id != datPerso.paisDomicilio.id}" class="text-danger bold" th:text="${datPerso.paisDomicilio.nombre}"
+                              data-toggle="tooltip" title="Cambio Pendiente"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 bold">Dirección</div>
+                    <div class="col-md-8">
+                        <span th:text="${postulante.persona.direccion}"></span>
+                        <br/>
+                        <span class="col-md-4 text-danger bold" th:if="${datPerso != null &amp;&amp; postulante.persona.direccion != datPerso.direccion}" th:text="${datPerso.direccion}"
+                              data-toggle="tooltip" title="Cambio Pendiente"></span>
+                    </div>
+                </div>
+                <div class="row" th:if="${postulante.persona.ubicacionDomicilio}">
+                    <div class="col-md-4 bold">Lugar</div>
+                    <div class="col-md-8">
+                        <span th:text="${postulante.persona.ubicacionDomicilio!=null?postulante.persona.ubicacionDomicilio.distrito:''}"></span>
+                        <br/>
+                        <span class="text-danger bold" th:if="${datPerso != null &amp;&amp; postulante.persona.ubicacionDomicilio != null
+                              &amp;&amp; postulante.persona.ubicacionDomicilio.id != datPerso.ubicacionDomicilio.id}" th:text="${datPerso.ubicacionDomicilio.distrito}"
+                              data-toggle="tooltip" title="Cambio Pendiente"></span>
+                    </div>
+                </div>
+            </div>
+
+            <h4 class="text-primary">Información de contacto</h4>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-4 bold">Teléfono fijo</div>
+                    <div class="col-md-8">
+                        <span th:text="${postulante.persona.telefono}"></span>
+                        <br/>
+                        <span class="text-danger bold" th:if="${datPerso != null &amp;&amp; postulante.persona.telefono != datPerso.telefono}" th:text="${postulante.persona.telefono}"
+                              data-toggle="tooltip" title="Cambio Pendiente"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 bold">Celular</div>
+                    <div class="col-md-8">
+                        <span th:text="${postulante.persona.celular}"></span>
+                        <br/>
+                        <span class="text-danger bold" th:if="${datPerso != null &amp;&amp; postulante.persona.celular != datPerso.celular}" th:text="${datPerso.celular}"
+                              data-toggle="tooltip" title="Cambio Pendiente"></span>
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 bold">Email</div>
+                    <div class="col-md-8">
+                        <span th:text=" ${postulante.persona.email}"></span>
+                        <br/>
+                        <span class="text-danger bold" th:if="${datPerso != null &amp;&amp; postulante.persona.email != datPerso.email}"
+                              data-toggle="tooltip" title="Cambio Pendiente" th:text=" ${datPerso.email}">
+                        </span>
+                    </div>
+                </div>
+            </div> 
+
+            <h4 class="text-primary">Modalidad de Ingreso</h4>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-12">
+                        <span th:text="${postulante.modalidadIngreso.nombre}"></span>
+                        <br/>
+                        <span class="bold text-danger" 
+                              th:if="${modModa != null &amp;&amp; postulante.modalidadIngreso.id != modModa.modalidadIngresoNueva.id}" 
+                              th:text="${modModa.modalidadIngresoNueva.nombreInscripcion}"
+                              data-toggle="tooltip" title="Cambio Pendiente"></span>
+                    </div>
+                </div> 
+            </div> 
+
+            <h4 class="text-primary"
+                th:if="${postulante.paisColegio}">Datos del colegio donde culminó sus estudios</h4>
+            <div class="panel-body" th:if="${postulante.paisColegio}">
+
+                <div class="row" >
+                    <div class="col-md-4 bold">País donde estudió</div>
+                    <div class="col-md-8">
+                        <span th:text="${postulante.paisColegio.nombre}"></span>
+                    </div>
+                </div>
+
+                <div th:if="${postulante.paisColegio.codigo == 'PE'}">    
+                    <div class="row">
+                        <div class="col-md-4 bold">Distrito del colegio</div>
+                        <div class="col-md-8">
+                            <span th:text="${postulante.colegioProcedencia.ubicacion.distrito}"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 bold">Dirección del colegio</div>
+                        <div class="col-md-8">
+                            <span th:text="${postulante.colegioProcedencia.direccion}"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 bold">Nombre del colegio</div>
+                        <div class="col-md-8">
+                            <span th:text="${postulante.colegioProcedencia.nombreLargo}"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 bold">Tipo gestión</div>
+                        <div class="col-md-8">
+                            <span th:text="${postulante.colegioProcedencia.gestion.nombre}"></span>
+                        </div>
+                    </div>
+<!--                    <div class="row" th:unless="${#strings.isEmpty(postulante.codigoAlumno)}">
+                        <div class="col-md-4 bold">Código Alumno</div>
+                        <div class="col-md-4" th:text="${postulante.codigoAlumno}"></div>
+                    </div>-->
+                </div>
+
+                <div th:unless="${postulante.paisColegio.codigo == 'PE'}">  
+                    <div class="row">
+                        <div class="col-md-4 bold">Nombre del colegio</div>
+                        <div class="col-md-8">
+                            <span th:text="${postulante.colegioExtranjero}"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" th:if="${postulante.gradoSecundaria}">
+                    <div class="col-md-4 bold">Último grado que finalizó en la secundaria</div>
+                    <div class="col-md-4" th:text="${postulante.gradoSecundaria.nombre}"></div>
+                </div>
+
+                <div class="row" th:if="${postulante.yearEgresoColegio}">
+                    <div class="col-md-4 bold">Año que egresó del colegio</div>
+                    <div class="col-md-4" th:text="${postulante.yearEgresoColegio}"></div>
+                </div>
+            </div>
+
+            <h4 class="text-primary"
+                th:if="${postulante.paisUniversidad}">Datos de la universidad de procedencia</h4>
+            <div class="panel-body" th:if="${postulante.paisUniversidad}">
+                <div class="row" >
+                    <div class="col-md-4 bold">País de la Universidad</div>
+                    <div class="col-md-8">
+                        <span th:text="${postulante.paisUniversidad.nombre}"></span>
+                    </div>
+                </div>
+                <div class="row" th:unless="${postulante.paisUniversidad.codigo=='PE'}">
+                    <div class="col-md-4 bold">Nombre de la Universidad</div>
+                    <div class="col-md-8">
+                        <span th:text="${postulante.universidadExtranjera}"></span>
+                    </div>
+                </div>
+                <div class="row" th:if="${postulante.paisUniversidad.codigo=='PE'}">
+                    <div class="col-md-4 bold">Nombre de la Universidad</div>
+                    <div class="col-md-8">
+                        <span th:text="${postulante.universidadProcedencia.nombre}"></span>
+                    </div>
+                </div>
+                <div class="row" th:if="${postulante.paisUniversidad.codigo=='PE'}">
+                    <div class="col-md-4 bold">Tipo gestión</div>
+                    <div class="col-md-8">
+                        <span th:text="${postulante.universidadProcedencia.tipoGestion.value}"></span>
+                    </div>
+                </div>
+                <div class="row" th:unless="${#strings.isEmpty(postulante.gradoTitulo)}">
+                    <div class="col-md-4 bold">Grado académico</div>
+                    <div class="col-md-8" th:text="${postulante.gradoTitulo}"></div>
+                </div>
+            </div>
+
+
+
+
+            <h4 class="text-primary"
+                th:if="${coleUni != null}">Cambios de Datos Académicos</h4>
+            <div class="panel-body" th:if="${coleUni != null AND coleUni.paisUniversidad != null}">
+                <div class="row" >
+                    <div class="col-md-4 bold">País de la Universidad</div>
+                    <div class="col-md-8">
+                        <span class="bold text-danger"
+                              th:text="${coleUni.paisUniversidad.nombre}" data-toggle="tooltip" title="Cambio Pendiente"></span>
+                    </div>
+                </div>
+                <div class="row" th:unless="${coleUni.paisUniversidad.codigo=='PE'}">
+                    <div class="col-md-4 bold">Nombre de la Universidad</div>
+                    <div class="col-md-8">
+                        <span class="bold text-danger"
+                              th:text="${coleUni.universidadExtranjera}" data-toggle="tooltip" title="Cambio Pendiente"></span>
+                    </div>
+                </div>
+                <div class="row" th:if="${coleUni.paisUniversidad.codigo=='PE'}">
+                    <div class="col-md-4 bold">Nombre de la Universidad</div>
+                    <div class="col-md-8">
+                        <span class="bold text-danger"
+                              th:text="${coleUni.universidadNueva.nombre}" data-toggle="tooltip" title="Cambio Pendiente"></span>
+                    </div>
+                </div>
+                <div class="row" th:if="${coleUni.paisUniversidad.codigo=='PE'}">
+                    <div class="col-md-4 bold">Tipo gestión</div>
+                    <div class="col-md-8">
+                        <span class="bold text-danger"
+                              th:text="${coleUni.universidadNueva.tipoGestion.value}" data-toggle="tooltip" title="Cambio Pendiente"></span>
+                    </div>
+                </div>
+            </div>
+
+            <div class="panel-body" th:if="${coleUni != null AND coleUni.paisColegio != null}">
+
+                <div class="row" >
+                    <div class="col-md-4 bold">País donde estudió</div>
+                    <div class="col-md-8">
+                        <span class="bold text-danger"
+                              data-toggle="tooltip" title="Cambio Pendiente" th:text="${coleUni.paisColegio.nombre}"></span>
+                    </div>
+                </div>
+
+                <div th:if="${coleUni.paisColegio.codigo == 'PE'}">    
+                    <div class="row">
+                        <div class="col-md-4 bold">Distrito del colegio</div>
+                        <div class="col-md-8">
+                            <span class="bold text-danger"
+                                  th:text="${coleUni.colegioNuevo.ubicacion.distrito}"
+                                  data-toggle="tooltip" title="Cambio Pendiente"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 bold">Direccion del colegio</div>
+                        <div class="col-md-8">
+                            <span class="bold text-danger"
+                                  th:text="${coleUni.colegioNuevo.direccion}" data-toggle="tooltip" title="Cambio Pendiente"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 bold">Nombre del colegio</div>
+                        <div class="col-md-8">
+                            <span class="bold text-danger"
+                                  th:text="${coleUni.colegioNuevo.nombreLargo}" data-toggle="tooltip" title="Cambio Pendiente"></span>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 bold">Tipo gestión</div>
+                        <div class="col-md-8">
+                            <span class="bold text-danger"
+                                  th:text="${coleUni.colegioNuevo.gestion.nombre}" data-toggle="tooltip" title="Cambio Pendiente"></span>
+                        </div>
+                    </div>
+                </div>
+
+                <div th:unless="${coleUni.paisColegio.codigo == 'PE'}">  
+                    <div class="row">
+                        <div class="col-md-4 bold">Nombre del colegio</div>
+                        <div class="col-md-8">
+                            <span th:text="${postulante.colegioExtranjero}"></span>
+                            <br/>
+                            <span class="bold text-danger" th:if="${coleUni != null &amp;&amp; coleUni.colegioExtranjero != null 
+                                  &amp;&amp; coleUni.colegioExtranjero != postulante.colegioExtranjero}" 
+                                  th:text="${coleUni.colegioExtranjero}" data-toggle="tooltip" title="Cambio Pendiente"></span>
+                        </div>
+                    </div>
+                </div>
+
+            </div>
+
+
+
+
+
+            <h4 class="text-primary" th:unless="${modalidad.isPreLaMolina()}">Carreras a postular</h4>
+            <h4 class="text-primary" th:if="${modalidad.isPreLaMolina()}">Especialidad</h4>
+            <div class="panel-body">
+                <div class="row">
+                    <div th:if="${!opciones.empty}">
+                        <div class="col-md-12 text-danger bold" th:if="${modModa != null &amp;&amp; carreras.size() == 0 
+                             &amp;&amp; modModa.modalidadIngresoNueva.modalidadIngresoCicloActual.opciones &lt; opciones.size()}" 
+                             th:inline="text" data-toggle="tooltip" title="Cambio Pendiente">
+                            <span class="text-warning">(*)</span>> Recuerda que al cambiar a la modalidad 
+                            [[${modModa.modalidadIngresoNueva.nombreInscripcion}]] solo se tomará en cuenta 
+                            [[${modModa.modalidadIngresoNueva.modalidadIngresoCicloActual.opciones &gt; 1 ? 
+                            'las ' + modModa.modalidadIngresoNueva.modalidadIngresoCicloActual.opciones + ' primeras opciones.' : 'la primera opción.'
+                            }]]
+                        </div>
+                        <div class="row col-md-12">
+                            <div class="col-md-4 bold" th:text="|Opción ${opciones[0].prioridad}|">Primera Opcion</div>
+                            <div class="col-md-8">
+                                <span th:text="${opciones[0].carreraPostula.carrera.nombre}"></span>
+                                <br/>
+                                <span th:if="${!carreras.empty &amp;&amp; carreras[0].carreraPostula.id != opciones[0].carreraPostula.id}" 
+                                      class="bold text-danger" th:text="${carreras[0].carreraPostula.carrera.nombre}"
+                                      data-toggle="tooltip" title="Cambio Pendiente"></span>
+                            </div>
+                        </div>
+                        <div class="row col-md-12" th:if="${opciones.size() &gt; 1 OR carreras.size() &gt; 1}">
+                            <div class="col-md-4 bold">Opción 2</div>
+                            <div class="col-md-8">
+                                <span th:text="${opciones.size() &gt; 1 ? opciones[1].carreraPostula.carrera.nombre : '---'}"></span>
+                                <br/>
+                                <span class="bold text-danger" th:text="${carreras.size() &gt; 1 ? carreras[1].carreraPostula.carrera.nombre : ''}"
+                                      data-toggle="tooltip" title="Cambio Pendiente"></span>
+                            </div>
+                        </div>
+                        <div class="row col-md-12" th:if="${opciones.size() &gt; 2 OR carreras.size() &gt; 2}">
+                            <div class="col-md-4 bold">Opción 3</div>
+                            <div class="col-md-8">
+                                <span th:text="${opciones.size() &gt; 2 ? opciones[2].carreraPostula.carrera.nombre : '---'}"></span>
+                                <br/>
+                                <span class="bold text-danger" th:text="${carreras.size() &gt; 2 ? carreras[2].carreraPostula.carrera.nombre : ''}"
+                                      data-toggle="tooltip" title="Cambio Pendiente"></span>
+                            </div>
+                        </div>
+                        <div class="row col-md-12" th:if="${opciones.size() &gt; 3 OR carreras.size() &gt; 3}">
+                            <div class="col-md-4 bold">Opción 4</div>
+                            <div class="col-md-8">
+                                <span th:text="${opciones.size() &gt; 3 ? opciones[3].carreraPostula.carrera.nombre : '---'}"></span>
+                                <br/>
+                                <span class="bold text-danger" th:text="${carreras.size() &gt; 3 ? carreras[3].carreraPostula.carrera.nombre : ''}"
+                                      data-toggle="tooltip" title="Cambio Pendiente"></span>
+                            </div>
+                        </div>
+                        <div class="row col-md-12" th:if="${opciones.size() &gt; 4 OR carreras.size() &gt; 4}">
+                            <div class="col-md-4 bold">Opción 5</div>
+                            <div class="col-md-8">
+                                <span th:text="${opciones.size() &gt; 4 ? opciones[4].carreraPostula.carrera.nombre : '---'}"></span>
+                                <br/>
+                                <span class="bold text-danger" th:text="${carreras.size() &gt; 4 ? carreras[4].carreraPostula.carrera.nombre : ''}"
+                                      data-toggle="tooltip" title="Cambio Pendiente"></span>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+            </div> 
+            <span></span>
+            <h4 class="text-primary" th:if="${cambios}">Cambios Recientes</h4>
+            <div th:if="${color}" th:remove="tag">
+                <p class="bold">Leyenda:</p>
+                <p class="bold"><span class="text-danger">* ROJO:</span> Cambio en proceso</p>
+                <p class="bold"><b class="text-info">* AZUL:</b> Cambio realizado</p>
+                <div class="panel-body">
+                    <div class="row">
+                        <div class="col-md-8 " th:each="item : ${cambios}" >     
+                            <b th:class="|bold ${item.estado == 'ACT' ? 'text-danger' : 'text-info'}|" 
+                               th:text="|- ${item.tipoCambioInfo.nombre}|"
+                               data-toggle="tooltip"
+                               ></b>
+                        </div>
+                    </div>
+                </div> 
+            </div> 
+            <div th:unless="${color}" class="row">
+                <div class="col-md-12" th:each="item : ${cambios}" >     
+                    <b
+                       th:text="|- ${item.tipoCambioInfo.nombre}|"
+                       data-toggle="tooltip"
+                       ></b>
+                </div>
+            </div>
+
+            <hr/>
+
+            <span class="col-md-12 text-center">
+                <a class="btn btn-link" th:href="@{/inscripcion/postpago/recurso}" >Regresar</a>
+            </span>
+
+        </div>
+        <div layout:fragment="js">
+            <script th:src="@{/app/postulante/postpago/resumen.js}" charset="utf-8"></script>
+        </div>
+    </body>
+</html>

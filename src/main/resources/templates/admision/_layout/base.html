@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout" class="app">
+    <head>
+        <th:block th:replace="website/_includes :: GENERAL-STYLES"/>
+
+        <title layout:title-pattern="$DECORATOR_TITLE - $CONTENT_TITLE">UNALM</title>
+        <base th:substituteby="admision/_layout/includes :: styles"/>
+        <base th:substituteby="admision/_layout/includes :: favicon"/>
+
+        <base layout:fragment="header-styles"/>
+
+    </head>
+
+    <body>
+        <section layout:fragment="body"> </section>
+        <div th:substituteby="admision/_layout/includes :: javascript"/>
+        <div th:substituteby="website/_includes :: parrot-chat"/>
+        <div th:substituteby="admision/_layout/includes :: google-analytics"/>
+
+        <section layout:fragment="js">  </section>
+        <div th:substituteby="admision/_layout/includes :: notify"/>
+    </body>
+</html>

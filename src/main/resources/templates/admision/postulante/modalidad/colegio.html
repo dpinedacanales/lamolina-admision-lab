@@ -1,0 +1,87 @@
+<h4 class="m-b-md m-t-md">Datos de Colegio</h4>
+
+<div class="row">
+    <div class="col-sm-12">
+        <div class="form-group">
+            <label>País del colegio</label>
+            <input th:if="${modalidadCiclo.verColegiosExtranjeros}"
+                   id="paisColegio" type="text" class="form-control buscar-pais-colegio" 
+                   name="paisColegio.id" data-trigger="change"
+                   th:rel="${postulante.paisColegio!=null ? postulante.paisColegio.nombre:''}"
+                   th:attr="codigo=${codigo}"
+                   th:value="${postulante.paisColegio!=null? postulante.paisColegio.id :''}"
+                   required="true"/>
+
+            <input th:unless="${modalidadCiclo.verColegiosExtranjeros}"
+                   id="paisColegio" type="text" class="form-control buscar-pais-colegio" 
+                   name="paisColegio.id" data-trigger="change"
+                   th:rel="${peru.nombre}"
+                   th:attr="codigo=${peru.codigo}"
+                   th:value="${peru.id}"
+                   required="true"/>
+        </div>
+    </div>
+
+</div>
+
+<div th:if="${modalidadCiclo.soloColegioExtranjero==0}" >
+    <div th:class="|row ${postulante.paisColegio!=null ? ( postulante.paisColegio.id==178?'':'hide'):'hide'}|" id="grupoColegioNac">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label>Distrito</label>
+                <input type="text" class="form-control" id="distritoColegio"
+                       th:rel="${postulante.colegioProcedencia!=null?(postulante.colegioProcedencia.ubicacion!=null?postulante.colegioProcedencia.ubicacion.distrito:''):''}"
+                       th:value="${postulante.colegioProcedencia!=null?(postulante.colegioProcedencia.ubicacion!=null?postulante.colegioProcedencia.ubicacion.id:''):''}"/>
+            </div>
+        </div>
+
+<!--        <div class="col-sm-6">
+            <div class="form-group">
+                <label>Código Alumno (Solo si <b>NO</b> tienes DNI)</label>                
+                <input type="text" class="form-control"
+                       th:rel="${postulante.persona.tipoDocumento.id}"
+                       th:required="${postulante.persona.tipoDocumento.id != 2}" 
+                       name="codigoAlumno" id="codigoAlumno"
+                       th:value="${postulante.codigoAlumno!=null?postulante.codigoAlumno:''}"/>
+                <small class="text-primary" style="cursor: pointer" id="queesesto">¿Qué es esto?</small>
+            </div>
+        </div>-->
+
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label>Nombre de colegio</label>
+                <input type="text" class="form-control" id="colegio-procedencia" name="colegioProcedencia.id"
+                       th:rel="${colegio!=null ? colegio.nombreLargo:''}"
+                       th:value="${colegio!=null ? colegio.id:''}"/>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div th:if="${modalidadCiclo.soloColegioPeruano==0}" >
+    <div  th:class="|row ${postulante.paisColegio!=null ? ( postulante.paisColegio.id==178?'hide':''):'hide'}|" id="grupoColegioExt">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label>Nombre del Colegio</label>
+                <input type="text" class="form-control" id="colegioExtranjero" name="colegioExtranjero"
+                       th:value="${postulante.colegioExtranjero}"/>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row m-b-lg">
+    <div class="col-sm-6">
+        <div class="form-group">
+            <label>Año de egresó del colegio</label>
+            <select class="input-s-full form-control" required="true" id="yearColegio" name="yearEgresoColegio">
+                <option></option>
+                <option th:each="year : ${#numbers.sequence((-(ciclo.cicloAcademico.year-1)),(-(ciclo.cicloAcademico.year-60)))}"
+                        th:value="${-year}"
+                        th:selected="${postulante.yearEgresoColegio}? ${(-year)==postulante.yearEgresoColegio}"
+                        th:text="${-year}">1</option>
+            </select>
+        </div>
+    </div>
+</div>

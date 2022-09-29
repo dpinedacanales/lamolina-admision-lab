@@ -1,0 +1,169 @@
+#parrot-chat {
+  width: 360px;
+  z-index: 999999;
+  position: fixed;
+  bottom: 0;
+  right: 25px;
+  font-family: Helvetica, Arial, sans-serif !important; }
+  #parrot-chat .minified-wrapper {
+    width: 260px;
+    background: #f5f5f5;
+    border: 2px solid #e2e2e2;
+    border-radius: 8px 8px 0 0;
+    padding: 10px 15px;
+    height: 40px;
+    cursor: pointer; }
+    #parrot-chat .minified-wrapper span {
+      font-size: 16px;
+      font-weight: bold;
+      color: #2ECC72; }
+    #parrot-chat .minified-wrapper .icon {
+      color: gray !important;
+      float: right;
+      margin-top: 4px; }
+  #parrot-chat .full-wrapper {
+    margin-bottom: 10px;
+    border-radius: 8px;
+    background: white;
+    box-shadow: 0 5px 50px rgba(0, 0, 0, 0.2) !important;
+    min-height: 460px; }
+    #parrot-chat .full-wrapper .message-header {
+      border-radius: 8px 8px 0 0;
+      height: 50px;
+      background: #2ECC72;
+      color: white;
+      padding: 15px; }
+      #parrot-chat .full-wrapper .message-header p {
+        font-weight: bold;
+        font-size: 1.3em;
+        display: inline-block; }
+      #parrot-chat .full-wrapper .message-header .close {
+        color: gray !important;
+        float: right;
+        margin-top: 4px; }
+    #parrot-chat .full-wrapper .message-body .message-form {
+      padding: 0px 30px; }
+      #parrot-chat .full-wrapper .message-body .message-form .presentation {
+        color: #999;
+        font-weight: bold;
+        font-size: 1.1em;
+        text-align: center;
+        width: 80%;
+        margin: 25px auto; }
+      #parrot-chat .full-wrapper .message-body .message-form form {
+        margin-top: 20px; }
+      #parrot-chat .full-wrapper .message-body .message-form label {
+        font-weight: bold; }
+    #parrot-chat .full-wrapper .message-body .scrolled {
+      overflow: auto;
+      padding: 10px;
+      height: 330px !important; }
+      #parrot-chat .full-wrapper .message-body .scrolled .delimiter-line {
+        position: relative;
+        margin: 30px 0;
+        text-align: center; }
+        #parrot-chat .full-wrapper .message-body .scrolled .delimiter-line span {
+          display: inline-block;
+          font-size: 14px;
+          line-height: 20px;
+          font-weight: bolder;
+          z-index: 200;
+          background: #fff;
+          position: relative;
+          padding: 0 20px; }
+        #parrot-chat .full-wrapper .message-body .scrolled .delimiter-line:after {
+          content: " ";
+          display: block;
+          position: absolute;
+          z-index: 100;
+          height: 0;
+          width: 100%;
+          top: 50%;
+          border-bottom: 1px solid rgba(0, 0, 0, 0.2); }
+      #parrot-chat .full-wrapper .message-body .scrolled .conv-bubbles {
+        position: relative;
+        width: 100%;
+        min-height: 20px;
+        overflow: hidden;
+        margin: 4px 0; }
+        #parrot-chat .full-wrapper .message-body .scrolled .conv-bubbles a.under, #parrot-chat .full-wrapper .message-body .scrolled .conv-bubbles a.under:hover {
+          display: block;
+          font-size: 0.7em;
+          color: #999;
+          margin-left: 10px;
+          width: 100%; }
+          #parrot-chat .full-wrapper .message-body .scrolled .conv-bubbles a.under.der, #parrot-chat .full-wrapper .message-body .scrolled .conv-bubbles a.under:hover.der {
+            float: right;
+            margin-right: 10px;
+            text-align: right;
+            width: 100%; }
+        #parrot-chat .full-wrapper .message-body .scrolled .conv-bubbles .bubble {
+          display: inline-block;
+          position: relative;
+          max-width: 70%;
+          background: #f5f5f5;
+          padding: 12px 16px;
+          border-radius: 5px;
+          margin-left: 5px;
+          overflow: visible;
+          font-size: 14px; }
+          #parrot-chat .full-wrapper .message-body .scrolled .conv-bubbles .bubble img {
+            max-width: 200px;
+            margin: 10px auto;
+            display: block; }
+          #parrot-chat .full-wrapper .message-body .scrolled .conv-bubbles .bubble .attach {
+            color: #286efa;
+            display: block; }
+            #parrot-chat .full-wrapper .message-body .scrolled .conv-bubbles .bubble .attach i {
+              color: #3b3b3b;
+              margin-right: 3px; }
+          #parrot-chat .full-wrapper .message-body .scrolled .conv-bubbles .bubble.der {
+            float: right;
+            margin-right: 5px; }
+          #parrot-chat .full-wrapper .message-body .scrolled .conv-bubbles .bubble.green {
+            background: #2ECC72;
+            color: #fff; }
+          #parrot-chat .full-wrapper .message-body .scrolled .conv-bubbles .bubble.orange {
+            background: #f39c12;
+            color: #fff; }
+          #parrot-chat .full-wrapper .message-body .scrolled .conv-bubbles .bubble.yellow {
+            background: #fff200; }
+          #parrot-chat .full-wrapper .message-body .scrolled .conv-bubbles .bubble.blue {
+            background: #286efa;
+            color: #fff; }
+    #parrot-chat .full-wrapper .message-footer {
+      position: absolute;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      min-height: 70px;
+      max-height: 200px;
+      border-top: 1px solid #e6e6e6;
+      padding: 20px 20px; }
+      #parrot-chat .full-wrapper .message-footer textarea {
+        width: 90%;
+        height: 100%;
+        border: 0px;
+        font-size: 13px;
+        resize: none; }
+      #parrot-chat .full-wrapper .message-footer textarea:focus {
+        outline: none !important; }
+      #parrot-chat .full-wrapper .message-footer .option-icons {
+        height: 80px;
+        position: absolute;
+        top: 0;
+        padding: 25px 10px;
+        display: inline-block; }
+        #parrot-chat .full-wrapper .message-footer .option-icons span, #parrot-chat .full-wrapper .message-footer .option-icons label {
+          display: inline-block;
+          overflow: unset !important;
+          cursor: pointer;
+          line-height: 32px;
+          color: rgba(0, 0, 0, 0.4);
+          transition-duration: 0.3s;
+          transition-property: all; }
+          #parrot-chat .full-wrapper .message-footer .option-icons span:hover, #parrot-chat .full-wrapper .message-footer .option-icons label:hover {
+            color: rgba(0, 0, 0, 0.8);
+            transition-duration: 0.3s;
+            transition-property: all; }
+

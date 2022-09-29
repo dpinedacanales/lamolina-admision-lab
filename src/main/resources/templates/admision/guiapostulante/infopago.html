@@ -1,0 +1,105 @@
+<html layout:decorator="admision/_layout/layoutAgraria1">
+    <head>
+        <title>Formas de Pago</title>
+    </head>
+
+    <body>
+
+        <div layout:fragment="banner">
+
+            <!--h3>Boleta de Pago</h3-->
+            <h1> <span  th:text="${interesado.nombreCompleto}" /> 
+                <div class="line"></div>
+            </h1>
+
+        </div>
+
+        <div layout:fragment="main">
+
+            <div class="col-md-12">
+                <div th:each="deuda : ${deudas}"
+                     th:class="|alert alert-${deuda.conceptoPrecio.color}|"
+                     style=" background-color: #D6EDDE; border-color: #D6EDDE;color: #000000">
+                    <h2 class="text-center m-b-xs" th:inline="text">
+                        Boleta de pago Nº [[${deuda.conceptoPrecio.numero}]]
+
+                    </h2>
+                    <!--<div class="block bold m-b text-center m-t-xs" th:inline="text">Documento [[${deuda.id}]]</div>-->
+                    <div >
+                        <table class="table table-condensed">
+                            <tbody class="">
+                                <tr th:if="${deuda.conceptoPrecio.conceptoPago.codigo=='999'}">
+                                    <td class="text-center" colspan="2"><b>Segundo Pago</b></td>
+                                </tr>
+                                <tr>
+                                    <td style="width:40%">Entidad Bancaria</td>
+                                    <td style="width:60%" 
+                                        th:text="${deuda.conceptoPrecio.conceptoPago.cuentaBancaria.banco}">BANCO DE CRÉDITO DEL PERÚ</td>
+                                </tr>
+                                <tr>
+                                    <td>Nombre Comercial</td>
+                                    <td th:text="${deuda.conceptoPrecio.conceptoPago.cuentaBancaria.empresa}">UNIVERSIDADES AGRARIA LA MOLINA</td>
+                                </tr>
+                                <tr th:unless="${deuda.conceptoPrecio.conceptoPago.codigo=='999'}">
+                                    <td>Nombre del servicio a pagar</td>
+                                    <td th:inline="text">
+                                        [[${deuda.cuentaBancaria.nombre}]]<br/>
+                                        <strong class="h4">[[${deuda.cuentaBancaria.numero}]]</strong>
+                                    </td>
+                                </tr>
+                                <tr th:if="${deuda.conceptoPrecio.conceptoPago.codigo=='999'}">
+                                    <td>Número de la Cuenta</td>
+                                    <td th:text="${deuda.conceptoPrecio.conceptoPago.cuentaBancaria.numero}"></td>
+                                </tr>
+                                <tr th:unless="${deuda.conceptoPrecio.conceptoPago.codigo=='999'}">
+                                    <td>Concepto de Pago</td>
+                                    <td th:text="${deuda.conceptoPrecio.conceptoPago.descripcion}"></td>
+                                </tr>
+                                <tr>
+                                    <td>Código de Identificación del postulante (DNI)</td>
+                                    <td th:text="${postulante.persona.codigoPago}"></td>
+                                </tr>
+                                <tr>
+                                    <td><b class="mark block">Monto a Pagar</b></td>
+                                    <td th:inline="text"><b class="mark block">S/. [[${helper.precio(deuda.conceptoPrecio.monto)}]]</b></td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <h4>
+                    <p class="h4 text-center m-t bold" th:unless="${esFinalInscripciones}"
+                       th:inline="text">
+                        <span th:if="${!ciclo.esVirtual}">  Si deseas rendir el Examen de Admisión [[${ciclo.cicloAcademico.descripcion}]] haz clic en el botón POSTULAR AL CONCURSO DE ADMISIÓN </span>
+                        <span th:if="${ciclo.esVirtual}">   Si deseas rendir el Examen de Admisión virtual [[${ciclo.cicloAcademico.descripcion}]] haz clic en el botón POSTULAR AL CONCURSO DE ADMISIÓN VIRTUAL</span>
+                    </p>
+                </h4>
+            </div>
+
+            <div class="col-md-6 col-md-offset-3 m-t-lg">
+                <a class="btn btn-lg btn-primary  m-b btn-block" 
+                   href="/inscripcion/guiapostulante/generateBoletaPago">
+                    Descarga tu Boleta de pago de la Guía del Postulante
+                </a>
+                <a class="btn btn-lg btn-primary  m-b btn-block" 
+                   th:href="@{/inscripcion/postulante}"
+                   th:unless="${esFinalInscripciones}">
+                    <span th:if="${!ciclo.esVirtual}">  Postular al CONCURSO DE ADMISIÓN</span>
+                    <span th:if="${ciclo.esVirtual}">  Postular al CONCURSO DE ADMISIÓN VIRTUAL</span>
+                </a>
+
+            </div>
+
+            <hr/>
+
+            <div class="col-md-12 text-center">
+                <a class="btn btn-link text-success" style="color:green" th:href="@{/}">Regresar</a>
+            </div>
+
+        </div>
+
+    </body>
+</html>
+

@@ -1,0 +1,403 @@
+<html layout:decorator="admision/_layout/layoutAgraria1">
+    <head>
+        <title>Inscripción de Postulantes</title>
+    </head>
+
+    <body>
+
+        <div layout:fragment="banner">
+            <h3>Cambios</h3>
+            <h1> 
+                <span  th:text="${persona.nombreCompleto}" > </span>
+                <div class="line"></div>
+            </h1>
+
+        </div>
+
+        <div layout:fragment="main">
+            <div id="cambiosVUE" v-cloak="">
+                <div class="row" th:if="${solicitudes.size() == 0}">
+                    <div class="col-md-12">
+                        <h4>No tienes ningun cambio por realizar</h4>
+                    </div>
+                </div>
+
+                <div class="row">
+                    <div th:each="item : ${solicitudes}">
+
+                        <div th:if="${item.tipoCambioInfo.codigo == 'CDATGEN'}">
+
+                            <h3>Cambio de Datos Generales</h3>
+                            <div>
+                                <form data-parsley-validate="true" method="POST" id="form" th:action="@{/inscripcion/postulante/savePaso/1/paso}">
+                                    <div class="panel-body">
+
+                                        <h4 class="m-b-md m-t-md">Ingresa tus Datos Generales</h4>
+
+                                        <div class="row">
+
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label>Tipo de documento de identidad</label>
+                                                    <span class="form-control">{{persona.tipoDocumento.simbolo}}</span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label>Número de documento de identidad</label>
+                                                    <span class="form-control">{{persona.numeroDocIdentidad}}</span>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label>Apellido Paterno</label>
+                                                    <input type="text" v-model="persona.paterno" class="form-control"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label>Apellido Materno</label>
+                                                    <input type="text" v-model="persona.materno" class="form-control"/>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row">
+
+                                            <div class="col-sm-6">
+
+                                                <input type="hidden" name="persona.nombres" required="true" th:value="${persona.nombres}" class="form-control"/>
+
+
+                                                <div class="row">
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <label>Primer nombre</label>
+                                                            <input type="text" required="true" v-model="persona.primerNombre" class="form-control"/>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-sm-6">
+                                                        <div class="form-group">
+                                                            <label>Segundo y tercer nombre</label>
+                                                            <input type="text" v-model="persona.segundoNombre" class="form-control"/>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label>Sexo</label>
+
+                                                    <div class="form-group">
+                                                        <div class="col-sm-14">
+                                                            <div class="col-sm-5">
+                                                                <label class="radio inline">
+                                                                    <input  type="radio" v-model="persona.sexo" id="inlineCheckbox1" value="M"/> Masculino
+                                                                </label>
+                                                            </div>
+                                                            <div class="col-sm-5">
+                                                                <label class="radio inline">
+                                                                    <input  type="radio" v-model="persona.sexo" id="inlineCheckbox2" value="F"/> Femenino
+                                                                </label>
+                                                            </div>
+                                                            <!--div class="col-sm-5">
+                                                                <label class="radio inline">
+                                                                    <input  type="radio" v-model="persona.sexo" id="inlineCheckbox3" value="otro"/> otro
+                                                                </label>
+                                                            </div-->
+                                                        </div>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <h4  class="m-b-md m-t-md">Lugar y fecha de nacimiento</h4>
+
+                                        <div class="row">
+
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label>País</label>
+                                                    <multiselect
+                                                        placeholder="Busca el País"
+                                                        v-model='persona.paisNacer'
+                                                        v-bind:searchable="true"
+                                                        v-bind:loading="isLoading" 
+                                                        v-bind:internal-search="false" 
+                                                        v-on:search-change="getPais"
+                                                        v-bind:limit='15'
+                                                        v-bind:options='paises'
+                                                        v-bind:allow-empty="false"
+                                                        track-by="id"
+                                                        label='nombre'>
+                                                    </multiselect>
+                                                    <input class="hide" v-model="persona.paisNacer" required=""/>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-6">
+
+                                                <label v-if="persona.paisNacer != null &amp;&amp; persona.paisNacer.codigo == 'PE'">Distrito de nacimiento (en Perú)</label>
+
+                                                <multiselect
+                                                    v-if="persona.paisNacer != null &amp;&amp; persona.paisNacer.codigo == 'PE'"
+                                                    v-model='persona.ubicacionNacer'
+                                                    v-bind:searchable="true"
+                                                    v-bind:loading="isLoading" 
+                                                    v-bind:internal-search="false" 
+                                                    v-on:search-change="getDistrito"
+                                                    v-bind:limit='15'
+                                                    v-bind:options='distritos'
+                                                    placeholder="Busca el Lugar"
+                                                    v-bind:allow-empty="false"
+                                                    track-by="id"
+                                                    label='nombre'>
+                                                </multiselect>
+
+                                            </div>
+
+                                        </div>
+
+                                        <div class="row">
+
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label>Fecha ( día / mes / año )</label>
+                                                    <div class="input-group date">
+                                                        <input data-parsley-errors-container="#errorfechaNacer"  type="text" th:value="${persona.fechaNacer}? ${#dates.format(persona.fechaNacer,'dd/MM/yyyy')}" class="form-control" name="persona.fechaNacer" required="true" />
+                                                        <span class="input-group-addon"><i class="fa fa-calendar"></i></span>
+                                                    </div>
+                                                    <span id="errorfechaNacer"></span>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label>Nacionalidad (Ingresa el país de tu nacionalidad)</label>
+                                                    <label>País</label>
+                                                    <multiselect
+                                                        placeholder="Busca el País"
+                                                        v-model='persona.nacionalidad'
+                                                        v-bind:searchable="true"
+                                                        v-bind:loading="isLoading" 
+                                                        v-bind:internal-search="false" 
+                                                        v-on:search-change="getPais"
+                                                        v-bind:limit='15'
+                                                        v-bind:options='paises'
+                                                        v-bind:allow-empty="false"
+                                                        track-by="id"
+                                                        label='nombre'>
+                                                    </multiselect>
+                                                    <input class="hide" v-model="persona.paisNacer" required=""/>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <h4  class="m-b-md m-t-md">Contacto</h4>
+
+                                        <div class="row">
+
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label>Teléfono</label>
+                                                    <input type="text" v-model="persona.telefono" maxlength="20" class="form-control sin-espacios numerico"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label>Celular</label>
+                                                    <input type="text" v-model="persona.celular" 
+                                                           data-parsley-length="[9,9]" 
+                                                           maxlength="9" class="form-control numerico"/>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-4">
+                                                <div class="form-group">
+                                                    <label>Correo Electrónico</label>
+                                                    <input type="text" v-model="persona.email" class="form-control verificar-email"/>
+                                                </div>
+                                            </div>
+
+                                        </div>
+
+                                        <h4  class="m-b-md m-t-md">Domicilio</h4>
+
+                                        <div class="row">
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label class="bold">País</label>
+                                                    <multiselect
+                                                        placeholder="Busca el País"
+                                                        v-model='persona.paisDomicilio'
+                                                        v-bind:searchable="true"
+                                                        v-bind:loading="isLoading" 
+                                                        v-bind:internal-search="false" 
+                                                        v-on:search-change="getPais"
+                                                        v-bind:limit='15'
+                                                        v-bind:options='paises'
+                                                        v-bind:allow-empty="false"
+                                                        track-by="id"
+                                                        label='nombre'>
+                                                    </multiselect>
+                                                    <input class="hide" v-model="persona.paisDomicilio" required=""/>
+                                                </div>
+                                            </div>
+
+                                            <div class="col-sm-6">
+                                                <div v-if="persona.paisDomicilio != null &amp;&amp; persona.paisDomicilio.codigo == 'PE'" class="form-group" id="distritoDomicilio">
+                                                    <label class="bold">Distrito (como indica tu DNI)</label>
+                                                    <multiselect
+                                                        v-if="persona.paisDomicilio != null &amp;&amp; persona.paisDomicilio.codigo == 'PE'"
+                                                        v-model='persona.ubicacionDomicilio'
+                                                        v-bind:searchable="true"
+                                                        v-bind:loading="isLoading" 
+                                                        v-bind:internal-search="false" 
+                                                        v-on:search-change="getDistrito"
+                                                        v-bind:limit='15'
+                                                        v-bind:options='distritos'
+                                                        placeholder="Busca el Lugar"
+                                                        v-bind:allow-empty="false"
+                                                        track-by="id"
+                                                        label='nombre'>
+                                                    </multiselect>
+                                                </div>
+                                            </div>
+                                        </div>
+
+                                        <div class="row">
+
+                                            <div class="col-sm-6">
+                                                <div class="form-group">
+                                                    <label class="bold">Dirección (como indica tu DNI)</label>
+                                                    <input type="text" class="form-control" v-model="persona.direccion" required="" />
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+
+                                    <hr/>
+
+                                </form>
+                            </div>
+
+                        </div>
+                        <div th:if="${item.tipoCambioInfo.codigo == 'COPCIONAI'}">
+
+                            <h3>Cambio de Carreras</h3>
+
+                            <div class="row">
+                                <div class="panel-body">
+                                    <div class="col-md-4 col-sm-6 col-xs-12">
+                                        <label>Primera opción</label>
+                                        <div class="form-group">
+                                            <multiselect
+                                                v-model='opciones[0]'
+                                                v-bind:limit='15'
+                                                v-bind:options='carreras'
+                                                placeholder="Selecciona una carrera"
+                                                v-bind:allow-empty="false"
+                                                track-by="id"
+                                                v-bind:custom-label="carreraNombre"
+                                                v-on:input="selOpcion">
+                                            </multiselect>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-12" v-if="postulante.modalidadIngresoCiclo.opciones >=2">
+                                        <label>Segunda opción</label>
+                                        <div class="form-group">
+                                            <multiselect
+                                                v-model='opciones[1]'
+                                                v-bind:limit='15'
+                                                v-bind:options='carreras'
+                                                v-bind:disabled="opciones[0] == null"
+                                                placeholder="Selecciona una carrera"
+                                                track-by="id"
+                                                v-bind:custom-label="carreraNombre"
+                                                v-on:input="selOpcion"
+                                                v-on:remove="remOpcion(2)"
+                                                >
+                                            </multiselect>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-12" v-if="postulante.modalidadIngresoCiclo.opciones >=3">
+                                        <label>Tercera opción</label>
+                                        <div class="form-group">
+                                            <multiselect
+                                                v-model='opciones[2]'
+                                                v-bind:limit='15'
+                                                v-bind:options='carreras'
+                                                v-bind:disabled="opciones[1] == null"
+                                                placeholder="Selecciona una carrera"
+                                                track-by="id"
+                                                v-bind:custom-label="carreraNombre"
+                                                v-on:input="selOpcion"
+                                                v-on:remove="remOpcion(3)">
+                                            </multiselect>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-4 col-sm-6 col-xs-12" v-if="postulante.modalidadIngresoCiclo.opciones >=4">
+                                        <label>Tercera opción</label>
+                                        <div class="form-group">
+                                            <multiselect
+                                                v-model='opciones[3]'
+                                                v-bind:limit='15'
+                                                v-bind:options='carreras'
+                                                v-bind:disabled="opciones[2] == null"
+                                                placeholder="Selecciona una carrera"
+                                                v-bind:allow-empty="false"
+                                                track-by="id"
+                                                v-bind:custom-label="carreraNombre"
+                                                v-on:input="selOpcion"
+                                                v-on:remove="remOpcion(4)">
+                                            </multiselect>
+                                        </div>
+                                    </div>
+
+                                </div>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <div th:unless="${solicitudes.size() == 0}" class="col-md-6 col-md-offset-3 m-t-lg">
+                        <a class="btn btn-lg btn-primary btn-block" style="color:green" 
+                           v-on:click='sendRequest'>Guardar Cambios</a>
+                    </div>
+                    <div class="col-md-6 col-md-offset-3 m-t-lg">
+                        <a class="btn btn-lg btn-primary  m-b btn-block" style="color:green" 
+                           th:href="@{/inscripcion/postulante}">Regresar</a>
+                    </div>
+                </div>
+
+
+            </div>
+            <div layout:fragment="js">
+                <script th:inline="javascript">
+                    /*<![CDATA[*/
+                    var postulante = /*[[${postulante}]]*/ postulante;
+                    var carreras = /*[[${carreras}]]*/ carreras;
+                    var cambios = /*[[${cambios}]]*/ cambios;
+                    /*]]>*/
+                </script>
+                <div th:substituteby="admision/_layout/includes :: javascript-vue-multiselect"></div>
+                <script th:src="@{/app/postulante/postulante/cambios/cambios.js}" charset="utf-8"></script>
+            </div>
+        </div>
+    </body>
+</html>

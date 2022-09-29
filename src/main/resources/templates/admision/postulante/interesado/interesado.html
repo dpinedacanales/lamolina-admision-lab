@@ -1,0 +1,268 @@
+<html layout:decorator="admision/_layout/layoutAgraria1">
+    <head>
+        <title>Inscripción de Postulantes</title>
+        <style>
+            .swal-wide{
+                width:850px !important;
+            }
+            .sweet-alert div {
+                display: initial !important;
+            }
+            .color-correo{
+                background: #017840
+            }
+
+        </style>
+
+    </head>
+
+    <body>
+        <div layout:fragment="banner">
+            <h3 id="preInscripcion" class="">Bienvenido a tu Preinscripción</h3>
+            <h2 id="titTaller" class="hidden text-success text-center"></h2>
+            <h3 id="insTaller" class="hidden">Inscripción</h3>
+            <h1> 
+                <div class="line"></div>
+            </h1>
+        </div>
+
+        <div layout:fragment="main">
+            <script>
+                var e = document.getElementById("procTitle");
+                e.classList.add("hide");
+            </script>
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2 m-b-xl">
+                    <div class="panel">
+                        <div class="panel-body">
+
+
+                            <form id="formInteresado"  data-parsley-validate="true" method="POST">
+<!--th:action="@{/contingencia}+${rutaForm}"-->
+                                <div class="panel-body">
+
+                                    <input type="hidden" th:if="${ciclo}" id="virtual" name="ciclo" th:value="${ciclo.esVirtual}" />
+                                    <input type="hidden" th:if="${contenido}" id="contenido" name="contenido" th:value="${contenido.contenido}" />
+
+                                    <input type="hidden" name="id" th:value="${interesado.id}" />
+                                    <input type="hidden" id="idTaller" name="idTaller" value=""/>
+
+                                    <div id="advertenciaVirtual" class="alert bold text-center" style="background: #017840; font-size: 25px" th:if="${ciclo.esSimulacro}"> Asegúrate de escribir tu  CORREO ELECTRÓNICO generado con las características de la decalaraciòn jurada de lo contrario no podrás acceder al Simulacro Virtual del Examen de Admisión.</div>
+                                    <!--cambioJR-->                 <div id="advertenciaVirtual" class="alert bold text-center" style="background: #017840; font-size: 25px;color: #ffffff " th:if="${!ciclo.esSimulacro and ciclo.esVirtual}"> Asegúrate de escribir tu CORREO ELECTRÓNICO generado con las características de la decalaración jurada de lo contrario no podrás acceder al Examen de Admisión Virtual <b th:text="|${ciclo.cicloAcademico.descripcion}|"></b>.</div>
+                                    <h4 th:if="${ciclo.esSimulacro}">Datos del Participante</h4>
+                                    <h4 th:if="${!ciclo.esSimulacro}">Datos del Postulante</h4>
+
+                                    <div class="row" th:if="${esContingencia}">
+                                        <div class="col-md-12">
+                                            <div class="form-group">
+                                                <label>Tipo de documento de Identidad</label>
+                                                <select th:unless="${interesado.tipoDocumento}" class="form-control col-md-9 select2" name="tipoDocumento.id">
+                                                    <option></option>
+                                                    <option th:each="item : ${documentos}"
+                                                            th:value="${item.id}"
+                                                            th:selected="${interesado.tipoDocumento} ? ${interesado.tipoDocumento.id == item.id}"
+                                                            th:text="${item.nombre}"
+                                                            >
+                                                    </option>
+                                                </select>
+                                                <input th:if="${interesado.tipoDocumento}" type="text" class="form-control" th:value="${interesado.tipoDocumento.nombre}" readonly=""/>
+                                                <input th:if="${interesado.tipoDocumento}" type="hidden" class="form-control" name="tipoDocumento.id" th:value="${interesado.tipoDocumento.id}"/>
+                                            </div>
+                                        </div>
+                                    </div><!-- comment -->
+                                    <div class="row">
+                                        <div class="col-md-8">
+                                            <div class="form-group">
+                                                <label>Número de Documento de Identidad</label>
+                                                <input type="text" required="" class="form-control" name="numeroDocIdentidad" th:value="${interesado.numeroDocIdentidad}" th:readonly="${interesado.numeroDocIdentidad != null AND interesado.numeroDocIdentidad != ''}"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-4">
+                                            <div class="form-group">
+                                                <label>Código de Verificación <a target="_blank" href="https://cdn.lamolina.edu.pe/v1/AUTH_90afa410262f41f1af475ed599eeb798/lamolina-admision/website/2022_I/Dni.jpg" class="fa fa-question-circle" aria-hidden="true" style="font-size: larger;"></a></label>
+                                                <input type="number" required="" min="0" max="9" pattern="^[0-9]+" class="form-control" name="codigoVerificacion" th:value="${interesado.codigoVerificacion}" th:readonly="${interesado.codigoVerificacion != null AND interesado.codigoVerificacion != ''}"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="row">
+
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label>Apellido Paterno</label>
+                                                <input type="text" name="paterno" 
+                                                       th:value="${interesado.paterno}" class="form-control nombre-persona" 
+                                                       th:readonly="${interesado.estado!='CRE'}"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label>Apellido Materno</label>
+                                                <input type="text" name="materno" class="form-control nombre-persona"
+                                                       th:value="${interesado.materno}"  
+                                                       th:readonly="${interesado.estado!='CRE'}"/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label>Nombres</label>
+                                                <input type="text" required="true" name="nombres" class="form-control nombre-persona" 
+                                                       th:value="${interesado.nombres}" 
+                                                       th:readonly="${interesado.estado!='CRE'}"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+
+                                                <label  th:if="${!ciclo.esVirtual}" id="lblCorreo">Correo Electrónico</label>
+                                                <input  th:if="${!ciclo.esVirtual}" type="text" required="true" name="email" class="form-control verificar-email" 
+                                                        th:value="${interesado.email}" 
+                                                        th:readonly="${interesado.estado!='CRE'}"
+                                                        id="correo"
+                                                        data-parsley-type="email"/>
+
+                                                <label class="bold color-correo" th:if="${ciclo.esVirtual}" id="lblCorreo" style="color: #ffffff ">Correo Electrónico</label>
+                                                <input th:if="${ciclo.esVirtual}" type="text" required="true" 
+                                                       name="email" class="color-correo form-control verificar-email " 
+                                                       th:value="${interesado.email}" 
+                                                       th:readonly="${interesado.estado!='CRE'}"
+                                                       id="correo"
+                                                       style="color: #ffffff"
+                                                       data-parsley-type="email"/> 
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                    <div class="row">
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label>Celular</label>
+                                                <input type="text" required="true" name="celular" 
+                                                       data-parsley-length="[9,9]"
+                                                       maxlength="9"
+                                                       th:value="${interesado.celular}" class="form-control sin-espacios numerico"
+                                                       th:readonly="${interesado.estado!='CRE'}"/>
+                                            </div>
+                                        </div>
+
+                                        <div class="col-sm-6">
+                                            <div class="form-group">
+                                                <label>Teléfono</label>
+                                                <input type="text" name="telefono" th:value="${interesado.telefono}" 
+                                                       maxlength="20" class="form-control sin-espacios numerico"/>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div id="tallerDetails" class="hidden">
+                                        <!--div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Tipo de documento de Identidad</label>
+                                                    <select th:unless="${interesado.tipoDocumento}" class="form-control col-md-9 select2" name="tipoDocumento.id">
+                                                        <option></option>
+                                                        <option th:each="item : ${documentos}"
+                                                                th:value="${item.id}"
+                                                                th:selected="${interesado.tipoDocumento} ? ${interesado.tipoDocumento.id == item.id}"
+                                                                th:text="${item.nombre}"
+                                                                >
+                                                        </option>
+                                                    </select>
+                                                    <input th:if="${interesado.tipoDocumento}" type="text" class="form-control" th:value="${interesado.tipoDocumento.nombre}" readonly=""/>
+                                                    <input th:if="${interesado.tipoDocumento}" type="hidden" class="form-control" name="tipoDocumento.id" th:value="${interesado.tipoDocumento.id}"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>Número de Documento de Identidad</label>
+                                                    <input type="text" class="form-control" name="numeroDocIdentidad" th:value="${interesado.numeroDocIdentidad}" th:readonly="${interesado.numeroDocIdentidad != null AND interesado.numeroDocIdentidad != ''}"/>
+                                                </div>
+                                            </div>
+                                        </div-->
+                                        <h4>Carreras de Interés</h4>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group">
+                                                    <label>¿Qué carrera te gustaría estudiar en la Agraria?</label>
+                                                    <select th:unless="${interesado.carreraInteres}" class="form-control col-md-9 select2" name="carreraInteres.id" readonly="true">
+                                                        <option></option>
+                                                        <option th:each="item : ${carreras}"
+                                                                th:value="${item.id}"
+                                                                th:selected='${interesado.carreraInteres} ? ${interesado.carreraInteres.id == item.id}'
+                                                                th:text="${item.nombre}"
+                                                                >
+                                                        </option>
+                                                    </select>
+                                                    <input th:if="${interesado.carreraInteres}" type="text" class="form-control" th:value="${interesado.carreraInteres.nombre}" readonly=""/>
+                                                    <input th:if="${interesado.carreraInteres}" type="hidden" class="form-control" name="carreraInteres.id" th:value="${interesado.carreraInteres.id}"/>
+                                                </div>
+                                            </div>                                             
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group">
+                                                    <label>¿Cuál de las siguientes carreras te gustaría que se implemente en la Agraria?</label>
+                                                    <select th:unless="${interesado.carreraNueva}" class="form-control col-md-9 select2" name="carreraNueva.id">
+                                                        <option></option>
+                                                        <option th:each="item : ${carrerasNuevas}"
+                                                                th:value="${item.id}"
+                                                                th:selected='${interesado.carreraNueva} ? ${interesado.carreraNueva.id == item.id}'
+                                                                th:text="${item.nombre}"
+                                                                >
+                                                        </option>
+                                                    </select>
+                                                    <input th:if="${interesado.carreraNueva}" type="text" class="form-control" th:value="${interesado.carreraNueva.nombre}" readonly=""/>
+                                                    <input th:if="${interesado.carreraNueva}" type="hidden" class="form-control" name="carreraNueva.id" th:value="${interesado.carreraNueva.id}"/>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div id="especificarCarrera"
+                                                 class="col-md-6">
+                                            </div>
+                                        </div>
+                                    </div>
+
+
+                                </div>
+
+                                <hr/>
+
+                                <span class="col-md-12 text-center">
+                                    <a class="btn btn-link pointer" id="cancelar">Cancelar</a>
+                                    <a id="btnSaveInteresado" class="pointer btn btn-success">Registrarse</a>
+                                </span>
+
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div layout:fragment="js" th:remove="tag">
+            <div th:substituteby="admision/_layout/includes :: jquery-cookie" th:remove="tag"></div>
+
+            <script>
+                if ($.cookie("page") == null || $.cookie("page") == '') {
+                    $("#procTitle").removeClass("hide");
+                }
+            </script>
+            <script th:inline="javascript">
+                /*<![CDATA[*/
+       
+                var rutaForm = /*[[${rutaForm}]]*/ '';
+                /*]]>*/
+            </script>
+            <script th:src="@{/app/postulante/interesado/interesado.js}" charset="utf-8"></script>
+
+        </div>
+
+    </body>
+</html>

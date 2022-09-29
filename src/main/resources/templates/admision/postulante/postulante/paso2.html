@@ -1,0 +1,70 @@
+<html layout:decorator="admision/_layout/layoutAgraria1">
+    <head>
+        <title>Inscripción de Postulantes</title>
+    </head>
+
+    <body>
+
+        <div layout:fragment="banner">
+
+            <h1> 
+                <span  th:text="${postulante.persona.nombreCompleto}" /> 
+                <div class="line"></div>
+            </h1>
+
+        </div>
+
+        <div layout:fragment="main">
+
+            <form  data-parsley-validate="true" id="formPostulante"  method="POST" th:action="@{/inscripcion/postulante/savePaso/2/paso}">
+
+                <div class="panel-body">
+
+                    <div class="row" >
+                        <div class="col-md-offset-3 col-sm-6">
+                            <P>Hola.</P>
+                            <P>Vemos que estudiaste en la CEPRE-UNALM.</P>
+                            <P>Por favor, ingrese tu código :</P>
+                        </div>
+                    </div>
+
+                    <div class="row" >
+                        <div class="col-md-offset-3 col-sm-6">
+
+                            <div th:class="|form-group ${error ? 'has-error':''}|">
+                                <input  type="text" name="codigoCepre"  class="form-control" required="true"/>
+                            </div>
+
+                            <p th:if="${error}" class="text-danger">El código no existe</p>
+
+                        </div>
+                    </div>
+
+                    <div class="row text-center"  th:if="${error}" >
+                        <div class="col-md-offset-3 col-sm-6">
+
+                            <a class="btn btn-warning"  th:href="@{/inscripcion/postulante/3/paso}" >Continuar sin código</a>
+
+                        </div>
+                    </div>
+
+                </div>
+
+                <hr/>
+
+                <div class="col-md-12 text-center">
+                    <a class="btn btn-link text-success atras" style="color:green" th:href="@{/inscripcion/postulante/1/paso}">Atras</a>
+                    <button type="button" class="btn btn-success send-form" >Siguiente</button>
+                </div>
+
+            </form>
+
+
+        </div>
+
+        <div layout:fragment="js">
+            <script th:src="@{/app/postulante/postulante/paso2.js}" charset="utf-8"></script>
+        </div>
+
+    </body>
+</html>

@@ -1,0 +1,299 @@
+<html layout:decorator="admision/_layout/layoutAgraria1">
+    <head>
+        <title>Inscripción de Postulantes</title>
+    </head>
+
+    <body>
+
+        <div layout:fragment="banner">
+
+            <h3>Bienvenido al proceso de Inscripción</h3>
+            <h1> 
+                <span  th:text="${persona !=null? persona.nombreCompleto:''}" /> 
+                <div class="line"></div>
+            </h1>
+
+        </div>
+
+        <div layout:fragment="main">
+
+
+            <form data-parsley-validate="true" method="POST" id="formPostulante" th:action="@{/inscripcion/postulante/savePaso/1/paso}" >
+                <div class="panel-body">
+
+                    <h4 class="m-b-md m-t-md">Ingresa tus Datos Generales</h4>
+
+                    <div class="row"
+                         th:if="${tiposDocIdentidad}">
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Tipo de documento de identidad</label>
+                                <select id="tipoDocumento" name="persona.tipoDocumento.id" class="form-control select2" required="true">
+                                    <option></option>
+                                    <option th:each="tipo : ${tiposDocIdentidad}"
+                                            th:value="${tipo.id}"
+                                            th:text="${tipo.nombre}"></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Número de documento de identidad</label>
+                                <input   id="numDocumento" type="text" name="persona.numeroDocIdentidad" th:value="${persona.numeroDocIdentidad}" class="form-control" required="true"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row"
+                         th:unless="${tiposDocIdentidad}">
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Tipo de documento de identidad</label>
+                                <input  type="text" readonly="true" th:value="${persona.tipoDocumento.nombre}" class="form-control"/>
+                                <input id="tipoDocumento" type="text" readonly="true" th:value="${persona.tipoDocumento.id}" class="form-control hidden" />
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="bold">Número de documento de identidad</label>
+                                <input id="numDocumento" type="text" readonly="true" th:value="${persona.numeroDocIdentidad}" class="form-control"/>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Apellido Paterno</label>
+                                <input id="paterno" type="text" name="persona.paterno" th:value="${persona.paterno}" class="form-control nombre-persona"/>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Apellido Materno</label>
+                                <input id="materno" type="text"  name="persona.materno" th:value="${persona.materno}" class="form-control nombre-persona"/>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-sm-6">
+
+                            <input type="hidden" name="persona.nombres" required="true" th:value="${persona.nombres}" class="form-control nombre-persona"/>
+
+
+                            <div class="row">
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Primer nombre</label>
+                                        <input  type="text" required="true" name="persona.primerNombre" th:value="${persona.primerNombre}" class="form-control nombre-persona"/>
+                                    </div>
+                                </div>
+                                <div class="col-sm-6">
+                                    <div class="form-group">
+                                        <label>Segundo y tercer nombre</label>
+                                        <input  type="text" name="persona.segundoNombre" th:value="${persona.segundoNombre}" class="form-control nombre-persona"/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Sexo</label>
+
+                                <div class="form-group">
+                                    <div class="col-sm-10">
+                                        <div class="col-sm-5">
+                                            <label class="radio inline">
+                                                <input  type="radio" required="true" name="persona.sexo" id="inlineCheckbox1" value="M" th:checked="${persona.sexo=='M'}" /> Masculino
+                                            </label>
+                                        </div>
+                                        <div class="col-sm-5">
+                                            <label class="radio inline">
+                                                <input  type="radio" required="true" name="persona.sexo" id="inlineCheckbox2" value="F" th:checked="${persona.sexo=='F'}" /> Femenino
+                                            </label>
+                                        </div>
+                                        <!--div class="col-sm-4">
+                                            <label class="radio inline">
+                                                <input  type="radio" required="true" name="persona.sexo" id="inlineCheckbox3" value="O" th:checked="${persona.sexo=='O'}" /> otro
+                                            </label>
+                                        </div-->
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <h4  class="m-b-md m-t-md">Lugar y fecha de nacimiento</h4>
+
+                    <div class="row">
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>País</label>
+                                <input  id="paisNacimiento" type="text" class="form-control input-s-full buscar-pais" 
+                                        name="persona.paisNacer.id" data-trigger="change"
+                                        th:rel="${paisNacer != null}? ${paisNacer.nombre}"
+                                        th:attr="codigo=${helper.showCodigoPais(paisNacer)}"
+                                        th:value="${paisNacer != null}? ${paisNacer.id}"
+                                        required="true"/>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+
+                            <div  id="lugarNacimiento" class="form-group" th:class="|form-group ${helper.showColegio(paisNacer)}|">
+                                <label>Distrito de nacimiento (en Perú)</label>
+                                <input  type="text" id="distNacimiento" class="form-control input-s-full buscar-distrito"
+                                        name="persona.ubicacionNacer.id" data-trigger="change"
+                                        th:rel="${ubicacionNacer != null}? ${ubicacionNacer.distrito}"
+                                        th:value="${ubicacionNacer != null}? ${ubicacionNacer.id}"
+                                        required="true"/>
+                                <span id="mensaje"></span>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Fecha ( día / mes / año )</label>
+                                <div class="input-group date">
+                                    <input  data-parsley-errors-container="#errorfechaNacer"  type="text" th:value="${persona.fechaNacer}? ${#dates.format(persona.fechaNacer,'dd/MM/yyyy')}" class="form-control" name="persona.fechaNacer" required="true" />
+                                    <span class="input-group-addon"><i class="fa fa-calendar" aria-hidden="true"></i></span>
+                                </div>
+                                <span id="errorfechaNacer"></span>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Nacionalidad (Ingresa el país de tu nacionalidad)</label>
+                                <input  type="text" class="form-control input-s-full buscar-pais" name="persona.nacionalidad.id" data-trigger="change"
+                                        th:rel="${nacionalidad != null}? ${nacionalidad.nombre}"
+                                        th:value="${nacionalidad != null}? ${nacionalidad.id}"
+                                        required="true"/>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <h4  class="m-b-md m-t-md">Contacto</h4>
+
+                    <div class="row">
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Teléfono</label>
+                                <input  type="search" name="persona.telefono" th:value="${persona.telefono}" 
+                                        maxlength="20" class="form-control sin-espacios numerico"/>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label>Celular</label>
+                                <input  type="search" name="persona.celular" 
+                                        th:value="${persona.celular}" data-parsley-length="[9,9]" 
+                                        maxlength="9" class="form-control sin-espacios numerico"/>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label th:if="${!ciclo.esVirtual}">Correo Electrónico</label>
+                                <input   id="correo" type="search" th:if="${!ciclo.esVirtual}" name="persona.email" th:value="${persona.email}" class="form-control verificar-email"/>
+                                <label style="background: #017840; color: #ffffff " class="bold " th:if="${ciclo.esVirtual}">Correo Electrónico</label>
+                                <input   id="correo" type="search" th:if="${ciclo.esVirtual}" name="persona.email" th:value="${persona.email}" class="form-control verificar-email"  data-parsley-type="email"  style="background: #017840; color: #ffffff"/>
+                            </div>
+                        </div>
+
+                    </div>
+
+                    <h4  class="m-b-md m-t-md">Domicilio</h4>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="bold">País</label>
+                                <input id="paisDomicilio" type="text" class="form-control input-s-full buscar-pais" 
+                                       name="persona.paisDomicilio.id" data-trigger="change"
+                                       th:rel="${paisDomicilio != null} ? ${paisDomicilio.nombre}"
+                                       th:attr="codigo=${helper.showCodigoPais(paisDomicilio)}"
+                                       th:value="${paisDomicilio != null}? ${paisDomicilio.id}"
+                                       required="true" />
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group" id="distritoDomicilio">
+                                <label class="bold">Distrito (como indica tu DNI)</label>
+                                <input type="text"  class="form-control input-s-full buscar-distrito" name="persona.ubicacionDomicilio.id" 
+                                       data-trigger="change" id="distritoDomicilioIn"
+                                       th:rel="${ubicacionDomicilio != null}? ${ubicacionDomicilio.distrito}"
+                                       th:value="${ubicacionDomicilio != null}? ${ubicacionDomicilio.id}" required="true" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="bold">Dirección (como indica tu DNI)</label>
+                                <input  type="search" class="form-control" name="persona.direccion" 
+                                       th:value="${persona.direccion}"  required="true"  />
+                            </div>
+                        </div>
+                         <!--div class="col-sm-6">
+                            <div class="form-group">
+                                <label class="bold">Adjunte carnet de vacunación (Puede descargarlo <a target="_blank" href="https://carnetvacunacion.minsa.gob.pe/">aquí</a> en formato PDF )</label>
+                                <input id="vacunaFile" type="file" class=" form-control"  accept="pdf" required="true" />
+                                <input class="nombreFila hidden" th:value="${persona.rutaArchivo}" name="persona.rutaArchivo" > </input>
+                               
+                            </div>
+                            
+                        </div-->
+                        
+                    </div>
+
+
+                </div>
+
+                <hr/>
+
+                <div class="col-md-12 text-center">
+                    <a class="btn btn-link boton" th:href="@{/inscripcion/postulante/0/paso}" >Atras</a>
+
+                    <button type="button" class="btn btn-success send-form boton"><i class="fa fa-spinner fa-spin hide" id="spin"/> Siguiente</button>
+                </div>
+
+                <input type="hidden" id="mensajeError" th:value='${mensaje}'/>
+                <input type="hidden" id="id" th:value='${postulante.id}' name="id"/>
+                <input type="hidden" id="limiteFechaNacer" th:value="${#dates.format(limiteFechaNacer,'dd/MM/yyyy')}"/>
+
+            </form>
+
+
+        </div>
+
+        <div layout:fragment="js">
+            <script th:src="@{/app/postulante/postulante/paso1.js}" charset="utf-8"></script>
+        </div>
+
+    </body>
+</html>

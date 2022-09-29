@@ -1,0 +1,375 @@
+<html layout:decorator="admision/_layout/layoutAgraria">
+    <head>
+        <title> Hoja Recorrido </title>
+    <div th:substituteby="admision/_layout/includes :: styles-mathquill"></div>
+    <style>
+        .i-checks span p{
+            display: inline;
+        }
+        .checkbox input[type=checkbox], .checkbox-inline input[type=checkbox], .radio input[type=radio], .radio-inline input[type=radio]{
+            position: relative;
+        }
+        .preg p:first-child{
+            display: inline;
+        }
+        .label {
+            font-size: 110% !important;
+            font-weight: 400 !important;
+            padding: 10px 15px !important;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div layout:fragment="banner">
+        <div class="col-md-10 col-md-offset-1  m-b-xl">
+
+            <p id="clock" class="text-center h1 m-t-n-xs text-primary pull-left"></p>
+            <div class="row">
+                <div class="col-md-12 col-sm-6">
+                    <h3 class="text-primary"  th:inline="text">[[${postulante.persona.apellidosNombres}]]</h3>
+                </div>
+                <div class="col-md-12 col-sm-6">
+                    <h3 class="text-primary title-ingreso" th:inline="text">
+                        Hoja de Recorrido
+                        [[${ciclo.cicloAcademico.descripcion}]]
+                    </h3>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div layout:fragment="main">
+        <div class="container" id="mainHojaRecorrido" v-cloak="">
+            <div class="row m-b-lg">
+                <div class="col-md-12 col-sm-6">
+                    <div class="container-1">
+
+                        <h3 class="text-second">¿listo para realizar tu primera matricula?</h3>
+                        <p class="text-center">Debes revisar la <strong>Hoja de recorrido</strong> de forma obligatoria. 
+                            Ahí sabrás paso a paso lo que tienes que hacer para concretar tu ingreso y tu matricula.  </p>
+                        <div style="text-align: center;">
+                            <a class="btn btn-success" v-on:click.prevent="loadHojaDeRecorrido">Actualizar</a>
+                            <!--a class="btn btn-primary m-t-0" target="guiapostulante"
+                               th:href="@{/inscripcion/postpago/verGuiaPostulante}">Revisa tu Guía del Postulante </a-->
+                            <a class="btn btn-info m-t-0" target="casillaelectronica"
+                               th:href="@{https://casillaelectronicaadmision.lamolina.edu.pe}">Revisa tu Casilla Electrónica </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="row m-b-md" v-for="(oficinaRec, index) in oficinasRecorrido">
+                <div class="panel-group" v-bind:id="'accordion'+index">
+
+                    <div class="panel panel-default">
+                        <a data-toggle="collapse" v-bind:data-parent="'#accordion'+index" v-bind:href="'#collapse'+index" class="">
+                            <div class="panel-heading option-coll panel-hover">
+
+                                <div class="row">
+                                    <div class="text-center col-md-2" style="margin-right: 10px;margin-left: 10px; width: 120px;">
+                                        <div class="date-action" >
+
+                                            <div v-if="oficinaRec.diaTurno != '' "
+                                                 class="date-calendar" style="width: 120px;">
+                                                <p class="text-dark-dk" style="font-size: 35px;">
+                                                    <em v-text='oficinaRec.mesTurno'>Abril</em>
+                                                    {{oficinaRec.diaTurno}}
+                                                </p>
+                                                <span class="m-r m-l m-b-lg m-t" style="margin-left: 10px; margin-right: 10px;">Según Turno</span>
+                                            </div>
+
+                                            <div v-else=""
+                                                 class="date-calendar" style="width: 120px;">
+                                                <p class="text-dark-dk" style="font-size: 35px;">
+                                                    <em>Por definir</em>
+                                                    ?
+                                                </p>
+                                                <span class="m-r m-l m-b-lg m-t" style="margin-left: 10px; margin-right: 10px;">8:00AM - 12:00PM</span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+
+
+                                    <div class="col-md-8 m-l-md text-panel">
+                                        <h4 class="m-t-0 text-black">{{oficinaRec.oficina.codigoDocumento}} {{oficinaRec.oficina.nombre}}</h4>
+
+                                        <ul>
+                                            <li class="text-dark-dk" v-if="oficinaRec.oficina.codigo=='OERA'"> <i class="fa fa-map-marker m-r-sm text-muted" aria-hidden="true"></i>{{oficinaRec.oficina.referenciaUbicacion}}</li>
+                                            <li class="text-dark-dk" v-if="oficinaRec.oficina.codigo=='OERA'"> La Dirección de Estudios y Registros Académicos (DERA) les saluda, y les comunica las actividades a desarrollarse en este Ciclo 2022-II:
+
+                                            <li class="text-dark-dk" v-if="oficinaRec.oficina.codigo=='OERA'"><strong>Para recepción de fotos se debe tener en cuenta:</strong>
+                                                <ol> 1. El fondo debe ser totalmente blanco para evitar error biométrico.</ol>
+                                                <ol>2. Enviar al correo informatica.dera@lamolina.edu.pe el archivo de foto zipeado con el siguiente asunto: FOTO CARNE  2022_2</ol>
+                                                <ol>3. Enviar solo cuando el archivo sea valido en el siguiente link brindado por SUNEDU: https://siucarne.sunedu.gob.pe/validacion/carne </ol>
+                                            </li>
+                                            <li class="text-dark-dk"  v-if="oficinaRec.oficina.codigo=='OERA'"><strong><a class ="btn btn-success" href="https://viceacad.lamolina.edu.pe/sites/oera/Carn%C3%A9" target="_blank" v-if="oficinaRec.oficina.codigo =='OERA'">Mas información</a> </strong></li>
+                                            <br/>            
+                                            <li class="text-dark-dk" v-if="oficinaRec.oficina.codigo=='OERA'"><strong> Viernes 16 de septiembre del 2022 de 08:00 a.m. a 04:00 p.m.:</strong></li>
+                                            <li class="text-dark-dk" v-if="oficinaRec.oficina.codigo=='OERA'">* PROCESO DE MATRÍCULA</li>
+                                            <li class="text-dark-dk" v-if="oficinaRec.oficina.codigo=='OERA'">* INSCRIPCIÓN DE CURSOS DE ACTIVIDADES DEPORTIVAS O CULTURALES</li></li>
+                                            <!--li class="text-dark-dk" v-if="oficinaRec.oficina.codigo=='OERA'"><strong><a href="https://viceacad.lamolina.edu.pe/sites/oera/Carn%C3%A9" target="_blank" v-if="oficinaRec.oficina.codigo =='OERA'">Mas información</a> </strong></li-->
+                                            <li class="text-dark-dk" v-if="oficinaRec.oficina.codigo =='OBUAE'"> 
+                                                <i class="fa fa-map-marker m-r-sm text-muted" aria-hidden="true"></i>La entrevista social Módulo Aulas Guindas<br/>
+                                                <i class="fa fa-map-marker m-r-sm text-muted" aria-hidden="true"></i>Examen médico Módulo Aulas Marrones.</li>
+                                            <li class="text-dark-dk" v-if="oficinaRec.oficina.codigo=='OBUAE'"><STRONG>El ingreso para la entrevista socioeconómica y examen medico será por la puerta principal de la UNALM</STRONG></li>
+                                            <li class="text-dark-dk" v-if="oficinaRec.oficina.codigo=='OBUAE'">Para completar tu ficha socioeconómica puedes ayudarte de este video: <a href="https://www.youtube.com/watch?v=tURr_8xFNAE">Aquí</a></li>
+                                            <li class="text-dark-dk" v-if="oficinaRec.oficina.codigo=='OBUAE'"><i class="fa fa-facebook"></i> <a href="https://www.facebook.com/bienestarunalm" style="color: black;">bienestarunalm</a></li>
+                                            <li class="text-dark-dk" v-if="oficinaRec.oficina.codigo =='CAP'">Si tu estado al lado derecho es <strong>COMPLETO</strong>, no debes presentar tu certificado de estudio visado por la UGEL al DAP y continúa con tu hoja de recorrido.</li>
+                                            <li class="text-dark-dk" v-if="oficinaRec.oficina.codigo =='CAP'" style="text-align-last: center;"><img src="https://cdn.lamolina.edu.pe/v1/AUTH_90afa410262f41f1af475ed599eeb798/lamolina-admision/website/2022_II/Ingresantes_ExamenUNALM_horario.png" alt=""/></li>
+                                            <li class="text-dark-dk" v-if="oficinaRec.oficina.codigo =='CAP'"><strong>SI ERES INGRESANTE CEPRE TU ATENCIÓN ES EL 31 DE AGOSTO CON LA DIRECCIÓN DE BIENESTAR UNIVERSITARIO</strong>  </li>
+
+                                            <!--li class="text-dark-dk"> <i class="fa fa-phone m-r-sm text-muted" aria-hidden="true" ></i>{{oficinaRec.oficina.telefonos}} 
+                                                <label v-if='oficinaRec.oficina.anexos'>Anexos:</label> {{oficinaRec.oficina.anexos}} (8:00AM - 12:00PM)</li-->
+                                            <li class="text-dark-dk" v-if="oficinaRec.oficina.codigo =='OBUAE'"> <i class="fa fa-whatsapp m-r-sm text-muted" aria-hidden="true"></i>958965164</li>
+                                            <li class="text-dark-dk" v-if="oficinaRec.oficina.codigo =='OERA'"> <strong><i class="fa fa-whatsapp m-r-sm text-muted" aria-hidden="true"></i>958965115</strong></li>
+                                            <li class="text-dark-dk" v-if="oficinaRec.oficina.codigo =='OERA'"> <strong><i class="fa fa-whatsapp m-r-sm text-muted" aria-hidden="true"></i>958965290</strong></li>
+                                            <li class="text-dark-dk" v-if="oficinaRec.oficina.codigo =='OBUAE'"> <i class="fa fa-whatsapp m-r-sm text-muted" aria-hidden="true"></i>987776105</li>
+                                            <!--li class="text-dark-dk" v-if="oficinaRec.oficina.codigo =='CAP'"> <i class="fa fa-whatsapp m-r-sm text-muted" aria-hidden="true"></i>949071307</li-->
+                                            <li class="text-dark-dk" v-if="oficinaRec.oficina.codigo =='OBUAE'"> <i class="fa fa-envelope m-r-sm text-muted" aria-hidden="true"></i>{{oficinaRec.oficina.email}} </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-2 m-t-lg">
+                                        <div class="badge-type">
+                                            <span class="label label-success pull-right"
+                                                  v-if="oficinaRec.actividadesCompletadas==oficinaRec.actividadesIngresante.length"
+                                                  >Completo</span>
+                                            <span class="label label-default pull-right"
+                                                  v-if="oficinaRec.actividadesCompletadas==0"
+                                                  >Pendiente</span>
+                                            <span class="label label-warning pull-right"
+                                                  v-if="oficinaRec.actividadesCompletadas!=0 &amp;&amp; oficinaRec.actividadesCompletadas!=oficinaRec.actividadesIngresante.length"
+                                                  >Incompleto</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </a>                      
+                        <div  v-bind:id="'collapse'+index" class="panel-collapse collapse in">
+                            <div class="panel-body">
+
+                                <div class="panel-group" v-bind:id="'acordChild'+index+childIndex" v-for="(actividadIngresante, childIndex) in oficinaRec.actividadesIngresante">
+                                    <div class="panel panel-default">
+                                        <a data-toggle="collapse" v-bind:data-parent="'#acordChild'+index+childIndex" v-bind:href="'#collChild'+index+childIndex">
+                                            <div class="panel-heading panel-b-hover">
+                                                <div class="row">
+                                                    <div class="col-md-12 col-sm-6">
+                                                        <h5 class="block pull-left" v-text='actividadIngresante.tipoActividadIngresante.nombreAdmision'>Identificación del Ingresante</h5>
+                                                        <span class="label pull-right"
+                                                              v-bind:class="getEstadoClass(actividadIngresante.estado)"
+                                                              v-text="actividadIngresante.estadoEnum.value"
+                                                              >Estado</span>
+                                                    </div>
+
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div v-bind:id="'collChild'+index+childIndex" class="panel-collapse collapse in">
+                                            <div class="panel-body m-b-xxs" 
+                                                 v-if="!actividadIngresante.estadoAct &amp;&amp; actividadIngresante.tipoActividadIngresante.descripcion != '' ">
+                                                {{actividadIngresante.tipoActividadIngresante.descripcion}}
+                                            </div>
+                                            <template v-if="isAditionalDocs(actividadIngresante)">
+                                                <div v-if="verDetalleDos(actividadIngresante)"
+                                                     class="panel-body m-b-xxs" >
+                                                    <a th:href="@{/inscripcion/postulante/generateBoletaPago}"
+                                                       v-if="actividadIngresante.tipoActividadIngresante.tipoRPAGOADM"
+                                                       class="btn text-muted"
+                                                       v-bind:rel="1"> 
+                                                        <i class="fa fa-file-text-o text-muted m-r-sm" aria-hidden="true"></i>Descargar Boleta
+                                                    </a>
+
+                                                    <a th:href="@{/inscripcion/hojarecorrido/boletaMatricula}"
+                                                       v-if="actividadIngresante.tipoActividadIngresante.tipoPAGOMATRI"
+                                                       class="btn text-muted"
+                                                       v-bind:rel="2"> 
+                                                        <i class="fa fa-file-text-o text-muted m-r-sm" aria-hidden="true"></i>Descargar Boleta
+                                                    </a>
+                                                    <a th:href="@{/inscripcion/hojarecorrido/generarBoletaExamenMedico}"
+                                                       v-if="actividadIngresante.tipoActividadIngresante.tipoPAGOEXAMED"
+                                                       class="btn text-muted"
+                                                       v-bind:rel="3"> 
+                                                        <i class="fa fa-file-text-o text-muted m-r-sm" aria-hidden="true"></i>Descargar Boleta
+                                                    </a>
+
+                                                    <template v-if="actividadIngresante.tipoActividadIngresante.tipoDOCS">
+                                                        <div th:substituteby="admision/inscripcion/hojarecorrido/fragments :: documentosPostulante"> DOCUMENTOS POSTULANTE </div>
+                                                    </template>
+                                                    <template v-if="actividadIngresante.tipoActividadIngresante.tipoENTREV">
+                                                        <div th:substituteby="admision/inscripcion/hojarecorrido/fragments :: documentosBienestar"> DOCUMENTOS BIENESTAR </div>
+                                                    </template>
+                                                </div>
+
+                                                <div class="panel-body m-t-xxs" v-if="actividadIngresante.tipoActividadIngresante.tipoFISOEC">
+                                                    <a  class="btn btn-hover text-info"  style="font-size:16px; color: #3b9ff3 !important;"
+                                                        v-on:click="goMaipi">
+                                                        <i class="fa fa-files-o fa-lg text-info m-r-sm" aria-hidden="true"></i>
+                                                        Haz clic aquí para que ingrese a su Ficha socioeconómica</a>
+                                                </div>
+
+                                                <div class="panel-body" v-if="actividadIngresante.tipoActividadIngresante.tipoTESTPSIC">
+                                                    <a  class="btn btn-hover text-info"  style="font-size:16px; color: #3b9ff3 !important;"
+                                                        th:href="@{/inscripcion/postpago/goIntranet?ficha=TEST_PSIC}">
+                                                        <i class="fa fa-comments fa-lg text-info m-r-sm" aria-hidden="true"></i>
+                                                        Haz clic aquí para que ingrese al Test Psicológico</a>
+                                                </div>
+
+                                                <div class="panel-body" v-if="email.emailIngresante &amp;&amp; actividadIngresante.tipoActividadIngresante.tipoMATRI">
+                                                    <p>Tu correo institucional es <strong>{{email.emailIngresante}}</strong></p>
+                                                    <p>Y la contraseña es <strong>{{email.claveEmailIngresante}}</strong> la cual debes cambiarla de inmediato.</p>
+                                                </div>
+                                            </template>
+
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="row m-b-md" v-if="PANEL_NIVELACION">
+                <div class="panel-group" >
+                    <div class="panel panel-default">
+                        <a data-toggle="collapse" data-parent="#accordion">
+                            <div class="panel-heading option-coll panel-hover">
+
+                                <div class="row">
+                                    <div class="text-center col-md-2" style="margin-right: 10px;margin-left: 10px; width: 120px;">
+                                        <div class="date-action" >
+                                            <div class="date-calendar" style="width: 120px;">
+                                                <p class="text-dark-dk" style="font-size: 35px;">
+                                                    <em>Agosto</em>
+                                                    24
+                                                </p>
+                                                <span class="m-r m-l m-b-lg m-t" style="margin-left: 10px; margin-right: 10px;">Las 24 horas</span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8 m-l-md text-panel">
+                                        <h4 class="m-t-0 text-black text-dark-dk">NIVELACIÓN DE INGRESANTES</h4>
+
+                                        <ul>
+                                            <li class="text-dark-dk">
+                                                <i class="fa fa-map-marker m-r-sm text-muted" aria-hidden="true"></i>UNIDAD DE ESTUDIOS GENERALES</li>
+                                            <li class="text-dark-dk"> Todo ingresante que ha desaprobado en alguna de las materias del examen de admisión llevara un curso de nivelación segun se indica en la pagina web 
+                                                <strong>http://www.lamolina.edu.pe/ueg/</strong>
+                                            <li class="text-dark-dk"><strong>Se iniciara el miercoles 31 de agosto y finalizara el Viernes 16 de septiembre del 2022 segun programa.
+                                                    Sera virtual via Zoom de la UNALM. El horario sera publicado en el calendar del alumno.</strong>
+                                            </li>
+                                            </li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-2 m-t-lg">
+                                        <div class="badge-type">
+                                            <div v-if="INSCRITO_NIVELACION" >
+                                                <a class="btn btn-warning"
+                                                   v-on:click.prevent="inscribirNivelacion">Inscríbase Aquí</a>
+                                            </div>
+                                            <div v-else="INSCRITO_NIVELACION">
+                                                <a class="label label-success pull-right">Ya inscrito</a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </a>                      
+                    </div>
+                </div>    
+            </div>
+
+
+            <div class="row m-b-md" v-if='false'>
+
+                <div class="panel-group" id="accordion-1">
+
+                    <div class="panel panel-default">
+                        <a data-toggle="collapse" data-parent="#accordion-1" href="#collapse-1" class="">
+                            <div class="panel-heading option-coll">
+                                <div class="row">
+                                    <div class="col-md-1 text-center">
+                                        <div class="date-action">
+
+                                            <div class="date-calendar">
+                                                <p class="text-dark-dk"><em>Abril</em>30</p>
+                                                <span>8:00AM-4:00PM</span>
+                                            </div>
+
+                                        </div>
+                                    </div>
+                                    <div class="col-md-8 m-l-md">
+                                        <h4 class="m-t-0 text-black">OBU Oficina de Bienestar Universitario  </h4>
+                                        <ul>
+                                            <li class="text-dark-dk"> <i class="fa fa-map-marker m-r-sm text-muted" aria-hidden="true"></i>Altura de la puerta 3</li>
+                                            <li class="text-dark-dk"><i class="fa fa-phone m-r-sm text-muted" aria-hidden="true"></i>614-5453 / 343-4522 (8am-4pm)</li>
+                                        </ul>
+                                    </div>
+                                    <div class="col-md-2">
+                                        <div class=" badge-type">
+                                            <span class="label label-danger pull-right">Pendiente</span>
+                                        </div>
+                                    </div>
+                                </div>
+
+                            </div>
+                        </a>
+                        <div id="collapse-1" class="panel-collapse collapse in">
+
+                            <div class="panel-body">
+                                <div class="panel-group" id="accordion-4">
+                                    <div class="panel panel-default">
+                                        <a data-toggle="collapse" data-parent="#accordion-4" href="#collapse4">
+                                            <div class="panel-heading">
+                                                <div class="row">
+                                                    <div class="col-md-8 pull-left">
+                                                        <h5 class="">Pago del examen médico </h5>
+                                                    </div>
+                                                    <div class="col-md-3 pull-right">
+                                                        <span class="label label-warning">Pendiente</span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                        <div id="collapse4" class="panel-collapse collapse in">
+                                            <div class="panel-body">
+                                                <p>Pago de Boleta <strong>nº 34</strong></p>
+                                                <a href="#" class="btn text-muted"> <i class="fa fa-file-text-o text-muted m-r-sm" aria-hidden="true"></i>Descargar Boleta</a>
+
+                                                <p>Pago de Boleta <strong>nº 34</strong></p>
+                                                <a href="#" class="btn text-muted"> <i class="fa fa-file-text-o text-muted m-r-sm" aria-hidden="true"></i>Descargar Boleta</a>
+
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div> 
+        <div id="wizardform">
+
+        </div>
+        <div th:substituteby="templates/modal"/>
+    </div>
+
+    <div layout:fragment="js">
+        <script th:inline="javascript">
+            var PANEL_NIVELACION = /*[[${verNivelacion}]]*/ {};
+            var INSCRITO_NIVELACION = /*[[${verInscritoNivelacion}]]*/ {};
+        </script>
+
+        <div th:substituteby="admision/_layout/includes :: javascript-vue-multiselect"></div>
+        <script th:src="@{/app/inscripcion/hojarecorrido/hojarecorrido.js}" charset="utf-8"></script>
+    </div>
+</body>
+</html>

@@ -1,0 +1,116 @@
+<html layout:decorator="admision/_layout/layoutAgraria1">
+    <head>
+        <title>Inscripción de Postulantes</title>
+        <style>
+            .swal-wide{
+                width:850px !important;
+            }
+            .sweet-alert div {
+                display: initial !important;
+            }
+            .color-correo{
+                background: #017840
+            }
+
+        </style>
+
+    </head>
+
+    <body>
+        <div layout:fragment="banner">
+            <h3 id="preInscripcion" class="">VERIFICA TU INSCRIPCIÓN</h3>
+            <h2 id="titTaller" class="hidden text-success text-center"></h2>
+            <h3 id="insTaller" class="hidden">Inscripción</h3>
+            <h1> 
+                <div class="line"></div>
+            </h1>
+        </div>
+
+        <div layout:fragment="main">
+            <script>
+                var e = document.getElementById("procTitle");
+                e.classList.add("hide");
+            </script>
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2 m-b-xl">
+                    <div class="panel">
+                        <div class="panel-body">
+                            <form id="formInteresadoContingencia"  data-parsley-validate="true" method="POST">
+                                <!--th:action="@{/contingencia/facebook/lagunas/login}"-->
+
+                                <div class="panel-body">
+
+                                    <input type="hidden" th:if="${ciclo}" id="virtual" name="ciclo" th:value="${ciclo.esVirtual}" />
+                                    <input type="hidden" th:if="${contenido}" id="contenido" name="contenido" th:value="${contenido.contenido}" />
+
+                                    <input type="hidden" name="id" th:value="${interesado.id}" />
+                                    <input type="hidden" id="idTaller" name="idTaller" value=""/>
+
+                                    <div id="advertenciaVirtual" class="alert bold text-center" style="background: #017840; font-size: 25px; color: #FFF" > Asegúrate de escribir tu DOCUMENTO correctamente</div>
+                                    <h4 th:if="${ciclo.esSimulacro}">Datos del Participante</h4>
+                                    <h4 th:if="${!ciclo.esSimulacro}">Datos del Postulante</h4>
+
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Tipo de documento de Identidad</label>
+                                                <select  class="form-control col-md-9 select2" name="tipoDocumento.id">
+                                                    <option></option>
+                                                    <option th:each="item : ${documentos}"
+                                                            th:value="${item.id}"
+                                                            th:selected="${interesado.tipoDocumento} ? ${interesado.tipoDocumento.id == item.id}"
+                                                            th:text="${item.nombre}"
+                                                            >
+                                                    </option>
+                                                </select>
+                                                <input th:if="${interesado.tipoDocumento}" type="text" class="form-control" th:value="${interesado.tipoDocumento.nombre}" readonly=""/>
+                                                <input th:if="${interesado.tipoDocumento}" type="hidden" class="form-control" name="tipoDocumento.id" th:value="${interesado.tipoDocumento.id}"/>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Número de Documento de Identidad</label>
+                                                <input type="text" class="form-control" name="numeroDocIdentidad" th:value="${interesado.numeroDocIdentidad}" th:readonly="${interesado.numeroDocIdentidad != null AND interesado.numeroDocIdentidad != ''}"/>
+                                            </div>
+                                        </div>
+                                         <div class="col-md-6">
+                                            <div class="form-group">
+                                                <label>Código de Verificación <a target="_blank" href="https://cdn.lamolina.edu.pe/v1/AUTH_90afa410262f41f1af475ed599eeb798/lamolina-admision/website/2022_I/Dni.jpg" class="fa fa-question-circle" aria-hidden="true" style="font-size: larger;"></a></label>
+                                                <input type="number" required="" min="0" pattern="^[0-9]+" max="100" class="form-control" name="codigoVerificacion" th:value="${interesado.codigoVerificacion}" th:readonly="${interesado.codigoVerificacion != null AND interesado.codigoVerificacion != ''}"/>
+                                            </div>
+                                        </div>
+                                    </div>
+
+                                </div>
+
+                                <hr/>
+
+                                <span class="col-md-12 text-center">
+                                    <a class="btn btn-link pointer" id="cancelar">Cancelar</a>
+                                    <a id="btnSaveInteresado" class="pointer btn btn-success">Ingresa</a>
+                                </span>
+
+
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div layout:fragment="js" th:remove="tag">
+            <div th:substituteby="admision/_layout/includes :: jquery-cookie" th:remove="tag"></div>
+
+            <script>
+                if ($.cookie("page") == null || $.cookie("page") == '') {
+                    $("#procTitle").removeClass("hide");
+                }
+            </script>
+            <script th:src="@{/app/postulante/contingencia/interesadoContingencia.js}" charset="utf-8"></script>
+
+        </div>
+
+    </body>
+</html>

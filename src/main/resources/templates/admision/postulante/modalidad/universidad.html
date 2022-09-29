@@ -1,0 +1,42 @@
+<input type="hidden" th:value="${postulante.paisUniversidad}? ${postulante.paisUniversidad.codigo}" id="codePaisUniv"/>
+
+<div >
+    <h4>Datos de la universidad de procedencia</h4>
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label>País de la universidad</label>
+                <input type="text" class="form-control buscar-pais" name="paisUniversidad.id" data-trigger="change"
+                       th:rel="${postulante.paisUniversidad}? ${postulante.paisUniversidad.nombre}"
+                       th:value="${postulante.paisUniversidad}? ${postulante.paisUniversidad.id}"
+                       required="true"/>
+            </div>
+        </div>
+
+        <div th:class="${postulante.paisUniversidad!=null ? ( postulante.paisUniversidad.id==178?'hide':''):'hide'}" id="universidadExtranjera">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label>Nombre de la Universidad</label>
+                    <input class="form-control" name="universidadExtranjera" id="universidadExtranjeraName"
+                           th:value="${postulante.universidadExtranjera}"/>
+                </div>
+            </div>
+        </div>
+
+        <div th:class="${postulante.paisUniversidad!=null ? ( postulante.paisUniversidad.id==178?'':'hide'):'hide'}" id="universidadPeruana">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label>Universidad Peruana</label>
+                    <select class="form-control" id="univ-peru" name="universidadProcedencia.id">
+                        <option selected="yes"></option>
+                        <option th:each="item : ${universidades}"
+                                th:text="${item.nombre}"
+                                th:selected="${postulante.universidadProcedencia}? ${item.id==postulante.universidadProcedencia.id}"
+                                th:value="${item.id}"></option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+    </div>
+</div>

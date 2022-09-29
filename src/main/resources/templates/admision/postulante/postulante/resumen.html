@@ -1,0 +1,145 @@
+<html layout:decorator="admision/_layout/layoutAgraria1">
+    <head>
+        <title>Inscripción de Postulantes</title>
+    </head>
+
+    <body>
+
+        <div layout:fragment="banner">
+
+            <h3>Resumen de Inscripción</h3>
+            <h1> <span  th:text="${postulante.persona.nombreCompleto}" /> 
+                <div class="line"></div>
+            </h1>
+        </div>
+
+        <div layout:fragment="main">
+
+            <a class="btn btn-success download m-b btn-block" >Descargar Carta de Compromiso</a>
+
+            <h4>Datos personales :</h4>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-4 bold">Paterno</div>
+                    <div class="col-md-8" th:text="${postulante.persona.paterno}"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 bold">Materno</div>
+                    <div class="col-md-8" th:text="${postulante.persona.materno}"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 bold">Nombres</div>
+                    <div class="col-md-8" th:text="${postulante.persona.nombres}"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 bold">Sexo</div>
+                    <div class="col-md-8" th:text="${postulante.persona.sexoEnum!=null?postulante.persona.sexoEnum.value:''}"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 bold">Doc. de Indentidad</div>
+                    <div class="col-md-8" th:text="|${postulante.persona.tipoDocumento!=null?postulante.persona.tipoDocumento.nombre:''} - ${postulante.persona.numeroDocIdentidad!=null?postulante.persona.numeroDocIdentidad:''} |"></div>
+                </div>
+
+            </div>
+
+            <h4>Fecha y Lugar de Nacimiento :</h4>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-4 bold">Fecha de Nacimiento</div>
+                    <div class="col-md-8" th:text="${postulante.persona.fechaNacer!=null? #dates.format( postulante.persona.fechaNacer,'dd/MM/yyyy'):''}"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 bold">País</div>
+                    <div class="col-md-8" th:text="${postulante.persona.paisNacer!=null?postulante.persona.paisNacer.nombre:''}"></div>
+                </div>
+                <div th:if="${postulante.persona.ubicacionNacer}">
+                    <div class="row">
+                        <div class="col-md-4 bold">Lugar</div>
+                        <div class="col-md-8" th:text="${postulante.persona.ubicacionNacer!=null?postulante.persona.ubicacionNacer.distrito:''}"></div>
+                    </div>
+                </div>
+            </div>
+
+            <h4>Domicilio :</h4>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-4 bold">Dirección</div>
+                    <div class="col-md-8" th:text="${postulante.persona.direccion}"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 bold">Lugar</div>
+                    <div class="col-md-8" th:text="${postulante.persona.ubicacionDomicilio!=null?postulante.persona.ubicacionDomicilio.distrito:''}"></div>
+                </div>
+            </div>
+
+            <h4>Datos del Colegio donde cumlminó sus estudios :</h4>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-4 bold">Año de Culminacion</div>
+                    <div class="col-md-8" th:text="${postulante.yearEgresoColegio}"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 bold">País donde estudió</div>
+                    <div class="col-md-8" th:text="${postulante.paisColegio}?${postulante.paisColegio.nombre}"></div>
+                </div>
+                <div th:if="${postulante.paisColegio}?${postulante.paisColegio.codigo == 'PE'}">    
+                    <div class="row">
+                        <div class="col-md-4 bold">Código Alumno</div>
+                        <div class="col-md-8" th:text="${postulante}?${postulante.codigoAlumno}"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 bold">Nombre del Colegio</div>
+                        <div class="col-md-8" th:text="${postulante.colegioProcedencia}?${postulante.colegioProcedencia.nombre}"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 bold">Dirección del Colegio</div>
+                        <div class="col-md-8" th:text="${postulante.colegioProcedencia}?${postulante.colegioProcedencia.direccion}"></div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-4 bold">Distrito del Colegio</div>
+                        <div class="col-md-8" th:text="${postulante.colegioProcedencia}?${postulante.colegioProcedencia.ubicacion.distrito}"></div>
+                    </div>
+                </div>
+                <div th:unless="${postulante.paisColegio}?${postulante.paisColegio.codigo == 'PE'}">  
+                    <div class="row">
+                        <div class="col-md-4 bold">Nombre del Colegio</div>
+                        <div class="col-md-8" th:text="${postulante.colegioExtranjero}?${postulante.colegioExtranjero}"></div>
+                    </div>
+                </div>
+            </div>
+
+            <h4>Modalidad y opciones de ingreso :</h4>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-4 bold">Modalidad de ingreso</div>
+                    <div class="col-md-8" th:text="${postulante.modalidadIngreso.nombre}"></div>
+
+                    <div th:each="opcion : ${opciones}" >     
+                        <div class="col-md-4 bold" th:text="|Opción ${opcion.prioridad}|">Primera Opción</div>
+                        <div class="col-md-8" th:text=" ${opcion.carreraPostula.carrera.nombre}"></div>
+                    </div>
+                </div>
+            </div> 
+
+            <h4>Información para Contactarlo :</h4>
+            <div class="panel-body">
+                <div class="row">
+                    <div class="col-md-4 bold">Teléfono Fijo</div>
+                    <div class="col-md-8" th:text="${postulante.persona.telefono}"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 bold">Teléfono Móvil</div>
+                    <div class="col-md-8" th:text="${postulante.persona.celular}"></div>
+                </div>
+                <div class="row">
+                    <div class="col-md-4 bold">E.Mail</div>
+                    <div class="col-md-8" th:text=" ${postulante.persona.email}"></div>
+                </div>
+            </div> 
+
+        </div>
+        <div layout:fragment="js">
+            <script th:src="@{/app/postulante/postulante/resumen.js}" charset="utf-8"></script>
+        </div>
+    </body>
+</html>

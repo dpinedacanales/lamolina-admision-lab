@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>Boleta de Pago</title>
+        <meta charset="utf-8"/>
+        <style>
+            table, th, td {
+                border: 1px solid black;
+                padding: 10px;
+            }
+            .alert {
+                padding: 10px;
+                margin-bottom: 20px;
+                border: 1px solid transparent;
+                border-radius: 4px;
+            }
+            .alert-warning{
+                color: #a94442; 
+                text-align: center;
+                background-color: #FFFFE7;
+                border-color: #FFFFE7;
+            }
+        </style>
+    </head>
+    <body>
+
+        <div class="col-md-12">
+
+            <img src="escudoUnalm.png"  height="55" width="200"/>
+
+
+            <h2 style="font-size: 22px; text-align: center; color: #0B6121;font-weight: bold;">Boleta de pago</h2>
+            <br/>
+
+            
+            <p th:utext="${header}" th:remove="tag">CONTENIDO DE CABECERA</p>
+            <br/>
+
+            <div th:each="deuda : ${deudas}">
+                <table width="100%" 
+                       align="center"
+                       th:style="|background-color: #D6EDDE; margin-bottom: 20px; font-size: 13px|">
+                    <tbody class="">
+                        <tr>
+                            <!--td style="text-align: center;" colspan="2"><strong th:inline="text">Documento [[${deuda.id}]]</strong></td-->
+                        </tr>
+                        <tr>
+                            <td style="width:35%"><b>Entidad Bancaria</b></td>
+                            <td style="width:65%" 
+                                th:text="${deuda.conceptoPrecio.conceptoPago.cuentaBancaria.banco}">BANCO DE CRÉDITO DEL PERÚ</td>
+                        </tr>
+                        <tr style="vertical-align: central;">
+                            <td><b>Nombre Comercial</b></td>
+                            <td th:text="${deuda.conceptoPrecio.conceptoPago.cuentaBancaria.empresa}">UNIVERSIDADES AGRARIA LA MOLINA</td>
+                        </tr>
+                        <tr th:unless="${deuda.conceptoPrecio.conceptoPago.codigo=='999'}">
+                            <td><b>Nombre del servicio a pagar</b></td>
+                            <td>
+                                <u th:text="${deuda.conceptoPrecio.conceptoPago.cuentaBancaria.nombre}"></u><br/>
+                                <span style="font-size: 16px;font-weight: bold;" th:text="${deuda.conceptoPrecio.conceptoPago.cuentaBancaria.numero}"></span>
+                            </td>
+                        </tr>
+                        <tr th:if="${deuda.conceptoPrecio.conceptoPago.codigo=='999'}">
+                            <td><b>Número de la Cuenta</b></td>
+                            <td><u th:text="${deuda.conceptoPrecio.conceptoPago.cuentaBancaria.numero}"></u></td>
+                        </tr>
+                        <tr th:unless="${deuda.conceptoPrecio.conceptoPago.codigo=='999'}">
+                            <td><b>Concepto de Pago</b></td>
+                            <td th:text="${deuda.conceptoPrecio.conceptoPago.descripcion}"></td>
+                        </tr>
+                        <tr>
+                            <td><b>Código de Identificación del Postulante (DNI)</b></td>
+                            <td th:text="${postulante.persona.codigoPago}"></td>
+                        </tr>
+                        <tr>
+                            <td><b style="background: yellow;">Monto a Pagar</b></td>
+                            <td th:inline="text"><b style="background: yellow;">S/. [[${helper.precio(deuda.conceptoPrecio.monto)}]]</b></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+            </div>
+
+            <p th:utext="${footer}">CONTENIDO PIE</p>
+
+
+        </div>
+    </body>
+</html>

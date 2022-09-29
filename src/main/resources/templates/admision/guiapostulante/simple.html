@@ -1,0 +1,71 @@
+<html layout:decorator="admision/_layout/layoutAgraria1">
+    <head>
+        <title>Guía del Postulante</title>
+    </head>
+
+    <body>
+
+
+        <div layout:fragment="banner">
+
+            <h3>Registrar Guía del Postulante</h3>
+            <h1> 
+                <span th:text="${interesado.nombreCompleto}" /> 
+                <div class="line"></div>
+            </h1>
+
+        </div>
+
+        <div layout:fragment="main">
+
+
+            <form id="formInteresado" th:action="@{/inscripcion/guiapostulante/save}" data-parsley-validate="true" method="POST">
+
+                <div class="panel-body">
+
+                    <input type="hidden" name="tipoProspecto" th:value="${tipo}" id="tipoGuiaPostulante"/>
+
+                    <div class="row" >
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Documento de identidad</label>
+                                <select name="persona.tipoDocumento.id" class="form-control select2" required="true">
+                                    <option></option>
+                                    <option th:each="tipo : ${tiposDocIdentidad}"
+                                            th:value="${tipo.id}"
+                                            th:selected="${postulante.persona==null?0:postulante.persona.tipoDocumento!=null?(postulante.persona.tipoDocumento.id==tipo.id):0}"
+                                            th:text="${tipo.nombre}"></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Número de documento de identidad</label>
+                                <input type="text" name="persona.numeroDocIdentidad" class="form-control" required="true"
+                                       th:value="${postulante.persona==null?'':postulante.persona.numeroDocIdentidad}" />
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <hr/>
+
+                <span class="col-md-12 text-center">
+                    <button type="button" id="btnGuiaPostulante" class="btn btn-success">Siguiente</button>
+                </span>
+
+            </form>
+
+
+        </div>
+
+        <div layout:fragment="js">
+            <script th:src="@{/app/guiapostulante/guiapostulante.js}" charset="utf-8"></script>
+        </div> 
+
+    </body>
+</html>

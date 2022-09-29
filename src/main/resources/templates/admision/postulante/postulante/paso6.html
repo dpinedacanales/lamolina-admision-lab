@@ -1,0 +1,161 @@
+<html layout:decorator="admision/_layout/layoutAgraria1">
+    <head>
+        <title>Inscripción de Postulantes</title>
+    </head>
+
+    <body>
+
+        <div layout:fragment="banner">
+
+            <h3 th:inline="text"
+                th:if="${despliegueConfig.lagunas}">Información de Pago </h3> <!--[[${postulante.id}]]-->
+            <h3 th:unless="${despliegueConfig.lagunas}">Información de Pago</h3>
+            <h1> 
+                <span  th:text="${persona.nombreCompleto}" /> 
+                <div class="line"></div>
+            </h1>
+
+        </div>
+
+        <div layout:fragment="main">
+
+
+            <div class="col-md-12">
+                <p th:utext="${header}" th:remove="tag"></p>
+                <br/>
+                <br/>
+
+                <div th:each="deuda : ${deudas}"
+                     class="alert alert-warning" style=" background-color: #D6EDDE; border-color: #D6EDDE;color: #000000">
+                    <h2 class="text-center m-b-xs" th:inline="text">
+                        Boleta de pago Nº [[${deuda.numero}]]
+                    </h2>
+                    <!--<span class="text-center block bold m-b m-t-xs" th:inline="text">Documento [[${deuda.id}]]</span>-->
+
+                    <div >
+                        <table class="table table-condensed">
+                            <tbody class="">
+
+                                <tr>
+                                    <td style="width:40%">Entidad Bancaria</td>
+                                    <td style="width:60%" 
+                                        th:text="${deuda.cuentaBancaria.banco}">BANCO DE CRÉDITO DEL PERÚ</td>
+                                </tr>
+                                <tr>
+                                    <td>Nombre Comercial</td>
+                                    <td th:text="${deuda.cuentaBancaria.empresa}">UNIVERSIDADES AGRARIA LA MOLINA</td>
+                                </tr>
+                                <tr>
+                                    <td>Nombre del servicio a pagar</td>
+                                    <td th:inline="text">
+                                        [[${deuda.cuentaBancaria.nombre}]]<br/>
+                                        <strong class="h4">[[${deuda.cuentaBancaria.numero}]]</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Concepto de Pago</td>
+                                    <td th:text="${deuda.descripcion}"></td>
+                                </tr>
+                                <tr>
+                                    <td th:if="${!esSimulacro}">Código de Identificación del Postulante (DNI)</td>
+                                    <td th:if="${esSimulacro}">Código de Identificación del participante (DNI)</td>
+                                    <td th:text="${postulante.persona.codigoPago}"></td>
+                                </tr>
+                                <tr th:if="${deuda.itemDeudaInteresado.size() > 1}" >
+                                    <td>
+                                        <ul>
+                                            <li th:each="itemD : ${deuda.itemDeudaInteresado}">
+                                                <span th:if='${itemD.conceptoPrecio != null}' th:remove='tag'
+                                                      th:text="${itemD.conceptoPrecio.conceptoPago.descripcion}">
+                                                    Item
+                                                </span>
+                                                <span th:if="${itemD.conceptoPrecio == null &amp;&amp; itemD.tipo == 'RESTA'}" 
+                                                      th:remove='tag'>
+                                                    DESCUENTO
+                                                </span>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                    <td th:inline="text">
+                                        <ul>
+                                            <li th:each="itemD : ${deuda.itemDeudaInteresado}" 
+                                                >
+                                                <span th:remove="tag" th:if="${itemD.conceptoPrecio != null}" 
+                                                      th:text="|S/. ${helper.precio(itemD.monto)}|">Item</span>
+                                                <span style="color: red;" th:if="${itemD.conceptoPrecio == null &amp;&amp; itemD.tipo == 'RESTA'}"
+                                                      th:text="|S/. ${helper.precio(itemD.monto)} -|">Item</span>
+                                            </li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td th:if="${deuda.itemDeudaInteresado.size() > 1}"><b class="mark block">Monto Total a Pagar</b></td>
+                                    <td th:if="${deuda.itemDeudaInteresado.size() == 1}"><b class="mark block">Monto a Pagar</b></td>
+                                    <td th:inline="text"><b class="mark block">S/. [[${helper.precio(deuda.monto)}]]</b></td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <h4 style="font-weight:normal; text-align: justify;">
+                    <p class="h4 text-center m-t" th:utext="${footer}"></p>
+                </h4>
+
+            </div>
+
+            <hr/>
+
+            <div class="col-md-8 col-md-offset-2 m-t-lg">
+
+                <a  class="btn btn-lg btn-primary  m-b btn-block" 
+                    th:href="@{/inscripcion/postulante/generateBoletaPago}">
+                    <span th:if="${!esSimulacro AND !modalidad.isPreLaMolina()}"> Descarga tus Boletas de Pago</span>  
+                    <span th:if="${esSimulacro OR modalidad.isPreLaMolina()}"> Descarga tu Boleta de Pago</span>  
+                   
+
+                </a>
+
+                <a  th:if='${postulante.estado.compareTo("PRE") == 0}' class="btn btn-lg btn-primary  m-b btn-block" 
+                    th:href="@{/inscripcion/postpago/resumen}">Verifica tus datos </a>
+
+                <a  class="btn btn-lg btn-primary  m-b btn-block" target="guiapostulante"
+                    th:if="${pagoGuiaPostulante AND !esSimulacro}"
+                    th:href="@{/inscripcion/postpago/verGuiaPostulante}">Guía del Postulante </a>
+
+                <a  class="btn btn-lg btn-primary  m-b btn-block" 
+                    th:if="${pagoGuiaPostulante}"
+                    th:unless="${modalidad.isPreLaMolina() OR esVirtual}"
+                    th:href="@{/inscripcion/evaluacion}">Simulacros de exámen de admisión </a>
+
+
+
+                <a  class="btn btn-lg btn-danger  m-b btn-block"
+                    th:unless="${postulante.cambioDni==1 or modalidad.isPreLaMolina()}"
+                    th:href="@{/inscripcion/numeroidentidad}">
+                    <span th:if="${!esVirtual}">Cambiar documento de identidad (solo una vez sin costo)</span> 
+                    <span th:if="${esVirtual}">Cambiar documento de identidad e email (solo una vez sin costo)</span> 
+                </a>
+
+                <a class="btn btn-lg btn-danger  m-b btn-block"
+                   th:if="${!esSimulacro}"
+                   th:href="@{/inscripcion/postulante/cambios/solicitud}">¿Deseas realizar alguna modificación? (con costo)</a>
+            </div>
+            <div class="col-md-6 col-md-offset-3 m-t-lg">
+                <a class="btn btn-lg btn-primary  m-b btn-block" style="color:green" 
+                   th:href="@{/logout}">Salir</a>
+            </div>
+
+
+        </div>
+        <div layout:fragment="js">
+            <script th:inline="javascript">
+                /*<![CDATA[*/
+                var esSimulacro = /*[[${esSimulacro}]]*/ '';
+                var esVirtual = /*[[${esVirtual}]]*/ '';
+                /*]]>*/
+            </script>
+        </div>
+    </body>
+</html>

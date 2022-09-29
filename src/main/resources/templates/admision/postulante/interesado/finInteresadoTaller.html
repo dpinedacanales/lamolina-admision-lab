@@ -1,0 +1,80 @@
+<html layout:decorator="admision/_layout/layoutAgraria">
+    <head>
+        <title>Inscripción de Talleres</title>
+    </head>
+
+    <body>
+        <div layout:fragment="banner">
+            <h1> 
+                <span  th:inline="text">Gracias [[${interesado.nombreCompleto}]] por inscribirte</span> 
+                <br/>
+                <span  >Te esperamos </span> 
+                <div class="line"></div>
+            </h1>
+        </div>
+
+        <div layout:fragment="main">
+            <script>
+                var e = document.getElementById("procTitle");
+                e.classList.add("hide");
+            </script>
+            <div class="row">
+                <div class="col-md-8 col-md-offset-2 m-b-xl">
+                    <div class="panel">
+                        <div class="panel-body">
+                            <div class="col-sm-12 m-t-lg m-b-md" >
+                                <a href="#"><img style="width: 70%" th:src="@{/phobos/images/logo.svg}" class="img-responsive center-block"/>  </a>
+                            </div>
+
+                            <div class="col-md-8 col-md-offset-2 m-t-lg">
+
+                                <div class="row">
+
+                                    <p class="col-xs-4" style="font-size: 18px; font-weight: bold">Evento</p>
+                                    <p class="col-xs-2" style="font-size: 18px; font-weight: bold">:</p>
+                                    <p class="col-xs-6" style="font-size: 18px; font-weight: bold" 
+                                       th:text="${taller.getTituloEnum().value}">Taller</p>
+
+                                    <p th:if="${taller.getTituloEnum().toString()=='CARR'}" class="col-xs-4" style="font-size: 18px; font-weight: bold">Carrera</p>
+                                    <p th:if="${taller.getTituloEnum().toString()=='CARR'}" class="col-xs-2" style="font-size: 18px; font-weight: bold">:</p>
+                                    <p th:if="${taller.getTituloEnum().toString()=='CARR'}" class="col-xs-6" style="font-size: 18px; font-weight: bold" 
+                                       th:text="${taller.carrera!=null?taller.carrera.nombre:''}">Taller</p>
+
+                                    <p class="col-xs-4" style="font-size: 18px; font-weight: bold">Fecha</p><p class="col-xs-2" style="font-size: 18px; font-weight: bold">:</p>
+                                    <p class="col-xs-6" style="font-size: 18px; font-weight: bold; text-transform: capitalize;" th:text="|${#dates.format( taller.fecha, 'dd/MM/YYYY' )}|">fecha</p>
+
+                                    <p class="col-xs-4" style="font-size: 18px; font-weight: bold">Hora</p><p class="col-xs-2" style="font-size: 18px; font-weight: bold">:</p>
+                                    <p class="col-xs-6" style="font-size: 18px; font-weight: bold;" th:text="${taller.hora}" >Miércoles 13:30</p>
+
+                                    <p class="col-xs-4" style="font-size: 18px; font-weight: bold">Lugar</p><p class="col-xs-2" style="font-size: 18px; font-weight: bold">:</p>
+                                    <p class="col-xs-6" style="font-size: 18px; font-weight: bold;" th:text="${taller.ubicacion}" >ubicación</p>
+
+                                </div>
+
+                                <br/>
+                                <div class="alert alert-orange text-center" th:if='${taller.visita == 1 AND taller.visitaCosto != NULL}'>
+                                    En caso desees una visita guiada por la UNALM este tendrá un costo de <span th:text="${taller.visitaCosto}" th:remove="tag">5</span> soles
+                                </div>
+
+                                <div class="row text-center">
+
+                                    <a class="btn btn-link m-b" th:href="@{/talleres}" >Regresar a Talleres </a>
+                                </div>
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+
+        </div>
+
+        <div layout:fragment="js" th:remove="tag">
+            <div th:substituteby="admision/_layout/includes :: jquery-cookie" th:remove="tag"></div>
+        </div>
+
+    </body>
+</html>

@@ -1,0 +1,36 @@
+<html layout:decorator="website/base">
+    <head>
+        <title th:text="${post.titulo}">Titulo Página</title>
+    </head>
+    <body>
+        <section layout:fragment="BODY">
+
+            <th:block th:utext="${post.contenido}"/>
+
+            <div id="callMeModal"></div>
+        </section>
+    </body>
+    <div layout:fragment="JS" th:remove="tag">
+        <script type="text/javascript" th:src="@{/vendor/parsleyjs/dist/parsley.remote.min.js}"></script>
+        <script type="text/javascript" th:src="@{/vendor/parsleyjs/src/extra/validator/comparison.js}"></script>
+        <script type="text/javascript" th:src="@{/vendor/parsleyjs/src/i18n/es.js}" charset="utf-8"></script>
+        <div th:substituteby="admision/_layout/includes :: jquery-cookie" th:remove="tag"></div>
+
+        <div th:if = '${session["SESSION_USUARIO"]}' th:remove='tag'>
+
+            <script th:inline='javascript'>
+                var nombre = /*[[${ session["SESSION_USUARIO"].interesado.getNombres()}]]*/;
+                if (nombre == '') {
+                    nombre = 'Postulante';
+                }
+
+                $("#usuLogin").append("Bienvenido " + nombre);
+                $("#usuLogout").removeClass('hide');
+                $("#p1").removeClass('hide');
+                $("#p2").removeClass('hide');
+            </script>
+
+        </div>
+        <script th:src="@{/app/global/global.js}" charset="utf-8"></script>
+    </div>
+</html>

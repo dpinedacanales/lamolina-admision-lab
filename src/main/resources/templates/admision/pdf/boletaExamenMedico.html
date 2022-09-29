@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>Boleta de Pago</title>
+        <meta charset="utf-8"/>
+        <style>
+            table, th, td {
+                border: 1px solid black;
+                padding: 10px;
+            }
+            .alert {
+                padding: 10px;
+                margin-bottom: 20px;
+                border: 1px solid transparent;
+                border-radius: 4px;
+            }
+            .alert-warning{
+                color: #a94442; 
+                text-align: center;
+                background-color: #FFFFE7;
+                border-color: #FFFFE7;
+            }
+        </style>
+    </head>
+    <body>
+        <img src="escudoUnalm.png"  height="55" width="200"/>
+
+        <div class="col-md-12">
+            
+            <p th:utext="${header}" th:remove="tag"></p>            
+            <br/>
+
+
+            <table width="100%" 
+                   align="center"
+                   th:style="|background-color: #D6EDDE; margin-bottom: 20px; font-size: 13px|">
+                <tbody class="">
+                    <tr>
+                        <td style="width:35%"><b>Entidad Bancaria</b></td>
+                        <td style="width:65%" 
+                            th:text="${cuentaBancaria.banco}">BANCO DE CRÉDITO DEL PERÚ</td>
+                    </tr>
+                    <tr style="vertical-align: central;">
+                        <td><b>Nombre Comercial</b></td>
+                        <td th:text="${cuentaBancaria.empresa}">UNIVERSIDADES AGRARIA LA MOLINA</td>
+                    </tr>
+                    <tr>
+                        <td><b>Nombre del servicio a pagar</b></td>
+                        <td>
+                            <u th:text="${cuentaBancaria.nombre}"></u><br/>
+                            <span style="font-size: 16px;font-weight: bold;" th:text="${cuentaBancaria.numero}"></span>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td><b>Concepto de Pago</b></td>
+                        <td  >
+                            <div th:each="deuda : ${deudas}" th:text="${deuda.conceptoMedicoCiclo.conceptoMedico.nombre}"></div>
+                        </td> 
+                    </tr>
+                    <tr>
+                        <td><b>Código de Identificación (DNI) del Postulante</b></td>
+                        <td th:text="${persona.codigoPago}"></td>
+                    </tr>
+                    <tr>
+                        <td ><b style="background: yellow;">Monto Total a Pagar</b></td>
+                        <td th:inline="text"><b style='background: yellow;'>S/. [[${helper.precio(examenMedico.montoTotal)}]]</b></td>
+                    </tr>
+
+                </tbody>
+            </table>
+            
+            <p th:utext="${footer}">CONTENIDO PIE</p>
+            
+        </div>
+    </body>
+</html>

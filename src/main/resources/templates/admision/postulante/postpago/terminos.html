@@ -1,0 +1,28 @@
+<html layout:decorator="admision/_layout/layoutAgraria1">
+    <head>
+        <title>Términos y Condiciones</title>
+    </head>
+
+    <body>
+        <div layout:fragment="banner">
+
+            <h3>Términos y condiciones </h3>
+            <h1> <span  th:text="${postulante.persona.nombreCompleto}"></span> 
+                <div class="line"></div>
+            </h1>
+        </div>
+
+        <div layout:fragment="main">
+            <div th:utext="${contenido.contenido}" style="padding: 20px; line-height: 1.7;">
+
+            </div>
+
+            <hr/>
+
+            <span class="col-md-12 text-center">
+                <a class="btn btn-link" th:href="@{/inscripcion/postpago/recurso}" >Regresar</a>
+            </span>
+
+        </div>
+    </body>
+</html>

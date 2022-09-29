@@ -1,0 +1,342 @@
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    carreras = /*[[${carreraz}]]*/ especialidades;
+    /*]]>*/
+</script>
+
+<div th:if="${modalidadCiclo.requiereColegio==1 and modalidadCiclo.requiereUniversidad==0}" >
+
+    <h4 class="m-b-md m-t-md">Datos de Colegio</h4>
+
+    <div class="row">
+        <div class="col-sm-12">
+            <div class="form-group">
+                <label>País del colegio</label>
+                <input th:if="${modalidadCiclo.verColegiosExtranjeros}"
+                       id="paisColegio" type="text" class="form-control buscar-pais-colegio" 
+                       name="paisColegio.id" data-trigger="change"
+                       th:rel="${helper.getParentTree(postulante,'paisColegio.nombre')}"
+                       th:attr="codigo=${codigo}"
+                       th:value="${helper.getParentTree(postulante,'paisColegio.id')}"
+                       required="true"/>
+
+                <input th:unless="${modalidadCiclo.verColegiosExtranjeros}"
+                       id="paisColegio" type="text" class="form-control buscar-pais-colegio" 
+                       name="paisColegio.id" data-trigger="change"
+                       th:rel="${peru.nombre}"
+                       th:attr="codigo=${peru.codigo}"
+                       th:value="${peru.id}"
+                       required="true"/>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${modalidadCiclo.soloColegioExtranjero==0}" >
+        <div th:class="|row ${postulante.paisColegio!=null ? ( postulante.paisColegio.id==178?'':'hide'):'hide'}|" id="grupoColegioNac">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label>Distrito</label>
+                    <input type="text" class="form-control" id="distritoColegioCoar"
+                           th:if="${modalidad.tipo == 'COAR'}" readonly="" />
+
+                    <input type="text" class="form-control" id="distritoColegio"
+                           th:unless="${modalidad.tipo == 'COAR'}"
+                           th:rel="${helper.getParentTree(postulante,'colegioProcedencia.ubicacion.distrito')}"
+                           th:value="${helper.getParentTree(postulante,'colegioProcedencia.ubicacion.id')}"/>
+                </div>
+            </div>
+            <!--
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Código Alumno (solo si <b>NO</b> tienes DNI)</label>
+                                <input type="text" class="form-control" name="codigoAlumno" id="codigoAlumno"
+                                       th:rel="${postulante.persona.tipoDocumento.id}"  
+                                       th:required="${postulante.persona.tipoDocumento.id!=2}" 
+                                       th:value="${postulante.codigoAlumno}" />
+                                <small class="text-primary" style="cursor: pointer" id="queesesto">¿Qué es esto?</small>
+                            </div>
+                        </div>-->
+
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label>Nombre de colegio</label>
+                    <input type="text" class="form-control" id="colegio-procedencia" name="colegioProcedencia.id"
+                           th:rel="${helper.getParentTree(postulante,'colegioProcedencia.nombreLargo')}"
+                           th:attr="nombre-ubicacion=${helper.getParentTree(postulante,'colegioProcedencia.ubicacion.distrito')},
+                           id-ubicacion=${helper.getParentTree(postulante,'colegioProcedencia.ubicacion.id')}"
+                           th:value="${helper.getParentTree(postulante,'colegioProcedencia.id')}"/>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div th:if="${modalidadCiclo.soloColegioPeruano==0}" >
+        <div  th:class="|row ${postulante.paisColegio!=null ? ( postulante.paisColegio.id==178?'hide':''):'hide'}|" id="grupoColegioExt">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label>Nombre del Colegio</label>
+                    <input type="text" class="form-control" id="colegioExtranjero" name="colegioExtranjero"
+                           th:value="${postulante.colegioExtranjero}"/>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${modalidad.isParticipanteLibre()}" >
+
+        <div class="row m-b-lg">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label>¿Cuál es el último grado que finalizó en la secundaria?</label>
+                    <select class="input-s-full form-control" required="true" id="grado" name="gradoSecundaria.id">
+                        <option></option>
+                        <option th:each="grado : ${grados}"
+                                th:value="${grado.id}"
+                                th:rel="${grado.orden}"
+                                th:selected="${postulante.gradoSecundaria}? ${grado.id==postulante.gradoSecundaria.id}"
+                                th:text="${grado.nombre}">1</option>
+                    </select>
+                </div>
+            </div>
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label>¿Qué Modalidad de Ingreso desea simular en el examen?</label>
+                    <select class="form-control" id="modalidadSimu" required="true" name="modalidadSimulacion.id">
+                        <option></option>
+                        <option th:each="item : ${modalidades}"
+                                th:value="${item.id}"
+                                th:unless="${item.isPreLaMolina()}"
+                                th:selected="${postulante.modalidadSimulacion}? ${item.id==postulante.modalidadSimulacion.id}"
+                                th:text="${item.nombreInscripcion}">nombre</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="row m-b-lg" id="divYearColegio" th:unless="${modalidad.isQuintoSecundaria()}" >
+        <div th:unless="${modalidad.isPrimerosPuestos()}">
+            <div class="col-sm-6">
+                <div class="form-group">
+                    <label>Año que egresó del colegio</label>
+                    <select class="input-s-full form-control" required="true" id="yearColegio" name="yearEgresoColegio">
+                        <option></option>
+                        <option th:each="year : ${#numbers.sequence((-(ciclo.cicloAcademico.year-1)),(-(ciclo.cicloAcademico.year-60)))}"
+                                th:value="${-year}"
+                                th:selected="${postulante.yearEgresoColegio}? ${(-year)==postulante.yearEgresoColegio}"
+                                th:text="${-year}">1</option>
+                    </select>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div th:if="${modalidad.isPrimerosPuestos()}" class="row m-b-lg">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label>Año que egresó del colegio</label>
+                <select class="input-s-full form-control" required="true" id="yearColegio" name="yearEgresoColegio">
+                    <option></option>
+                    <option th:each="year : ${#numbers.sequence((-(ciclo.cicloAcademico.year-1)),(-(ciclo.cicloAcademico.year-2)))}"
+                            th:value="${-year}"
+                            th:selected="${postulante.yearEgresoColegio}? ${(-year)==postulante.yearEgresoColegio}"
+                            th:text="${-year}">1</option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div th:if="${modalidadCiclo.requiereColegio==0 and modalidadCiclo.requiereUniversidad==1}">
+
+    <input type="hidden" th:value="${postulante.paisUniversidad}? ${postulante.paisUniversidad.codigo}" id="codePaisUniv"/>
+
+    <div >
+        <h4>Datos de la universidad de procedencia</h4>
+        <div class="row">
+            <div class="col-sm-12">
+                <div class="form-group">
+                    <label>País de la universidad</label>
+                    <input type="text" class="form-control buscar-pais" name="paisUniversidad.id" data-trigger="change"
+                           th:rel="${helper.getParentTree(postulante,'paisUniversidad.nombre')}"
+                           th:value="${helper.getParentTree(postulante,'paisUniversidad.id')}"
+                           required="true"/>
+                </div>
+            </div>
+
+            <div th:class="${postulante.paisUniversidad!=null ? ( postulante.paisUniversidad.id==178?'hide':''):'hide'}" id="universidadExtranjera">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label>Nombre de la Universidad</label>
+                        <input class="form-control" name="universidadExtranjera" id="universidadExtranjeraName"
+                               th:value="${postulante.universidadExtranjera}"/>
+                    </div>
+                </div>
+            </div>
+
+            <div th:class="${postulante.paisUniversidad!=null ? ( postulante.paisUniversidad.id==178?'':'hide'):'hide'}" id="universidadPeruana">
+                <div class="col-sm-12">
+                    <div class="form-group">
+                        <label>Universidad Peruana</label>
+                        <select class="form-control" id="univ-peru" name="universidadProcedencia.id">
+                            <option selected="yes"></option>
+                            <option th:each="item : ${universidades}"
+                                    th:text="${item.nombre}"
+                                    th:selected="${postulante.universidadProcedencia}? ${item.id==postulante.universidadProcedencia.id}"
+                                    th:value="${item.id}"></option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+</div>
+
+<div th:if="${modalidadCiclo.requiereColegio==1 and modalidadCiclo.requiereUniversidad==1}">
+    <label>Institución educativa de procedencia</label>
+
+    <div class="form-group">
+        <div class="col-sm-10">
+            <div class="col-sm-3">
+                <label class="radio">
+                    <input class="institucion-procedencia" type="radio" required="true" name="procedencia" rel="COLEGIO" /> Colegio
+                </label>
+            </div>
+            <div class="col-sm-3">
+                <label class="radio">
+                    <input class="institucion-procedencia" type="radio" required="true" name="procedencia" rel="UNIVERSIDAD" /> Universidad
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="row"></div>
+    <div id="conteInstitucion">
+
+    </div>
+</div>
+
+<div  class="row" th:if="${modalidad.isGraduadosTituladosUniversitarios()}">
+    <div class="col-sm-12">
+        <label>¿Cuál es tu grado académico?</label>
+
+        <div class="form-group">
+            <div class="col-sm-12">
+                <div class="col-sm-6">
+                    <label class="radio">
+                        <input class="" type="radio" required="true" name="gradoTitulo" value="GRADUADO"
+                               th:checked="${'GRADUADO'==postulante.gradoTitulo}"/> Graduado
+                    </label>
+                </div>
+                <div class="col-sm-6">
+                    <label class="radio">
+                        <input class="" type="radio" required="true" name="gradoTitulo" value="TITULADO" 
+                               th:checked="${'TITULADO'==postulante.gradoTitulo}"/> Titulado
+                    </label>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="m-b-md m-t-md" th:unless="${modalidad.isPreLaMolina()}">
+    <h4  class="m-b-md m-t-md" >Carreras a postular</h4>
+</div>
+<div class="m-b-md m-t-md" th:if="${modalidad.isPreLaMolina()}">
+    <h4  class="m-b-md m-t-md" >Especialidad</h4>
+</div>
+
+<div class="row">
+    <div class="col-sm-6" id="divOpcion1">
+
+        <input type="hidden" th:value="${helper.getIdCarreraPostula(postulante,1)}" id="opcion1"/>
+        <input type="hidden" th:value="${helper.getIdCarreraPostula(postulante,2)}" id="opcion2"/>
+        <input type="hidden" th:value="${helper.getIdCarreraPostula(postulante,3)}" id="opcion3"/>
+        <input type="hidden" th:value="${helper.getIdCarreraPostula(postulante,4)}" id="opcion4"/>
+        <input type="hidden" th:value="${helper.getIdCarreraPostula(postulante,5)}" id="opcion5"/>
+
+        <div class="form-group" th:unless="${modalidad.isPreLaMolina()}">
+            <label>Primera opción</label>
+            <select class="form-control opcion-carrera" name="opcionCarrera[0].carreraPostula.id" required="true" rel="1">
+                <option></option>
+                <option th:each="item : ${carrerasPostula}"
+                        th:text="${item.carrera.nombre}"
+                        th:selected="${helper.getCarreraOpcion(postulante,1)}? ${helper.getCarreraOpcion(postulante,1).id==item.id}"
+                        th:value="${item.id}"></option>
+            </select>
+        </div>
+        <div class="form-group" th:if="${modalidad.isPreLaMolina()}">
+            <label>Carrera de ingreso</label>
+            <select class="form-control opcion-carrera" name="opcionCarrera[0].carreraPostula.id" required="true" rel="1">
+                <option></option>
+                <option th:each="item : ${carrerasPostula}"
+                        th:text="${item.carrera.nombre}"
+                        th:if="${item.id==carrera.id}"
+                        th:selected="${helper.getCarreraOpcion(postulante,1)}? ${helper.getCarreraOpcion(postulante,1).id==item.id}"
+                        th:value="${item.id}"></option>
+            </select>
+        </div>
+    </div>
+</div>
+
+<div class="row" th:if="${modalidadCiclo.opciones >=2}">
+    <div th:class="|${helper.showCarrera(modalidad,2)}|" id="divOpcion2">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label>Segunda opción</label>
+                <select class="form-control opcion-carrera" 
+                        th:rev="${helper.getCarreraOpcion(postulante,2)}? ${helper.getCarreraOpcion(postulante,2).id}"
+                        name="opcionCarrera[1].carreraPostula.id" rel="2">
+                    <option></option>
+                </select>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<div class="row" th:if="${modalidadCiclo.opciones >=3}">
+
+    <div th:class="|${helper.showCarrera(modalidad,3)}|" id="divOpcion3">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label>Tercera opción</label>
+                <select class="form-control opcion-carrera" 
+                        th:rev="${helper.getCarreraOpcion(postulante,3)}? ${helper.getCarreraOpcion(postulante,3).id}"
+                        name="opcionCarrera[2].carreraPostula.id" rel="3"></select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" th:if="${modalidadCiclo.opciones >=4}">
+    <div th:class="|${helper.showCarrera(modalidad,4)}|" id="divOpcion4">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label>Cuarta opción</label>
+                <select class="form-control opcion-carrera" 
+                        th:rev="${helper.getCarreraOpcion(postulante,4)}? ${helper.getCarreraOpcion(postulante,4).id}"
+                        name="opcionCarrera[3].carreraPostula.id" rel="4"></select>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="row" th:if="${modalidadCiclo.opciones >=5}">
+
+    <div th:class="|${helper.showCarrera(modalidad,5)}|" id="divOpcion5">
+        <div class="col-sm-6">
+            <div class="form-group">
+                <label>Quinta opción</label>
+                <select class="form-control opcion-carrera"
+                        th:rev="${helper.getCarreraOpcion(postulante,5)}? ${helper.getCarreraOpcion(postulante,5).id}"
+                        name="opcionCarrera[4].carreraPostula.id" rel="5"></select>
+            </div>
+        </div>
+    </div>
+
+</div>

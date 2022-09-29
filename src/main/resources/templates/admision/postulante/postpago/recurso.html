@@ -1,0 +1,240 @@
+<html layout:decorator="admision/_layout/layoutAgraria1">
+    <head>
+        <title>Recursos</title>
+    </head>
+
+    <body>
+
+        <div layout:fragment="banner">
+            <h1>
+                <span th:text="${postulante.persona.nombreCompleto}" /> 
+                <div class="line"></div>
+            </h1>
+        </div>
+
+        <div layout:fragment="main">
+            <div class="panel">
+                <div class="panel-heading">
+
+                    <h1 th:if="${postulante.isIngresante()}">
+                        ¡Felicitaciones por tu ingreso!
+                    </h1> 
+                    <h1 th:if="${postulante.isInscrito()}">
+                        ¡Felicidades estás 
+                        <span th:if="${postulante.persona.sexo == 'M'}">inscrito! </span> 
+                        <span th:if="${postulante.persona.sexo == 'F'}">inscrita! </span> 
+                    </h1> 
+                    <h1 th:if="${postulante.isSinVacante()}">
+                        Lo sentimos, no alcanzó una vacante
+                    </h1> 
+
+                    <p class="h4 text-center">
+
+                        <span th:if="${!esSimulacro}">Gracias por participar en el Concurso de Admisión</span>
+                        <!--<span th:if="${esSimulacro}">Gracias por participar del Simulacro de Admisión</span>-->
+                        <!--<span th:text="${ciclo.cicloAcademico.descripcion}">2020-III</span>.-->
+                    </p>
+
+                    <!--p class="text-center m-t"
+                       th:if="${modalidadCiclo.rindeExamenAdmision==1}">
+                        <span th:if="${!esVirtual}">
+                            El ingreso para el día del examen se realizará por la <b>puerta principal, puerta 1 y puerta 2</b>, a partir de las 05:30 am
+                            hasta las 07:30 am.
+                        </span> 
+                    </p-->
+                    <p class="text-center m-t-lg bold text-warningw h4"
+                       th:if="${encuestar}">
+                        <span class="alert alert-warning">
+                            Ayúdanos a darte un mejor servicio respondiendo esta 
+                            <a th:href="@{/inscripcion/encuesta}">encuesta</a> haciendo clic
+                            <a th:href="@{/inscripcion/encuesta}">aquí</a>.
+                        </span>
+                        <br/><br/>
+                    </p>
+
+
+                </div>
+
+                <hr/>
+
+                <p th:if="${deudas.size()>0}" class="text-center h4 m-b text-danger">
+                    Debes cancelar esta boleta para que haga efectivo el cambio solicitado.
+                </p>
+
+                <div th:each="deuda : ${deudas}"
+                     class="alert alert-warning" style=" background-color: #D6EDDE; border-color: #D6EDDE;color: #000000">
+                    <h2 class="text-center m-b-xs" th:inline="text">
+                        Boleta de pago Nº [[${deuda.numero}]]
+                    </h2>
+                    <!--span class="text-center block bold m-b m-t-xs" th:inline="text">Documento [[${deuda.id}]]</span-->
+
+                    <div >
+                        <table class="table table-condensed">
+                            <tbody class="">
+
+                                <tr>
+                                    <td style="width:40%">Entidad Bancaria</td>
+                                    <td style="width:60%" 
+                                        th:text="${deuda.cuentaBancaria.banco}">BANCO DE CRÉDITO DEL PERÚ</td>
+                                </tr>
+                                <tr>
+                                    <td>Nombre Comercial</td>
+                                    <td th:text="${deuda.cuentaBancaria.empresa}">UNIVERSIDADES AGRARIA LA MOLINA</td>
+                                </tr>
+                                <tr>
+                                    <td>Nombre del servicio a pagar</td>
+                                    <td th:inline="text">
+                                        [[${deuda.cuentaBancaria.nombre}]]<br/>
+                                        <strong class="h4">[[${deuda.cuentaBancaria.numero}]]</strong>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td>Concepto de Pago</td>
+                                    <td th:text="${deuda.descripcion}"></td>
+                                </tr>
+                                <tr>
+                                    <td>Código de Identificación del postulante(DNI)</td>
+                                    <td th:text="${postulante.persona.codigoPago}"></td>
+                                </tr>
+                                <tr th:if="${deuda.itemDeudaInteresado.size() > 1}" >
+                                    <td>
+                                        <ul>
+                                            <li th:each="itemD : ${deuda.itemDeudaInteresado}" 
+                                                th:text="${itemD.conceptoPrecio.conceptoPago.descripcion}">Item</li>
+                                        </ul>
+                                    </td>
+                                    <td th:inline="text">
+                                        <ul>
+                                            <li th:each="itemD : ${deuda.itemDeudaInteresado}" 
+                                                th:text="|S/. ${helper.precio(itemD.monto)}|">Item</li>
+                                        </ul>
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td th:if="${deuda.itemDeudaInteresado.size() > 1}"><b class="mark block">Monto Total a Pagar</b></td>
+                                    <td th:if="${deuda.itemDeudaInteresado.size() == 1}"><b class="mark block">Monto a Pagar</b></td>
+                                    <td th:inline="text"><b class="mark block">S/. [[${helper.precio(deuda.monto)}]]</b></td>
+                                </tr>
+
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <div class="panel-body">
+
+                    <div class="col-md-8 col-md-offset-2 m-t-lg">
+                        <a  class="btn btn-lg btn-danger  m-b btn-block"
+                            th:if="${deudas.size()>0}"
+                            th:href="@{/inscripcion/postulante/generateBoletaPago}">Descarga tu Boleta de Pago pendiente </a>
+
+                        <!--                        <a  class="btn btn-lg btn-warning  m-b btn-block" 
+                                                    th:if="${token}"
+                                                    th:href="@{/inscripcion/postpago/goIntranet}">Ficha socioeconómica</a>
+                        -->
+                                           
+                         <a  class="btn btn-lg btn-success  m-b btn-block"
+                            th:if="${esVirtual or !esVirtual}"
+                            th:href="'https://casillaelectronicaadmision.lamolina.edu.pe/'" target="_blank" style="font-size: 20px;">                           
+                        <strong><span>CASILLA ELECTRÓNICA</span></strong>                         
+                                                    </a>
+                        <a  class="btn btn-lg btn-primary  m-b btn-block" 
+                            th:if="${pagoGuiaPostulante AND !esSimulacro}" target="guiapostulante"
+                            th:href="@{/inscripcion/postpago/verGuiaPostulante}">Guía del Postulante </a>
+
+                        <!--a  class="btn btn-lg btn-primary  m-b btn-block" 
+                            th:if="${modalidadCiclo.rindeExamenAdmision==1 &amp;&amp; (postulante.estado == 'INS' || postulante.estado == 'PAGO') AND !esVirtual }"
+                            id="avisoRendirExamen">Conoce donde rendirás el EXAMEN</a-->
+
+                        <a  class="btn btn-lg btn-primary  m-b btn-block" 
+                            th:unless="${modalidad.isPreLaMolina() OR esSimulacro}"
+                            th:href="@{/inscripcion/evaluacion}">Simulacros de exámen de admisión </a>
+
+                        <!--a  class="btn btn-lg btn-primary  m-b btn-block" 
+                            th:if="${!esSimulacro}"
+                            th:href="|${S3_LINK}website/20202/REGLAMENTO_DE_ADMISION_MARZO_2020.pdf| ">Reglamento de Admisión  </a-->
+
+                        <a  class="btn btn-lg btn-primary  m-b btn-block" 
+                            th:href="@{/inscripcion/postpago/resumen}">Resumen de inscripción </a>
+
+
+                        <a  class="btn btn-lg btn-primary  m-b btn-block" 
+                            th:if="${encuestar}"
+                            th:href="@{/inscripcion/encuesta}">Encuesta Virtual</a>
+
+                        <!--a  class="btn btn-lg btn-success  m-b btn-block"
+                            th:if="${esVirtual}"
+                            target="_blank"
+                            th:href="'https://cdn.lamolina.edu.pe/v1/AUTH_90afa410262f41f1af475ed599eeb798/lamolina-admision/website/20202/simulacro/01_Carta_UNALM_CAP_N°0286_2020.pdf'">                           
+                            <span >Descargar Carta UNALM CAP N° 0286-2020.</span> 
+                        </a-->
+                        <!--a  class="btn btn-lg btn-success  m-b btn-block"
+                            th:if="${esVirtual}"
+                            th:href=" 'https://cdn.lamolina.edu.pe/v1/AUTH_90afa410262f41f1af475ed599eeb798/lamolina-admision/website/20202/simulacro/02_Declaracion_Jurada_llenar_firmar_enviar.pdf'" target="_blank">                           
+                            <span >Declaración Jurada (llena y envía a </span><span class="bold">admision@lamolina.edu.pe </span> )
+                        </a-->
+                        <!--a  class="btn btn-lg btn-success  m-b btn-block"
+                            th:if="${esVirtual}"
+                            th:href=" 'https://cdn.lamolina.edu.pe/v1/AUTH_90afa410262f41f1af475ed599eeb798/lamolina-admision/website/20202/simulacro/02_Declaracion_Jurada_llenar_firmar_enviar.pdf'" target="_blank">                           
+                            <span >Declaración Jurada</span>
+                        </a-->
+                        <!--a  class="btn btn-lg btn-success  m-b btn-block"
+                            th:if="${esVirtual}"
+                            th:href=" 'https://cdn.lamolina.edu.pe/v1/AUTH_90afa410262f41f1af475ed599eeb798/lamolina-admision/website/20202/simulacro/03_Guia_Instalacion_Navegador_Seguro.pdf'" target="_blank">                           
+                            <span >Guía de instalación del navegador seguro.</span> 
+                        </a-->
+                        <!--a  class="btn btn-lg btn-success  m-b btn-block"
+                            th:if="${esVirtual}"
+                            th:href=" 'https://drive.google.com/file/d/1qd-GRrvmkKBFTTwmNBhf_BxNW3OjnAMi/view?usp=sharing'" target="_blank">                           
+                            <span >Video de problemas Admisión.</span> 
+                        </a-->
+                                               <!--a  class="btn btn-lg btn-danger  m-b btn-block"
+                                                    th:unless="${postulante.cambioDni==1 or modalidad.isPreLaMolina()}"
+                                                    th:href="@{/inscripcion/numeroidentidad}">
+                                                    <span th:if="${!esVirtual}">Cambiar documento de identidad</span> 
+                                                    <span th:if="${esVirtual}">Cambiar documento de identidad e email (solo una vez sin costo)</span> 
+                                                </a-->
+
+
+                        <a class="btn btn-lg btn-danger  m-b btn-block"
+                           th:if="${!esSimulacro}"
+                           th:href="@{/inscripcion/postulante/cambios/solicitud}">
+                           ¿Deseas realizar alguna modificación? (con costo)</a>
+                        
+                         <a  class="btn btn-lg btn-danger  m-b btn-block"
+                    th:unless="${postulante.cambioDni==1 or modalidad.isPreLaMolina()}"
+                    th:href="@{/inscripcion/numeroidentidad}">
+                    <span th:if="${!esVirtual}">Cambiar documento de identidad</span> 
+                    <span th:if="${esVirtual}">Cambiar documento de identidad e email (solo una vez sin costo)</span> 
+                    </a>
+                    </div>  
+                </div>
+
+                <div class="container">
+                    <div class="menu_footer cond">
+                        <ul>
+                            <li>
+                                <a th:href="@{/inscripcion/postpago/terminos}" style="font-size: 19px;"><span class="fa fa-file"></span> Términos y condiciones aceptados</a>
+                            </li>
+                            <li th:if="${modalidadCiclo.rindeExamenAdmision == 1}">
+                                <a th:href="@{/inscripcion/postpago/compromiso}" style="font-size: 19px;"  th:if="${!esVirtual}"><span class="fa fa-file"></span> Declaración jurada aceptada</a>
+                                <a th:href="@{/inscripcion/postpago/compromiso}" style="font-size: 19px;"  th:if="${esVirtual}"><span class="fa fa-file"></span> Carta de compromiso aceptada</a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div layout:fragment="js">
+            <script th:inline="javascript">
+                /*<![CDATA[*/
+                var esSimulacro = /*[[${esSimulacro}]]*/ '';
+                var esVirtual = /*[[${esVirtual}]]*/ '';
+                /*]]>*/
+            </script>
+            <script th:src="@{/app/postulante/postpago/recurso.js}" charset="utf-8"></script>
+        </div>
+    </body>
+</html>

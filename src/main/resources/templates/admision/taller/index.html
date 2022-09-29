@@ -1,0 +1,108 @@
+<html layout:decorator="website/base">
+    <head>
+        <title>Talleres</title>
+    </head>
+    <body>
+        <section class="wrapper_principal wrapper_interna" id="page-postula" layout:fragment="BODY">
+
+            <div class="banner banner-minimo sections">
+                <div id="myCarousel" class="carousel slide" data-ride="carousel">
+
+                    <div class="carousel-inner">
+                        <div class="item active">
+                            <img src="https://cdn.lamolina.edu.pe/v1/AUTH_90afa410262f41f1af475ed599eeb798/lamolina-admision/website/images2018/lion.jpg" alt="Lion"/>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="sections minimal">
+                <div class="container">
+                    <div class="col-md-12">
+                        <h3>Nuestras Charlas</h3>
+
+                        <!--p class="subtitulos">
+                            Conócenos por dentro.
+                        </p-->
+
+                        <div class="row">
+                            <ul class="calendario col-md-14">
+
+                                <li th:each="taller : ${talleres}" th:rel="${taller.id}" th:class="col-md-3" 
+                                    th:classappend="|${taller.titulo == 'TACA' ? 'special' : ''} ${taller.estado eq 'ACT' ? 'showTaller' : ''}|">
+
+                                    <div class="img-containered">
+                                        <img th:src='|/archivo/download/${taller.banner}|' />
+                                    </div>
+
+                                    <strong>
+                                        <span th:text="${dt.format( taller.fecha,'dd', 'es')}" th:remove="tag">12</span>
+                                        <i th:text="${dt.format( taller.fecha,'MMM', 'es')}">JUN</i>
+                                        <span class="label label-danger" th:if='${taller.estado == "INA"}'>Finalizado</span>
+                                    </strong>
+                                    
+                                    <div class="events">
+                                        <p class="sub-title">
+                                            Charlas Agraria
+                                        </p>
+                                        <h4 th:text="${taller.getTituloEnum().value}">Taller de Carreras</h4>
+                                        <p th:if='${taller.titulo == "CARR"}' 
+                                           th:text="${taller.carrera != null ? taller.carrera.nombre : ''}">
+                                            Carrera
+                                        </p>
+                                        
+                                        <p th:text="${taller.descripcion}">
+                                        </p>
+                                        <p th:inline="text">
+                                            <span class="fa fa-map-marker"></span> [[${taller.ubicacion}]]
+                                        </p>
+                                        <p style="text-transform: capitalize;">
+                                            <span class="fa fa-calendar"></span> 
+                                            <span th:text="|${dt.format( taller.fecha,'EEEE', 'es')} ${taller.hora}|" th:remove="tag" 
+                                                  >Sábado 9:30</span> 
+                                            
+                                        </p>
+                                    </div>
+                                    <div class="events">
+                                        <p class="sub-title">
+                                            Charlas Agraria
+                                        </p>
+                                        <h4 th:text="${taller.getTituloEnum().value}">Charla de Carreras</h4>                 
+                                        <p th:if='${taller.titulo == "CARR"}' 
+                                           th:text="${taller.carrera != null ? taller.carrera.nombre : ''}">
+                                            Carrera
+                                        </p>
+                                        <h4 style="font-weight: bold; margin-bottom: 2px;" th:if="${taller.carrera}" th:text="${taller.carrera.nombre}">Biología</h4>
+                                        <p th:text="${taller.descripcion}">
+                                        </p>
+                                        <p th:inline="text">
+                                            <span class="fa fa-map-marker"></span> [[${taller.ubicacion}]]
+                                        </p>
+                                        <p style="text-transform: capitalize;">
+                                            <span class="fa fa-calendar"></span> 
+                                            <span th:text="|${dt.format( taller.fecha,'EEEE', 'es')} ${taller.hora}|" th:remove="tag">
+                                                Sábado 9:30</span> 
+                                            
+                                        </p>
+                                    </div>
+                                </li>
+
+                            </ul>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+
+            <div id="tallerModal"></div>
+        </section>
+    </body>
+
+    <div layout:fragment="JS" th:remove="tag">
+        <script type="text/javascript" th:src="@{/vendor/parsleyjs/dist/parsley.remote.min.js}"/>
+        <script type="text/javascript" th:src="@{/vendor/parsleyjs/src/extra/validator/comparison.js}"/>
+        <script type="text/javascript" th:src="@{/vendor/parsleyjs/src/i18n/es.js}" charset="utf-8"/>
+        <div th:substituteby="admision/_layout/includes :: jquery-cookie" th:remove="tag"></div>
+        <script th:src="@{/app/inscripcion/taller/taller.js}" charset="utf-8"></script>
+    </div>
+</html>

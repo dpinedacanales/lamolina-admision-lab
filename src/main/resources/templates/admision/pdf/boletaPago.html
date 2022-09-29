@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html>
+
+    <head>
+        <title>Boleta de Pago</title>
+        <meta charset="utf-8"/>
+        <style>
+            table, th, td {
+                border: 1px solid black;
+                padding: 5px;
+            }
+            .alert {
+                padding: 10px;
+                margin-bottom: 10px;
+                border: 1px solid transparent;
+                border-radius: 4px;
+            }
+            .alert-warning{
+                color: #a94442; 
+                text-align: center;
+                background-color: #FFFFE7;
+                border-color: #FFFFE7;
+            }
+        </style>
+    </head>
+    <body>
+        <img src="escudoUnalm.png"  height="55" width="200"/>
+
+        <div class="col-md-12">
+
+            <p th:utext="${header}" th:remove="tag">CONTENIDO DE CABECERA</p>
+           
+
+            <div th:each="deuda : ${deudas}">
+                <p style="font-size: 20px;font-weight: bold ;text-align: center; color: #0B6121; margin-bottom: 0px;"
+                   th:inline="text">Boleta de pago Nº [[${deuda.numero}]]</p>
+                <!--p style="font-size: 10px;font-weight: bold ;text-align: center; color: #4770BB; margin-top: 0px;margin-bottom: 10px;"
+                   th:inline="text">Documento [[${deuda.id}]]</p-->
+                <br/>
+                <table width="100%" 
+                       align="center"
+                       th:style="|background-color: #D6EDDE; margin-bottom: 18px; font-size: 13px|">
+                    <tbody class="">
+                        <tr>
+                            <td style="width:35%"><b>Entidad Bancaria</b></td>
+                            <td style="width:65%" 
+                                th:text="${deuda.cuentaBancaria.banco}">BANCO DE CRÉDITO DEL PERÚ</td>
+                        </tr>
+                        <tr style="vertical-align: central;">
+                            <td><b>Nombre Comercial</b></td>
+                            <td th:text="${deuda.cuentaBancaria.empresa}">UNIVERSIDADES AGRARIA LA MOLINA</td>
+                        </tr>
+                        <tr>
+                            <td><b>Nombre del servicio a pagar</b></td>
+                            <td>
+                                <u th:text="${deuda.cuentaBancaria.nombre}"></u><br/>
+                                <span style="font-size: 16px;font-weight: bold;" th:text="${deuda.cuentaBancaria.numero}"></span>
+                            </td>
+                        </tr>
+                        <tr >
+                            <td><b>Concepto de Pago</b></td>
+                            <td th:text="${deuda.descripcion}"></td>
+                        </tr>
+                        <tr style="text-align: left">
+                            <td>
+                                <b th:if="${esSimulacro}">Código de Identificación del Participante (DNI) </b>
+                                <b th:if="${!esSimulacro}">Código de Identificación del Postulante (DNI)</b>                            
+                            </td>
+                            <td th:text="${postulante.persona.codigoPago}"></td>
+                        </tr>
+                        <tr th:if="${deuda.itemDeudaInteresado.size() > 1}" >
+                            <td>
+                                <ul style="list-style: none;">
+                                    <li style="list-style: none;" th:each="itemD : ${deuda.itemDeudaInteresado}">
+                                        <span th:if='${itemD.conceptoPrecio != null}' th:remove='tag'
+                                              th:text="${itemD.conceptoPrecio.conceptoPago.descripcion}">
+                                            Item
+                                        </span>
+                                        <span th:if="${itemD.conceptoPrecio == null &amp;&amp; itemD.tipo == 'RESTA'}" 
+                                              th:remove='tag'>
+                                            DESCUENTO
+                                        </span>
+                                    </li>
+                                </ul>
+                            </td>
+                            <td th:inline="text">
+                                <ul style="list-style-type: none;">
+                                    <li th:each="itemD : ${deuda.itemDeudaInteresado}">
+                                        <span th:remove="tag" th:if="${itemD.conceptoPrecio != null}" 
+                                              th:text="|S/. ${helper.precio(itemD.monto)}|">Item</span>
+                                        <span style="color: red;" th:if="${itemD.conceptoPrecio == null &amp;&amp; itemD.tipo == 'RESTA'}"
+                                              th:text="|S/. ${helper.precio(itemD.monto)} -|">Item</span>
+                                    </li>
+                                </ul>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td th:if="${deuda.itemDeudaInteresado.size() > 1}"><b style="background: yellow;">Monto Total a Pagar</b></td>
+                            <td th:if="${deuda.itemDeudaInteresado.size() == 1}"><b style="background: yellow;">Monto a Pagar</b></td>
+                            <td th:inline="text"><b style='background: yellow;'>S/. [[${helper.precio(deuda.monto)}]]</b></td>
+                        </tr>
+
+                    </tbody>
+                </table>
+                          </div>
+
+            <p th:utext="${footer}">CONTENIDO PIE</p>
+
+        </div>
+    </body>
+</html>

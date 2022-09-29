@@ -1,0 +1,69 @@
+<div th:fragment="documentosPostulante">
+    <table class="table table-striped" style="margin-top: 0px;">
+        <thead>
+            <tr>
+                <th class="col-xs-1"></th>
+                <th class="col-xs-7 v-middle text-center">Documento</th>
+                <th class="col-xs-2 v-middle text-center">Entrega de Pendiente</th>
+                <th class="col-xs-2 v-middle text-center">Estado</th>
+            </tr>
+        </thead>
+
+        <tbody>
+
+            <tr v-for="(documento,index) in actividadIngresante.postulanteDocumentos">
+
+                <td class="v-middle text-center">
+                    <i v-if="documento.estado == 'ENTREGADO' " class="fa fa-check-square-o fa-2x text-success"></i>
+                    <i v-else-if="documento.estado == 'COMPROMISO' " class="fa fa-question-circle fa-2x text-warning"></i>
+                    <i v-else="" class="fa fa-times-circle fa-2x text-danger"></i>
+                </td>
+
+                <td class="v-middle">
+                    {{documento.documentoModalidad.documentoRequisito.nombre}}
+                </td>
+
+                <td  class="v-middle text-center">
+                    <span v-if="documento.estado == 'COMPROMISO'" >
+                        {{documento.fechaCompromisoEntrega}}
+                    </span>
+                </td>
+                
+                <td class="v-middle text-center">
+                    <span v-if="documento.estado == 'SIN_ENTREGAR' "
+                          class="label label-danger">{{documento.estadoEnum.value}}
+                    </span>
+                    <span v-else-if="documento.estado == 'COMPROMISO' "
+                          class="label label-warning">{{documento.estadoEnum.value}}
+                    </span>
+                    <span v-else-if="documento.estado == 'ENTREGADO' "
+                          class="label label-primary">{{documento.estadoEnum.value}}
+                    </span>
+                </td>
+
+            </tr>
+
+        </tbody>
+    </table>
+</div>
+<div th:fragment="documentosBienestar">
+    <table class="table table-striped table-hover"
+           v-if="actividadIngresante.documentoBienestar">
+        <thead>
+            <tr>
+                <th></th>
+                <th class="v-middle">Documento</th>
+            </tr>
+        </thead>
+
+        <tbody>
+            
+            <tr v-for="(documento,index) in actividadIngresante.documentoBienestar">
+                <td v-text="index+1">1</td>
+                <td v-text="documento.nombre">
+
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>

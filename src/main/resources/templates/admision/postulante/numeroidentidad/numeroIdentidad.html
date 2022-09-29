@@ -1,0 +1,106 @@
+<html layout:decorator="admision/_layout/layoutAgraria1">
+    <head>
+        <title>Cambiar de Documento de Identidad</title>
+        <style>
+            select.form-control{
+                border:1px solid #ccc !important; 
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div layout:fragment="banner">
+
+            <h3 th:if="${!esVirtual}">Cambiar de Documento de Identidad</h3>
+            <h3 th:if="${esVirtual}">CAMBIOS QUE PUEDES REALIZAR SOLO UNA VEZ SIN COSTO</h3>
+            <h1> 
+                <span  th:text="${postulante.persona !=null? postulante.persona.nombreCompleto:''}" /> 
+                <div class="line"></div>
+            </h1>
+
+        </div>
+
+        <div layout:fragment="main" class="scrollable" id="scrolled">
+            <div id="numeroDocVUE">
+                <form  data-parsley-validate="true" id="formChangeModalidad" th:action="@{/inscripcion/modalidad/accept}" >
+
+                    <div wclass="col-md-offset-2 col-md-8">
+                        <div th:if="${!esVirtual}" class="alert alert-danger text-center m-b-lg" style="font-size: 24px;">
+                            Al cambiar tu Documento de Identidad también cambiará tu código de postulante
+                            y la información de tus boletas de pago que estén pendientes de cancelación.
+                        </div>
+                        <div th:if="${esVirtual}" class="alert bold text-center m-b-lg" style="font-size: 24px;background: red; color: #ffffff ">
+                            Al cambiar tu Documento de Identidad también cambiará tu código de postulante
+                            y la información de tu boleta de pago que está pendiente de cancelación.
+                        </div>
+                        <div th:if="${!esVirtual}" class="alert alert-danger text-center m-b-lg" style="font-size: 24px;">
+                            <b>Este cambio podrás realizarlo solo una vez SIN COSTO.</b>
+                        </div>
+                        <div th:if="${esVirtual}" class="alert bold text-center" style="background: #017840; font-size: 24px;color: #ffffff " th:inline="text" > Verifica que tu correo electrónico sea el correcto, caso contrario no accederás al Concurso de Admisión Virtual [[${ciclo.cicloAcademico.descripcion}]].</div>
+
+                    </div>
+
+                    <div class="row">
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Tipo de documento de identidad</label>
+                                <multiselect  v-model="persona.tipoDocumento"
+                                              track-by="id"
+                                              v-bind:options="tiposDoc"
+                                              v-bind:allow-empty="false"
+                                              label='nombre'
+                                              placeholder=""
+                                              deselect-label=""
+                                              select-label="">
+
+                                </multiselect>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                          <label>Número de documento</label>
+                                <input type="text" class="form-control" required="true"
+                                       v-model="persona.numeroDocIdentidad"/>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row" th:if="${esVirtual}">
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label style="background: #017840; color: #ffffff " class="bold " >Correo electrónico</label>
+                                <input style="background: #017840; color: #ffffff " type="text" class="form-control " required="true"  v-model="persona.email" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <hr/>
+                    <div th:unless="${postulante.modalidadIngreso.isPreLaMolina()}" th:remove="tag">
+                        <div th:if="${postulante.cambioDni == null || postulante.cambioDni == 0}" class="col-md-12 text-center m-t-lg">
+                            <a class="btn btn-link text-primary"  th:href="@{/inscripcion/postulante}">Cancelar modificación</a>
+                            <button type="button" class="btn btn-danger" id="cambiar" v-on:click="cambiarDocumento">Aceptar</button>
+                        </div>
+                        <div th:if="${postulante.cambioDni != null &amp;&amp; postulante.cambioDni != 0}" class="col-md-12 text-center m-t-lg">
+                            <a class="btn btn-link text-primary"  th:href="@{/inscripcion/postulante}">Regresar</a>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+        </div>
+
+        <div layout:fragment="js">
+            <script th:inline="javascript">
+                var tiposDocJson = /*[[${tiposDocJson}]]*/ {};
+                var personaJson = /*[[${personaJson}]]*/ {};
+                var esVirtual = /*[[${esVirtual}]]*/ {};
+            </script>
+            <div th:substituteby="admision/_layout/includes :: javascript-vue-multiselect"></div>
+            <script th:src="@{/app/postulante/numeroidentidad/numeroIdentidad.js}" charset="utf-8"></script>
+        </div>
+    </body>
+</html>

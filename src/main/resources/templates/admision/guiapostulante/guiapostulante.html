@@ -1,0 +1,120 @@
+<html layout:decorator="admision/_layout/layoutAgraria1">
+    <head>
+        <title>Guía del Postulante</title>
+    </head>
+
+    <body>
+
+        <div layout:fragment="banner">
+
+            <h3>Registrar Guía del Postulante</h3>
+            <h1> 
+                <div class="line"></div>
+            </h1>
+
+        </div>
+
+        <div layout:fragment="main">
+
+            <form id="formInteresado" data-parsley-validate="true" method="POST">
+
+                <div class="panel-body">
+
+                    <input type="hidden" name="id" th:value="${id}" />
+                    <input type="hidden" name="tipoProspecto" th:value="${tipo}" id="tipoGuiaPostulante" />
+
+                    <div class="row">
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Apellido Paterno</label>
+                                <input type="text" required="true" name="persona.paterno" th:value="${interesado.paterno}" class="form-control nombre-persona"/>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Apellido Materno</label>
+                                <input type="text" required="true" name="persona.materno" th:value="${interesado.materno}" class="form-control nombre-persona"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Nombres</label>
+                                <input type="text" required="true" name="persona.nombres" th:value="${interesado.nombres}" class="form-control nombre-persona"/>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Correo Electrónico</label>
+                                <input type="text" required="true" name="persona.email" th:value="${interesado.email}" class="form-control verificar-email"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Celular</label>
+                                <input type="text" required="true" name="persona.celular" 
+                                       data-parsley-length="[9,9]" maxlength="9"
+                                       th:value="${interesado.celular}" class="form-control sin-espacios numerico"/>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Teléfono</label>
+                                <input type="text" name="persona.telefono" th:value="${interesado.telefono}" class="form-control sin-espacios numerico"/>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row" >
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Documento de identidad</label>
+                                <select name="persona.tipoDocumento.id" class="form-control select2" required="true">
+                                    <option></option>
+                                    <option th:each="tipo : ${tiposDocIdentidad}"
+                                            th:value="${tipo.id}"
+                                            th:text="${tipo.nombre}"></option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div class="col-sm-6">
+                            <div class="form-group">
+                                <label>Nùmero de documento de identidad</label>
+                                <input type="text" name="persona.numeroDocIdentidad" 
+                                       class="form-control" required="true"/>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <hr/>
+
+                <span class="col-md-12 text-center">
+                    <button type="button" id="btnGuiaPostulante" class="btn btn-success">Siguiente</button>
+                </span>
+
+            </form>
+
+
+
+        </div>
+
+        <div layout:fragment="js">
+            <script th:src="@{/app/guiapostulante/guiapostulante.js}" charset="utf-8"></script>
+        </div> 
+
+    </body>
+</html>

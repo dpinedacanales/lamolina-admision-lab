@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html class="app">
+    <head>
+        <title>UNALM - Login</title>
+        <base th:substituteby="admision/_layout/includes :: styles"/>
+        <base th:substituteby="admision/_layout/includes :: favicon"/>
+    </head>
+
+    <body class="login-bg">
+        <section class="login-wrapper">
+            <h2 class="logo"> UNALM - SISTEMA DE INSCRIPCIÓN DEL POSTULANTE </h2>
+
+            <div class="box">
+                <div class="content-wrap">
+                    <a class="btn btn-danger" th:href="@{/}">Sus credenciales no tienen acceso al sistema.</a>
+                </div>
+            </div>
+
+        </section>
+
+        <div th:substituteby="admision/_layout/includes :: javascript"/>
+    </body>
+</html>

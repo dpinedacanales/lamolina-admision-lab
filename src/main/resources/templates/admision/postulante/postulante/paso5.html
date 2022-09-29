@@ -1,0 +1,160 @@
+<html layout:decorator="admision/_layout/layoutAgraria1">
+    <head>
+        <title>Inscripción de Postulantes</title>
+        <style>
+            @media only screen and (max-width : 320px) {
+                .font-cell {
+                    font-size: 15px;
+                    line-height: 17px;
+                }
+                .sweet-alert .sa-icon {
+                    width: 0;
+                    height: 0;
+                    border: 0 solid gray;
+                }
+                .sweet-alert .sa-icon.sa-warning .sa-body {
+                    width: 0;
+                    height: 0;
+                    left: 0;
+                    top: 0;
+                }
+                .sweet-alert h2 {
+                    line-height: 17px;
+                }
+            }
+
+            /* Extra Small Devices, Phones */
+            @media only screen and (max-width : 480px) {
+                .font-cell {
+                    font-size: 15px;
+                    line-height: 17px;
+                }
+                .sweet-alert .sa-icon {
+                    width: 0;
+                    height: 0;
+                    border: 0 solid gray;
+                }
+                .sweet-alert .sa-icon.sa-warning .sa-body {
+                    width: 0;
+                    height: 0;
+                    left: 0;
+                    top: 0;
+                }
+                .sweet-alert h2 {
+                    line-height: 17px;
+                }
+            }
+
+            .sweet-alert p {
+                color: #000;
+                font-size: 16px;
+            }
+
+            .parrafo {
+                text-align: justify;
+                margin-bottom: 20px;
+            }
+            .resaltar {
+                text-transform: uppercase;
+                font-weight: bold;
+            }
+
+            .sweet-alert p {
+                color: #000;
+                font-size: 16px;
+            }
+        </style>
+        <link rel="stylesheet" type="text/css" th:href="@{/vendor/bootzard-wizard/style.css}" />
+    </head>
+
+    <body>
+
+        <div layout:fragment="banner">
+
+            <h1 style="font-size: 40px; color: black;">
+                <span th:text="${titulo}"></span>
+                <span th:if="${!esSimulacro}" th:text='${postulante.cicloPostula.cicloAcademico.descripcion}'></span> 
+            </h1>
+            <h1> <span  th:text="${postulante.persona.nombreCompleto}" /> 
+                <div class="line"></div>
+            </h1>
+
+        </div>
+
+        <div layout:fragment="main">
+            <input type="hidden" id="verTerminos" th:value="${verTerminos}"/>
+            
+            <div th:if="${postulante.modalidadIngreso.isPreLaMolina() OR esSimulacro}">
+                   <form  data-parsley-validate="true"  method="POST"  id="formPostulante" th:action="@{/inscripcion/postulante/savePaso/5/paso}">
+            
+                            <input type="hidden" name="id" th:value="${postulante.id}"/>
+                            <input type="hidden" name="modalidadIngreso.id" th:value="${postulante.modalidadIngreso.id}"/>
+            
+                            <div th:utext="${contenido}" style="padding: 20px; line-height: 1.7;">bla bla bla</div>
+            
+                            <div class="col-md-12 text-center">
+                                <a th:unless="${postulante.modalidadIngreso.isPreLaMolina() OR esVirtual}" class="btn btn-link text-success boton" style="color:green" th:href="@{/inscripcion/postulante/4/paso}">Atras</a>
+                                <a th:if="${postulante.modalidadIngreso.isPreLaMolina() OR esVirtual}" class="btn btn-link text-success boton" style="color:green" th:href="@{/inscripcion/postulante/3/paso}">Atras</a>
+                                <button type="button" class="btn btn-success send-form boton" id="btnAccept" ><i class="fa fa-spinner fa-spin hide" id="spin"/> Aceptar</button>
+                            </div>
+            
+                        </form>
+            </div>
+            
+                  
+            <div class="col-sm-12 form-box" th:unless="${postulante.modalidadIngreso.isPreLaMolina() OR esSimulacro}">
+                <form role="form" action="" method="post" class="f1" id="wizardform">
+                    
+                      <input type="hidden" name="id" th:value="${postulante.id}"/>
+                      <input type="hidden" name="modalidadIngreso.id" th:value="${postulante.modalidadIngreso.id}"/>
+            
+                    <div class="f1-steps">
+                        <div class="f1-progress">
+                            <div class="f1-progress-line" data-now-value="0" data-number-of-steps="0" style=""></div>
+                        </div>
+
+                        <div th:each="carta, conteo : ${cartas}"
+                             th:class="|f1-step ${conteo.index==0? 'active':''} |"
+                             th:rel="${carta.id}"
+                             th:attr="ref=${carta.id}">
+                            <div class="f1-step-icon"
+                                 th:inline="text">[[${conteo.count}]]</div><p></p>
+                        </div>
+                    </div>
+
+                    <fieldset th:each="carta, conteo : ${cartas}"
+                              th:attr="ref=${carta.id}"
+                              th:rel="${carta.id}">
+
+                        <div class="form-group m-t-xl m-l-lg m-r-lg"  style="min-height: 250px;" >
+                             <div th:utext="${carta.contenido}" style="padding: 20px; line-height: 1.7;">bla bla bla</div>
+                           
+                        </div>
+
+                        <div class="f1-buttons text-center" style="text-align: center !important">
+                            <button type="button" class="btn btn-next " th:attr="ref=${carta.id}, value=${carta.nombre}, name=${conteo.count}">ACEPTAR</button>
+                            <button type="button" class="btn btn-submit hide" th:attr="ref=${carta.id}, value=${carta.nombre}, name=${conteo.count}">Finalizar</button>
+                        </div>
+
+                    </fieldset>
+                </form>
+            </div>
+
+        </div>  
+
+        <div layout:fragment="js">
+            <script th:inline="javascript">
+                /*<![CDATA[*/
+                var esPre = /*[[${postulante.modalidadIngreso.isPreLaMolina()}]]*/ postulante;
+                var esSimulacro = /*[[${esSimulacro}]]*/ '';
+                var esVirtual = /*[[${esVirtual}]]*/ '';
+                /*]]>*/
+            </script>
+            <script type="text/javascript" th:src="@{/vendor/jquery.countdown/dist/jquery.countdown.min.js}" />
+            <script type="text/javascript" th:src="@{/vendor/bootzard-wizard/scripts.js}" />
+
+            <script th:src="@{/app/postulante/postulante/paso5.js}" charset="utf-8"></script>
+        </div>
+
+    </body>
+</html>

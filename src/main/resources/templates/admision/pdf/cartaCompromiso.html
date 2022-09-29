@@ -1,0 +1,106 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Carta Compromiso</title>
+        <meta charset="utf-8"/>
+        <style type="text/css">
+            .subrayado{
+                text-decoration: underline;
+            }
+            body{
+                font-family: Calibri;
+                padding: 25px;
+                text-align: justify;
+                line-height: 140%;
+            }
+            .tab1{
+                margin-left:11.3em;
+            }
+            .tab2{
+                margin-left:4.3em;
+            }
+            .tab3{
+                margin-left:2.9em;
+            }
+            .tab4{
+                margin-left:5em;
+            }
+            .tab5{
+                margin-left:6.3em;
+            }
+            .tab6{
+                margin-left:9.3em;
+            }
+
+
+        </style>
+    </head>
+    <body>
+
+    <center> <h1 class="subrayado" style="font-size:20px">CARTA DE COMPROMISO</h1></center>
+
+    <P th:inline="text">El presente documento acredita que Yo [[${postulante.persona.nombreCompleto}]] declaro conocer y cumplir los siguientes requisitos:</P>
+
+    <p class="tab2"><b>CÓDIGO DE POSTULANTE</b>: <span th:text="${postulante.codigo}">666</span></p>
+    <p class="tab3"><b th:text="${postulante.persona.tipoDocumento!=null? #strings.toUpperCase(postulante.persona.tipoDocumento.nombre):''}" >DOCUMENTO DE IDENTIDAD</b>:  <span th:text="${postulante.persona.numeroDocIdentidad}">999</span></p>
+    <p class="tab5"><b>COLOR DE MODULO</b>: ___________</p>
+    <p class="tab6"><b>N° DE AULA</b>: ___________</p>
+
+    <br/>
+
+    <h2 class="subrayado" style="font-size:15px"> DISPOSICIONES PARA EL DÍA DEL EXAMEN DE ADMISIÓN  </h2>
+
+    <ol>
+        <li>El <b class="subrayado">DOMINGO 05 DE MARZO</b> me presentaré en la UNALM a partir de las <b>5:30 a.m.</b> por la <b>PUERTA PRINCIPAL.</b></li>
+        <li>YO ingresare al campus sólo hasta las <b>7:30 a.m.</b></li>
+        <li> <b class="subrayado">TRAERE ÚNICAMENTE</b> la Carta de Compromiso y mi DNI, de ser el caso, Pasaporte o Carnet de Extranjería.</li>
+        <li>Completare el  <b class="subrayado">COLOR DE MÓDULO Y N° DE AULA</b> una vez publicado el 04 de Marzo en el Site del Centro de Admisión y Promoción a partir del mediodía. </li>
+        <li>YO <b class="subrayado">FIRMARE</b> esta carta de compromiso el día del Examen de Admisión dentro del aula.</li>
+        <li> <b class="subrayado">SI SOY MENOR DE EDAD:</b> Mis padres deberán de firmar y llenar los datos que  corresponden de la Carta de Compromiso antes del día del Examen de Admisión.</li>
+        <li><b class="subrayado">NO TRAERE:</b> Lápiz, borrador y tajador ya que estos serán proporcionados el mismo día del Examen en su respectiva aula. </li>
+        <li>Tengo pleno conocimiento que está terminantemente prohibido traer  <b class="subrayado">objetos METÁLICAS</b>  y alguno de estos objetos:
+
+            <ul>
+                <li><b>Artículos de vestir</b>:Bufandas, ropa voluminosa, casacas gruesas, casacones, gorros, guantes, correas, hebillas, pashminas, chales, zapatos o botas con hebilla, lentes del sol, etc.</li>
+                <li><b>Equipos</b>: Celulares, mp3, iPhone, tablets, calculadoras, Smart watch, audífonos, etc.</li>
+                <li><b>Alhajas</b>: Pulseras de cualquier material (cuero, sintéticas, de tela, etc.), relojes, anillos, pendientes, gargantillas, piercing, aretes, sujetadores plásticos de cabello o de cualquier material, etc.</li>
+                <li><b>Bolsos</b>:Carteras, monederos, billeteras, cartucheras, estuche de lentes, etc.</li>
+                <li><b>Materiales de escritorio</b>: Sobres, micas de cualquier tamaño, regla, lápiz, tajador, borrador, etc.</li>
+                <li><b>Artículos varios</b>: Llaveros, llaves, <b>NO MONEDAS</b> (sólo billetes), lente de sol, bloqueador, botellas de agua, etc.</li>
+                <p><b>Si portase cualquiera de los elementos mencionados, no se le permitirá el ingreso ni rendir el examen. Se decomisará  el o los objetos y se desecharán sin lugar a reclamo.</b></p>
+            </ul>
+            <b> Si porto cualquiera de los elementos mencionados, no deben permitirme el ingreso ni rendir el examen. Se me decomisará  el o los objetos y se desecharán sin lugar a que  reclame.</b>
+        </li>
+        <li>Es de mi conocimiento que la  suplantación (que un postulante sea sustituido por otra persona) es un acto delictivo, que será sancionado de acuerdo a ley e impedirá que los infractores vuelvan a postular a la Universidad Nacional Agraria La Molina. <b class="subrayado"> PERDERA DE MANERA AUTOMATICA LA VACANTE SIN LUGAR A RECLAMO</b></li>
+
+        <ul>
+            <li>
+                En caso de alcanzar una vacante, me comprometo  a presentar los documentos originales, solicitados por el Centro de Admisión y Promoción de la Universidad Nacional Agraria La Molina, según la Modalidad de Ingreso y de acuerdo a lo establecido en el Reglamento de Admisión, teniendo como fecha única de entrega el día 6 de Marzo en el horario de 8:00 am - 12:00 pm y de 01:00 - 3:45 pm. De no presentar los documentos o no estén en regla perderé la vacante automáticamente.
+            </li>
+            <li>
+                No registro antecedentes policiales, penales ni judiciales. 
+            </li>
+            <li>
+                La información consignada al momento de inscribirme como postulante al Concurso de Admisión 2017 – I, vía internet, fue verdadera y de mi entera responsabilidad, cualquier infracción a lo estipulado en los términos y condiciones, originará las sanciones correspondientes y pérdida del derecho a postular o la vacante que podría alcanzar.
+            </li>
+            <li>
+                Conozco y acepto todas las disposiciones del Estatuto, Reglamento General y Reglamento de Admisión de la UNALM publicado en el Web Site del Centro de Admisión y Promoción, de no cumplir  lo especificado  acepto que perderé la vacante en caso de ser obtenida.
+            </li>
+        </ul>
+
+    </ol>
+    <h4>DEJO CONSTANCIA, FIRMO A CONTINUACIÓN</h4><br/>
+    <h4 align="center">________________________________</h4>
+    <h4 align="center"><b>Firma de Postulante</b></h4>
+
+    <br/><p><b>*</b>SÓLO si el postulante es <b class="subrayado"> MENOR DE EDAD</b>, completar la siguiente información con los datos del Padre o Apoderado:</p><br/><br/><br/>
+
+    <h4 align="center">________________________________</h4>
+    <h4 align="center"><b>Firma del padre o apoderado</b></h4>
+    <br/>       
+
+    <p>Apellidos y Nombres:_________________________</p>
+    <p class="tab1">N° DNI:_________________________</p>
+
+</body>
+</html>

@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+    <head>
+        <title>Declaración Jurada</title>
+        <meta charset="utf-8"/>
+        <style type="text/css">
+            .subrayado{
+                text-decoration: underline;
+            }
+            body{
+                font-family: Calibri;
+                padding: 25px;
+                text-align: justify;
+                line-height: 140%;
+            }
+            .tab1{
+                margin-left:11.3em;
+            }
+            .tab2{
+                margin-left:4.3em;
+            }
+            .tab3{
+                margin-left:2.9em;
+            }
+            .tab4{
+                margin-left:5em;
+            }
+            .tab5{
+                margin-left:6.3em;
+            }
+            .tab6{
+                margin-left:9.3em;
+            }
+
+
+        </style>
+    </head>
+    <body>
+
+    <center> <h1 class="subrayado" style="font-size:20px">DECLARACIÓN JURADA</h1></center>
+
+    <p style="text-align: justify;" th:inline="text" >
+        Yo, [[${postulante.persona.paterno}]]  [[${postulante.persona.materno}]] [[${postulante.persona.nombres}]] ,
+        identificado (a) con [[|${postulante.persona.tipoDocumento!=null?postulante.persona.tipoDocumento.nombre:''} - ${postulante.persona.numeroDocIdentidad!=null?postulante.persona.numeroDocIdentidad:''} |]], 
+        y con domicilio en  [[${postulante.persona.direccion}]]  [[${postulante.persona.direccion}]]  ;</p>
+
+    <p style="text-align: justify;" th:inline="text" >
+
+        DECLARO BAJO JURAMENTO: </p>
+
+    <ol>
+        <li><p style="text-align: justify;">No haber sido condenado por los delitos consignados en la Ley Nº 29988.</p></li>
+        <li><p style="text-align: justify;">No haber sido condenado por delito doloso, ni encontrarme inhabilitado judicialmente o con cese temporal.</p></li>
+        <li><p style="text-align: justify;">El postulante conoce y acepta todas las disposiciones del reglamento general de la UNALM publicado en el Sitio Web, de no cumplir con lo especificado aceptará perder la vacante en caso de ser obtenida.</p></li>
+    </ol>
+
+    <p style="text-align: justify;" th:inline="text" >
+
+        En caso de resultar falsa la información que proporciono, me sujeto a los alcances de lo establecido en el artículo 411º del Código Penal, concordante con el artículo 32º de la Ley Nº 27444, Ley del Procedimiento Administrativo General.  </p>
+
+    <p style="text-align: justify;" th:inline="text" >
+
+        En fe de lo cual firmo la presente.   </p>
+
+
+
+    <br/>
+
+    <h4>PARA MAYOR CONSTANCIA, FIRMO A CONTINUACIÓN <b class = "subrayada">(TRAER ESTA CONSTANCIA IMPRESA Y FIRMADA)</b>.</h4><br/>
+
+    <br/><p>En caso de ser mayor de edad</p><br/>
+
+    <h4 align="center">________________________________</h4>
+    <h4 align="center"><b>Firma de Postulante</b></h4>
+
+    <br/><p><b>*</b>SÓLO si el postulante es <b class="subrayado"> MENOR DE EDAD</b>, completar la siguiente información:</p><br/><br/><br/>
+
+    <h4 align="center">________________________________</h4>
+    <h4 align="center"><b>Firma del padre o apoderado</b></h4>
+    <br/>       
+
+    <p>Nombre del padre o apoderado:_________________________</p>
+    <p class="tab1">DNI:_________________________</p>
+
+</body>
+</html>

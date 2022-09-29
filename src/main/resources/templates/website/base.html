@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout">
+    <head>
+        <title layout:title-pattern="$CONTENT_TITLE - $DECORATOR_TITLE"> La Molina </title>
+
+    <th:block th:replace="website/_includes :: GENERAL-STYLES"/>
+    <th:block th:replace="website/_includes :: FAVICON" />
+</head>
+<body>
+    <div class="wrapper">
+        <div class="searcher-input">
+            <div class="below"></div>
+            <input type="text" placeholder="Término a buscar" />
+        </div>
+
+        <th:block th:utext='${service.findWidget("header").contenido}' />
+
+        <section layout:fragment="BODY"  th:remove="tag"> </section>
+
+        <th:block th:utext='${service.findWidget("footer").contenido}' />
+
+    </div>
+
+<th:block th:replace="website/_includes :: GENERAL-JS"/>
+<script th:inline="javascript">
+    /*<![CDATA[*/
+    var dataList = /*[[${service.allDatalist()}]]*/ dataList;
+    /*]]>*/
+</script>
+<div layout:fragment="JS" th:remove="tag"> </div>
+<div th:substituteby="website/_includes :: parrot-chat"/>
+
+<div th:substituteby="website/_includes :: google-analytics"/>
+</body>
+</html>

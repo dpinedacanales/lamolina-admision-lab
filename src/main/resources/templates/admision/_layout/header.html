@@ -1,0 +1,47 @@
+<div class="row bg-primary">
+    <div class="container">
+        <ul class="menu_superior">
+            <li style="height: 20px ; font-size: 20px">  Contáctenos: 614-7117 </li>
+            <li style="height: 20px ; font-size: 20px">
+                <i class="fa fa-whatsapp"></i>&nbsp;
+                    <a href="https://api.whatsapp.com/send?phone=51937413951&amp;text=Tengo%20dudas%20en%20mi%20inscripci%C3%B3n" style="width: auto;color: #FFFF;">937413951</a>               
+                </li>
+            <li style="height: 20px ; font-size: 20px">
+                <i class="fa fa-whatsapp"></i>&nbsp;
+                    <a href="https://api.whatsapp.com/send?phone=51978585632" style="width: auto;color: #FFFF;">978585632</a>                              
+                </li>
+                <li style="height: 20px ; font-size: 20px">
+                <i class="fa fa-whatsapp"></i>&nbsp;
+                    <a href="https://api.whatsapp.com/send?phone=51949071307&amp;fbclid=IwAR0eixiFrD3O8tw8u5Zc8DDFtPfYjimC-aVBYlbGOtKvlVtLgE824vkVq6g" style="width: auto;color: #FFFF;">949071307 </a>
+                
+                    </li>
+            <li style="height: 20px ; font-size: 20px">
+                <a  href="https://es-la.facebook.com/admisionagrarialamolina/" target="_blank"> <i class="fa fa-facebook"/></a>
+            </li>
+            <li style="height: 20px ; font-size: 20px" class="search_controls"> <a href="/logout" style="color: white;"> Salir  </a> </li>
+        </ul>
+    </div>
+</div>
+
+<div class="row top-bar">
+    <div class="container">
+        <div class="col-md-6">
+            <div class="logo">
+                <a href="#"><img th:src="@{/phobos/images/logo.svg}" class="logo1"/>  </a>
+            </div>
+        </div>
+        <div class="col-md-6" th:if="${!ciclo.esVirtual}">
+
+            <h2 class="h2-bar pull-right" id="procTitle"
+                th:text="|Concurso de Admisión ${ciclo.cicloAcademico.descripcion}|"> Proceso de Admisión 2016-I </h2>
+        </div>
+        <div class="col-md-6" th:if="${ciclo.esVirtual}">
+
+                             <h2 class="h2-bar pull-right" id="procTitle" th:if="${ciclo.esSimulacro}"
+                                th:text="|Simulacro Virtual del Concurso de Admisión|"> Simulacro Virtual del Examen Admisión </h2>
+<!--cambioJR-->             <h2 class="h2-bar pull-right" id="procTitle" th:if="${!ciclo.esSimulacro}"
+                                th:text="|Concurso de Admisión Virtual ${ciclo.cicloAcademico.descripcion}|"> Concurso de Admisión Virtual 2020-II </h2>
+        </div>
+        
+    </div>
+</div>

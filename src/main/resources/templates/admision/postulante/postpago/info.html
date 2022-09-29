@@ -1,0 +1,88 @@
+<html layout:decorator="admision/_layout/layoutAgraria1">
+    <head>
+        <title>Inscripción de Postulantes</title>
+    </head>
+
+    <body>
+
+
+        <div layout:fragment="banner">
+
+            <h1> <span  th:text="${postulante.persona.nombreCompleto}" /> 
+                <div class="line"></div>
+            </h1>
+        </div>
+
+        <div layout:fragment="main">
+
+            <h1>
+                ¡Felicidades estás inscrito!
+            </h1> 
+
+            <p class="h4 text-center">Gracias por participar en el Proceso de Admisión
+                <span th:text="${ciclo.cicloAcademico.descripcion}">2020-III</span>
+            </p>
+
+            <p class="text-center m-t"
+               th:if="${modalidadCiclo.rindeExamenAdmision==1}">
+    El ingreso para el día del examen se realizará por la <b>puerta principal</b>, a partir de las 05:00 am
+                hasta las 07:30 am.
+            </p>
+
+            <p class="text-center m-t-lg bold text-warningw h4"
+               th:if="${encuestar}">
+                <span class="alert alert-warning">
+                    Ayúdanos a darte un mejor servicio respondiendo esta 
+                    <a th:href="@{/inscripcion/encuesta}">encuesta</a> haciendo clic
+                    <a th:href="@{/inscripcion/encuesta}">aquí</a>.
+                </span>
+                <br/><br/>
+            </p>
+
+            <hr/>
+
+            <div class="panel-body">
+                <div class="col-md-6 col-md-offset-3 m-t-lg">
+
+                    <a  class="btn btn-lg btn-primary  m-b btn-block" 
+                        th:if="${pagoGuiaPostulante}" target="guiapostulante"
+                        th:href="@{/inscripcion/postpago/verGuiaPostulante}">Guía del Postulante </a>
+                    <a  class="btn btn-lg btn-primary  m-b btn-block" 
+                        th:if="${modalidadCiclo.rindeExamenAdmision==1}"
+                        id="avisoRendirExamen">Conoce donde rendirás el EXAMEN</a>
+                    <a  class="btn btn-lg btn-primary  m-b btn-block" 
+                        th:unless="${modalidad.isPreLaMolina()}"
+                        th:href="@{/inscripcion/evaluacion}">Examen Virtual </a>
+                    <a  class="btn btn-lg btn-primary  m-b btn-block" 
+                        th:href="|${S3_LINK}website/documentos%20importantes/REGLAMENTO%20DE%20ADMISI%C3%93N%20-%20NOVIEMBRE%202017.pdf|">Reglamento de Admisión  </a>
+                    <a  class="btn btn-lg btn-primary  m-b btn-block" 
+                        th:href="@{/inscripcion/postpago/resumen}">Resumen de inscripción </a>
+                 
+                    <a  class="btn btn-lg btn-primary  m-b btn-block" 
+                        th:if="${postulante.isIngresante()}"
+                        href="https://cdn.lamolina.edu.pe/v1/AUTH_90afa410262f41f1af475ed599eeb798/lamolina-admision/publico/documentos/20182/BienvenidoCachimbo-20182.pdf">Bienvenido cachimbo</a>
+                    <a class="btn btn-lg btn-danger  m-b btn-block"
+                       th:href="@{/inscripcion/postulante/cambios/solicitud}">¿Deseas realizar alguna modificación?(con costo)</a>
+                </div>
+            </div>
+
+            <div class="container">
+                <div class="menu_footer cond">
+                    <ul>
+                        <li>
+                            <a th:href="@{/inscripcion/postpago/terminos}" style="font-size: 19px;"><span class="fa fa-file"></span> Términos y condiciones aceptados</a>
+                        </li>
+                        <li>
+                            <a th:href="@{/inscripcion/postpago/compromiso}" style="font-size: 19px;"><span class="fa fa-file"></span> Carta de compromiso aceptada</a>
+                            <a th:href="@{/inscripcion/postpago/compromiso}" style="font-size: 19px;"  th:if="${esVirtual}"><span class="fa fa-file"></span> Declaración jurada aceptada</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+        </div>
+        <div layout:fragment="js">
+            <script th:src="@{/app/postulante/postpago/recurso.js}" charset="utf-8"></script>
+        </div>
+    </body>
+</html>

@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html class="app">
+    <head>
+        <title>UNALM - Login</title>
+        <base th:substituteby="admision/_layout/includes :: styles"/>
+        <base th:substituteby="admision/_layout/includes :: favicon"/>
+
+        <link rel="stylesheet" type="text/css" th:href="@{/phobos/css/override-old.css}" />
+    </head>
+
+    <body class="login-bg">
+        <section class="login-wrapper">
+            <h2 class="logo text-center m-b-lg"> UNALM - SISTEMA DE INSCRIPCIÓN DEL POSTULANTE </h2>
+
+            <div class="box text-center m-t-lg">
+                <a class="btn btn-info login" th:href="@{/login}"
+                   style="width: 300px">Ingresar con <br/>Correo Electrónico Google</a>
+            </div>
+
+            <div class="box text-center m-t-lg">
+                <form action="/connect/facebook" method="POST">
+                    <input type="hidden" name="scope" value="user_posts" />
+                    <button  class="btn btn-info login"
+                            style="width: 300px">Ingresar con <br/>Facebook</button>
+                </form>
+            </div>
+
+        </section>
+
+        <div th:substituteby="admision/_layout/includes :: javascript"/>
+        <div layout:fragment="js">
+            <script th:src="@{/app/security/login.js}" charset="utf-8"></script>
+        </div>
+    </body>
+</html>

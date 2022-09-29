@@ -1,0 +1,30 @@
+<html layout:decorator="admision/_layout/base">
+
+    <base layout:fragment="header-styles">
+    <link rel="stylesheet" type="text/css" th:href="@{/phobos/css/inscripcion.css}" />
+    </base>
+
+    <div class="hbox stretch"  layout:fragment="body">
+
+        <div th:substituteby="admision/_layout/header"> header </div>
+
+        <div  class="dock"> 
+            <section  layout:fragment="banner"></section>
+
+            <div class="row">
+                <div class="col-md-10 col-md-offset-1 m-b-xl">
+                    <div class="panel">
+                        <div class="panel-body">
+
+                            <section layout:fragment="main"></section>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div th:substituteby="admision/_layout/footer"> header </div>
+
+        </div>   
+    </div>
+
+</html>

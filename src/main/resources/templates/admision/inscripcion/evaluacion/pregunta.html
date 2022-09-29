@@ -1,0 +1,134 @@
+<html layout:decorator="admision/_layout/layoutAgraria1">
+    <head>
+        <title> Evaluación </title>
+    <div th:substituteby="admision/_layout/includes :: styles-mathquill"></div>
+    <style>
+        .i-checks span p{
+            display: inline;
+        }
+        .checkbox input[type=checkbox], .checkbox-inline input[type=checkbox], .radio input[type=radio], .radio-inline input[type=radio]{
+            position: relative;
+        }
+        .preg p:first-child{
+            display: inline;
+        }
+    </style>
+</head>
+
+<body>
+
+    <div layout:fragment="banner">
+
+        <div class="col-md-10 col-md-offset-1  m-b-xl">
+
+        </div>
+
+    </div>
+
+    <div layout:fragment="main">
+
+        <input type="hidden" id="siguiente" th:value="${siguiente}? ${siguiente.id}"/>
+        <input type="hidden" id="anterior" th:value="${anterior}? ${anterior.id}"/>
+
+        <div id="wizardform">
+
+            <div class="navbar hidden">
+                <div class="navbar-inner">
+                    <ul class="header-navbar-rounded">
+                        <li th:each="item, conteo : ${preguntas}"  
+                            th:class="${item.id==pregunta.id ? 'active':''}"  >
+                            <a class="collapse-menu" 
+                               th:href="@{'/inscripcion/evaluacion/'+${item.id}+'/pregunta'}"
+                               data-toggle="tab" th:text="${item.numero}">1</a>
+                        </li>
+                    </ul>
+                </div>
+            </div>
+
+            <div class="tab-content" >
+
+                <div class="tab-pane active" role="tabpanel"
+                     th:id="${'tab'+ pregunta.id}">
+                 
+                    <div class="form-group  m-l-lg m-r-lg contenido-pregunta"  style="min-height: 250px;"  >
+
+                        <div class="m-b-xl" >
+
+                            <p class="bold h4 m-b-sm text-center" 
+                               th:if="${pregunta.tema!=null}" 
+                               th:utext="${pregunta.tema.nombre}"></p>
+
+                            <span th:if="${pregunta.subtitulo!=null}">
+                                <p class="bold h4 m-b-sm text-center"
+                                   th:utext="${pregunta.subtitulo.temaExamen.nombre}"></p>
+                                <p class="bold h5 m-b-sm"
+                                   th:utext="${pregunta.subtitulo.nombre}"></p>
+                            </span>
+
+                            <span th:if="${pregunta.bloquePreguntas!=null}">
+                                <p class="bold h4 m-b-sm text-center"
+                                   th:utext="${pregunta.bloquePreguntas.subTituloExamen.temaExamen.nombre}"></p>
+                                <p class="bold h4 m-b-sm"
+                                   th:utext="${pregunta.bloquePreguntas.subTituloExamen.nombre}"></p>
+                                <p class="bold h5 m-b-sm"
+                                   th:utext="${pregunta.bloquePreguntas.nombre}"></p>
+                                <p th:utext="${pregunta.bloquePreguntas.contenido}"></p>
+                            </span>
+
+                            <p style="display: inline;">
+                                <a href="#" class="btn btn-warning btn-roundedq bold btn-sm" th:utext="${pregunta.numero}"> 666 </a> 
+                                <div style="display: inline;" class="preg" th:utext="${pregunta.texto}"/>
+                            </p>
+
+                        </div>
+
+                        <div th:each="opcion, contador : ${pregunta.opcionPregunta}">
+
+                            <div class="radio i-checks">
+                                <label>
+
+                                    <input type="radio" 
+                                           th:name="${pregunta.id}" 
+                                           th:rel='${opcion.id}' 
+                                           th:value="${opcion.id}"/>
+
+                                    <i></i>
+                                    <span th:utext="|${zelp.contador(contador.count)}) ${opcion.contenido}|"></span>
+                                    <input th:if="${opcion.esOtro}" type="text" disabled="true" class="form-control preOtro" th:rel='${item.id}' />
+                                    <span class="hidden fa fa-spinner fa-spin text-sm text-info" data-toggle="tooltip" data-placement="bottom" ></span>
+                                    <span class="hidden fa fa-check-circle text-sm text-info" data-toggle="tooltip" data-placement="bottom" >Guardado</span>
+                                    <span class="hidden fa fa-close text-sm text-danger" data-toggle="tooltip" data-placement="bottom" >Reenviar</span>
+                                </label>
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                    <hr/>
+
+                    <ul class="pager wizard">
+                        <li class="previous">
+                            <a href="#">Previo</a>
+                        </li>
+                        <li class="next">
+                            <a href="#">Siguiente</a>
+                        </li>
+                        <li class="otro"><a  href="#">Ir a pregunta</a></li>
+                    </ul>
+
+                </div>
+            </div>
+
+        </div>
+    </div>
+
+    <div layout:fragment="js">
+        <script type="text/javascript" th:src="@{/vendor/mathquill/mathquill.min.js}"/>
+        <script type="text/javascript" th:src="@{/vendor/jquery.countdown/dist/jquery.countdown.min.js}"/>
+        <script type="text/javascript" th:src="@{/phobos/js/wizard/jquery.bootstrap.wizard.js}"/>
+        <script th:src="@{/app/evaluacion/pregunta.js}" charset="utf-8"></script>
+    </div>
+
+</body>
+</html>

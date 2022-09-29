@@ -1,0 +1,251 @@
+<html layout:decorator="admision/_layout/layoutAgraria1">
+    <head>
+        <title>Modificación de Datos</title>
+    </head>
+
+    <body>
+
+        <div layout:fragment="banner">
+            <h3>Modificación de Datos</h3>
+            <h1> 
+                <span  th:text="${persona.nombreCompleto}" /> 
+                <div class="line"></div>
+            </h1>
+
+        </div>
+
+        <div layout:fragment="main">
+            <div id="cambiosVUE" v-cloak="">
+                <div class="row" th:if="${solicitudes.size() &gt; 0}">
+                    <div class="col-md-10 col-md-offset-1">
+                        <h4>Ya tienes solicitudes en proceso</h4>
+                        <ul>
+                            <li th:each="item : ${solicitudes}" th:text="${item.tipoCambioInfo.nombre}"></li>
+                        </ul>
+                        <button class="btn btn-primary" v-on:click="anular">Cancelar la solicitud</button>
+                    </div>
+                </div>
+
+                <div th:if="${solicitudes.size() == 0}">
+                    <h2>Puedes elegir más de una opción</h2>
+                    <div id="form" data-parsley-validate="true">
+                        <div class="row">
+
+                            <div class="col-md-6 col-sm-6 col-xs-12" v-for="item in cambios">
+                                <label class="switch">
+                                    <input v-if="item.tipoCambioInfo.codigo == 'CMODAAI' || 
+                                           item.tipoCambioInfo.codigo == 'CMODADI' || 
+                                           item.tipoCambioInfo.codigo == 'CMODAOPC'" type="checkbox" v-bind:value="item" v-model="checkeds" v-on:click='openModas'/>
+                                    <input v-else-if="item.tipoCambioInfo.codigo == 'CCOLEUNIAE' || 
+                                           item.tipoCambioInfo.codigo == 'CCOLEUNIDE'" type="checkbox" v-bind:value="item" v-model="checkeds" v-on:click='openCole'
+                                           id="coleCheck"/>
+
+                                    <input v-else='' type="checkbox" v-bind:value="item" v-model="checkeds" v-on:click='showInfo'/>
+
+                                    <span></span>
+                                </label>
+                                <label>
+                                    <span class="h5">{{item.conceptoPago.descripcion}}</span>
+                                    <span v-if="showInfo1 &amp;&amp; item.tipoCambioInfo.codigo =='CDATGEN'" class="h6 block text-danger">Este cambio podrá realizarse despues del pago</span>
+                                    <span v-if="showInfo2 &amp;&amp; (item.tipoCambioInfo.codigo == 'COPCIONAI' 
+                                          || item.tipoCambioInfo.codigo == 'COPCIONDI')" class="h6 block text-danger">Este cambio podrá realizarse despues del pago</span>
+                                </label>
+                            </div>
+
+                        </div>
+
+                        <div class="row" v-if="modaOpen || coleOpen">
+                            <hr/>
+                            <div class="col-md-6" v-if="modaOpen">
+                                <h4>Cambio de Modalidad</h4>
+                                <multiselect
+                                    v-model='modalidad'
+                                    v-bind:limit='15'
+                                    v-bind:options='modalidades'
+                                    placeholder="Selecciona una modalidad"
+                                    v-bind:allow-empty="false"
+                                    track-by="id"
+                                    v-bind:custom-label='modaNombre'
+                                    v-on:input="selMod">
+                                </multiselect>
+                                <input class="hide" v-model="modalidad" required=""/>
+                            </div>
+
+                            <div class="col-md-6" v-if="coleOpen">
+
+                                <div v-if="isColeUni">
+                                    <h4>Selecciona</h4>
+                                    <div class="col-md-6">
+                                        <label class="radio-inline">
+                                            <input  type="radio" name="opciones" value="cole" v-model="selCU"/>
+                                            Colegio
+                                        </label>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <label class="radio-inline">
+                                            <input type="radio" name="opciones" value="uni" v-model="selCU"/>
+                                            Universidad
+                                        </label>
+                                    </div>
+                                    <br/>
+                                </div>
+
+                                <div v-if="isCole">
+                                    <h4>Cambiar Colegio</h4>
+
+                                    <multiselect
+                                        placeholder="Busca el País"
+                                        v-model='pais'
+                                        v-bind:searchable="true"
+                                        v-bind:loading="isLoading" 
+                                        v-bind:internal-search="false" 
+                                        v-on:search-change="getPais"
+                                        v-bind:limit='15'
+                                        v-bind:options='paises'
+                                        v-bind:allow-empty="false"
+                                        track-by="id"
+                                        label='nombre'>
+                                    </multiselect>
+                                    <input class="hide" v-model="pais" required=""/>
+                                    <br/>
+                                    <multiselect
+                                        v-if="pais != null &amp;&amp; pais.codigo == 'PE'"
+                                        v-model='distrito'
+                                        v-bind:searchable="true"
+                                        v-bind:loading="isLoading" 
+                                        v-bind:internal-search="false" 
+                                        v-on:search-change="getDistrito"
+                                        v-bind:limit='15'
+                                        v-bind:options='distritos'
+                                        placeholder="Buscar Distrito"
+                                        v-bind:allow-empty="false"
+                                        track-by="id"
+                                        label='nombre'>
+                                    </multiselect>
+                                    <input v-if="pais != null &amp;&amp; pais.codigo == 'PE'" class="hide" v-model="distrito" required=""/>
+                                    <br v-if="pais != null &amp;&amp; pais.codigo == 'PE'"/>
+                                    <multiselect
+                                        v-if="distrito != null &amp;&amp; pais != null &amp;&amp; pais.codigo == 'PE'"
+                                        v-model='colegio'
+                                        v-bind:searchable="true"
+                                        v-bind:loading="isLoading" 
+                                        v-bind:internal-search="false" 
+                                        v-on:search-change="getColegio"
+                                        v-bind:limit='15'
+                                        v-bind:options='colegios'
+                                        placeholder="Busca el Colegio"
+                                        v-bind:allow-empty="false"
+                                        track-by="id"
+                                        label='nombre'
+                                        v-on:input="selInst">
+                                        <template slot="singleLabel" slot-scope="props">
+                                            <span>{{ props.option.nombreLargo }}</span>
+                                        </template>
+                                        <template slot="option" slot-scope="props">
+                                            <div>
+                                                <span class="block h4">{{ props.option.nombre }}</span>
+                                                <span class="block">
+                                                    <b>Cód.Modular:</b> {{ props.option.codigoModular }} - <b>Anexo:</b> {{props.option.anexo}} - 
+                                                    <b>Atención: </b> {{props.option.formaAtencion}} - <b>Gestión:</b> {{props.option.gestion}} 
+                                                </span>
+                                                <span class="block"><b>Modalidad:</b> {{ props.option.nivelModalidad }} - <b>Dirección: </b> {{props.option.direccion}}</span>
+                                            </div>
+                                        </template>
+                                    </multiselect>
+                                    <input v-if="distrito != null" class="hide" v-model="colegio" required=""/>
+                                    <div>
+                                        <h5 v-if="pais != null &amp;&amp; pais.codigo != 'PE'">Escribe el nombre del Colegio</h5>
+                                        <input v-if="pais != null &amp;&amp; pais.codigo != 'PE'" class="form-control" v-model="coleText"/>
+                                    </div>
+                                </div>
+                                <div v-if="isUni">
+                                    <h4>Cambiar Universidad</h4>
+                                    <multiselect
+                                        placeholder="Busca el País"
+                                        v-model='pais'
+                                        v-bind:searchable="true"
+                                        v-bind:loading="isLoading" 
+                                        v-bind:internal-search="false" 
+                                        v-on:search-change="getPais"
+                                        v-bind:limit='15'
+                                        v-bind:options='paises'
+                                        v-bind:allow-empty="false"
+                                        track-by="id"
+                                        label='nombre'>
+                                    </multiselect>
+                                    <input class="hide" v-model="pais" required=""/>
+                                    <multiselect
+                                        v-if="pais != null &amp;&amp; pais.codigo == 'PE'"
+                                        placeholder="Busca la Universidad"
+                                        v-model='universidad'
+                                        v-bind:searchable="true"
+                                        v-bind:loading="isLoading" 
+                                        v-bind:internal-search="false" 
+                                        v-on:search-change="getUniversidad"
+                                        v-bind:limit='15'
+                                        v-bind:options='universidades'
+                                        v-bind:allow-empty="false"
+                                        track-by="id"
+                                        label='nombre'
+                                        v-on:input="selInst">
+                                    </multiselect>
+                                    <input v-if="pais != null &amp;&amp; pais.codigo == 'PE'" class="hide" v-model="universidad" required=""/>
+                                    <div>
+                                        <h5 v-if="pais != null &amp;&amp; pais.codigo != 'PE'">Escribe el nombre de la Universidad</h5>
+                                        <input v-if="pais != null &amp;&amp; pais.codigo != 'PE'" class="form-control" v-model="uniText" required=""/>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+                    <div class="row" v-if="checkeds != ''">
+                        <div class="col-md-12">
+                            <hr/>
+                            <div class="">
+                                <p>Tus cambios son:</p>
+                                <div class="col-md-6">
+                                    <table class="table" style="margin-top: 10px;">
+                                        <tbody>
+                                            <tr v-for='item in checkeds'>
+                                                <td>{{item.conceptoPago.descripcion}} </td><td> S/. {{item.monto.toFixed(2)}}</td>
+                                            </tr>
+                                            <tr class="bold"><td>Total</td><td>S/. {{total.toFixed(2)}}</td></tr>
+                                        </tbody>
+                                    </table>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-12">
+                            <button v-if="btnEnviar" class="btn btn-primary btn-block" style="color:green" v-on:click='sendRequest'>Procesar Solicitud</button>
+                            <button v-if="!btnEnviar" class="btn btn-primary btn-block" style="color:green" disabled="" v-on:click='sendRequest'>Procesar Solicitud</button>
+                        </div>
+                    </div>
+                </div>
+                <hr/>
+
+                <div class="col-md-6 col-md-offset-3 m-t-lg">
+                    <a class="btn btn-lg btn-primary btn-block" style="color:green" 
+                       th:href="@{/inscripcion/postulante}">Ver Boleta Anterior</a>
+                </div>
+                <div class="col-md-6 col-md-offset-3">
+                    <a class="btn btn-lg btn-primary  m-b btn-block" style="color:green" 
+                       th:href="@{/}">Finalizar</a>
+                </div>
+            </div>
+
+
+        </div>
+        <div layout:fragment="js">
+            <script th:inline="javascript">
+                /*<![CDATA[*/
+                var postulante = /*[[${postulante}]]*/ postulante;
+                var deudaPagada = /*[[${deudaPagada}]]*/ deudaPagada;
+                /*]]>*/
+            </script>
+            <div th:substituteby="admision/_layout/includes :: javascript-vue-multiselect"></div>
+            <script th:src="@{/app/postulante/postulante/cambios/solicitud.js}" charset="utf-8"></script>
+        </div>
+    </body>
+</html>

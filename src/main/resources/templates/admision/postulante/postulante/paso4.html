@@ -1,0 +1,144 @@
+<html layout:decorator="admision/_layout/layoutAgraria1">
+    <head>
+        <title>Inscripción de Postulantes</title>
+        <style>
+            @media only screen and (max-width : 320px) {
+                .font-cell {
+                    font-size: 15px;
+                    line-height: 17px;
+                }
+                .sweet-alert .sa-icon {
+                    width: 0;
+                    height: 0;
+                    border: 0 solid gray;
+                }
+                .sweet-alert .sa-icon.sa-warning .sa-body {
+                    width: 0;
+                    height: 0;
+                    left: 0;
+                    top: 0;
+                }
+                .sweet-alert h2 {
+                    line-height: 17px;
+                }
+            }
+
+            /* Extra Small Devices, Phones */
+            @media only screen and (max-width : 480px) {
+                .font-cell {
+                    font-size: 15px;
+                    line-height: 17px;
+                }
+                .sweet-alert .sa-icon {
+                    width: 0;
+                    height: 0;
+                    border: 0 solid gray;
+                }
+                .sweet-alert .sa-icon.sa-warning .sa-body {
+                    width: 0;
+                    height: 0;
+                    left: 0;
+                    top: 0;
+                }
+                .sweet-alert h2 {
+                    line-height: 17px;
+                }
+            }
+
+            .sweet-alert p {
+                color: #000;
+                font-size: 16px;
+            }
+
+            .parrafo {
+                text-align: justify;
+                margin-bottom: 20px;
+            }
+            .resaltar {
+                text-transform: uppercase;
+                font-weight: bold;
+            }
+
+            .sweet-alert p {
+                color: #000;
+                font-size: 16px;
+            }
+        </style>
+    </head>
+
+    <body>
+
+        <div layout:fragment="banner">
+
+            <h1> <span  th:text="${postulante.persona.nombreCompleto}" /> 
+                <div class="line"></div>
+            </h1>
+
+        </div>
+
+        <div layout:fragment="main">
+
+            <form id="form" data-parsley-validate="true">
+                <div class="panel-body">
+                    <input type="hidden" name="metalesPostulante.postulante.id" th:value="${postulante.id}"/>
+
+                    <div class="col-sm-8 col-sm-offset-2">
+                        <h4 class="m-b-md">¿Posees algún objeto metálico (distinto a brackets) en tu cuerpo por prescripción médica?</h4>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-sm-8 col-sm-offset-2">
+                            <div class="form-group" >
+                                <div class="radio">
+                                    <div class="col-sm-6">
+                                        <div class="col-sm-3 h3">
+                                            <label><input type="radio" name="metalesPostulante.opcion" th:checked="${metalPostulante}" class="opcion" value="SI" />Sí</label>
+                                        </div>
+                                        <div class="col-sm-3 h3">
+                                            <label><input type="radio" name="metalesPostulante.opcion" class="opcion" value="" />No</label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-sm-8 col-sm-offset-2">
+                            <div class="form-group hide" id="div-explicacion">
+                                <label>¿Qué objeto metálico?</label>
+                                <input id="objeto" class="form-control" name="metalesPostulante.objeto" 
+                                       th:value="${metalPostulante} ? ${metalPostulante.objeto} : ''" 
+                                       maxlength="100" readonly=""/>
+                                <label>¿En qué parte de tu cuerpo está ubicado?</label>
+                                <textarea id="explicacao" class="form-control" name="metalesPostulante.explicacion" 
+                                          th:text="${metalPostulante} ? ${metalPostulante.explicacion} : ''" 
+                                          style="resize: vertical;" rows="3" readonly=""></textarea>
+                            </div>
+                        </div>
+                    </div>
+
+
+                </div>
+
+                <hr/>
+
+                <div class="col-md-12 text-center">
+                    <a class="btn btn-link text-success boton" style="color:green" th:href="@{/inscripcion/postulante/3/paso}">Atras</a>
+                    <button  
+                        type="button" 
+                        id="submitForm"
+                        disabled="yes"
+                        class="btn btn-success send-form boton" ><i class="fa fa-spinner fa-spin hide" id="spin"/> Siguiente</button>
+                </div>
+
+            </form>
+
+
+        </div>
+
+        <div layout:fragment="js">
+            <script th:src="@{/app/postulante/postulante/paso4.js}" charset="utf-8"></script>
+        </div>
+
+    </body>
+</html>
